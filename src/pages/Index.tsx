@@ -1,153 +1,78 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
-import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import ProfileSection from '@/components/ProfileSection';
-import { useDevice } from '@/hooks/use-mobile';
-import { useAuth } from '@/hooks/use-auth';
+import Hero from '@/components/Hero';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from 'react-router-dom';
+import { BookOpen, ArrowRight } from 'lucide-react';
 
-const Index: React.FC = () => {
-  const { isMobile } = useDevice();
-  const { user } = useAuth();
-
-  // If user is logged in, show a personalized dashboard preview
-  if (user) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavbarWithAuth />
-        <main className="flex-grow">
-          <div className="container mx-auto px-4 py-8">
-            <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome back, {user.fullName || user.username || 'there'}!</h1>
-              <p className="text-muted-foreground">
-                Continue growing your social media presence with Roundabout WebTraffic.
-              </p>
-            </div>
-
-            <div className="bg-muted rounded-lg p-6 mb-10">
-              <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Link to="/dashboard">
-                  <Button variant="outline" className="w-full">View Dashboard</Button>
-                </Link>
-                <Link to="/platforms">
-                  <Button variant="outline" className="w-full">Manage Platforms</Button>
-                </Link>
-                <Link to="/analytics">
-                  <Button variant="outline" className="w-full">Check Analytics</Button>
-                </Link>
-                <Link to="/communities">
-                  <Button variant="outline" className="w-full">Join Communities</Button>
-                </Link>
-              </div>
-            </div>
-
-            <Tabs defaultValue="growth" className="space-y-6">
-              <TabsList>
-                <TabsTrigger value="growth">Growth Opportunities</TabsTrigger>
-                <TabsTrigger value="monetization">Monetization Tips</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="growth" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Enhance Your Profile</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Complete your profile to increase visibility and create a stronger brand image.
-                    </p>
-                    <Link to="/profile">
-                      <Button size="sm" variant="outline">Update Profile</Button>
-                    </Link>
-                  </div>
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Join Engagement Groups</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Participate in reciprocal engagement to boost your content's reach.
-                    </p>
-                    <Link to="/communities">
-                      <Button size="sm" variant="outline">Find Groups</Button>
-                    </Link>
-                  </div>
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Analyze Top Performers</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Learn from your best-performing content to optimize future posts.
-                    </p>
-                    <Link to="/analytics">
-                      <Button size="sm" variant="outline">View Analytics</Button>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="monetization" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Sponsorship Opportunities</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Explore brand partnerships that match your content style and audience.
-                    </p>
-                    <Link to="/monetization">
-                      <Button size="sm" variant="outline">View Sponsors</Button>
-                    </Link>
-                  </div>
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Premium Content</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Create exclusive content for subscribers to generate recurring revenue.
-                    </p>
-                    <Link to="/monetization">
-                      <Button size="sm" variant="outline">Start Creating</Button>
-                    </Link>
-                  </div>
-                  <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="font-medium mb-2">Affiliate Marketing</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Promote products you love and earn commissions on sales.
-                    </p>
-                    <Link to="/monetization">
-                      <Button size="sm" variant="outline">Browse Programs</Button>
-                    </Link>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Default landing page for non-logged in users
+const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWithAuth />
       <main className="flex-grow">
         <Hero />
-        <ProfileSection userId="user-123" />
-        <section className="py-16 bg-gradient-to-br from-roundabout-purple to-roundabout-blue text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Grow Your Online Presence?</h2>
-            <p className="max-w-2xl mx-auto mb-8">
-              Join Roundabout WebTraffic today and connect with creators, grow your audience, 
-              and monetize your content across multiple platforms.
-            </p>
-            <div className={`flex ${isMobile ? 'flex-col' : ''} gap-4 justify-center`}>
-              <Link to="/register">
-                <Button size="lg" className="bg-white text-roundabout-purple font-medium hover:bg-opacity-90 transition-colors">
-                  Get Started
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:bg-opacity-10 transition-colors">
-                  Sign In
-                </Button>
-              </Link>
+        
+        {/* Feature Sections */}
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Powerful features for creators</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Cross-Platform Management</h3>
+                <p className="text-muted-foreground mb-4">Connect and manage all your social media accounts from one dashboard.</p>
+              </div>
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Advanced Analytics</h3>
+                <p className="text-muted-foreground mb-4">Track performance metrics and gain insights across all your platforms.</p>
+              </div>
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Community Building</h3>
+                <p className="text-muted-foreground mb-4">Grow your audience and manage engagement in one place.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Documentation Section */}
+        <section className="py-16">
+          <div className="container mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="md:w-1/2">
+                <h2 className="text-3xl font-bold mb-4">Comprehensive Documentation</h2>
+                <p className="text-muted-foreground mb-6">
+                  Explore our detailed guides for integrating Roundabout with your favorite tools and platforms. 
+                  From no-code solutions like Webflow and Bubble to development environments like VS Code.
+                </p>
+                <Link to="/docs">
+                  <Button className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Browse Documentation
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="md:w-1/2 bg-muted p-6 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">No-Code Platforms</h4>
+                    <p className="text-sm text-muted-foreground">Integrate with Webflow, Bubble, Zapier, and more</p>
+                  </div>
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">Developer Tools</h4>
+                    <p className="text-sm text-muted-foreground">VS Code setup, snippets, and debugging guides</p>
+                  </div>
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">API Reference</h4>
+                    <p className="text-sm text-muted-foreground">Comprehensive API documentation</p>
+                  </div>
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">Architecture</h4>
+                    <p className="text-sm text-muted-foreground">Technical architecture and design patterns</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

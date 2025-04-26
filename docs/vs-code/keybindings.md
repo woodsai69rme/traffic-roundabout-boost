@@ -2,174 +2,159 @@
 # Visual Studio Code Keybindings for Roundabout Development
 
 ## Overview
-This document provides recommended keyboard shortcuts and custom keybindings to enhance productivity when developing the Roundabout application.
+This document provides recommended keyboard shortcuts and custom keybindings to enhance productivity when working on the Roundabout project.
 
-## Default VS Code Shortcuts
+## Default Keybindings to Remember
 
-### Essential Navigation
-| Shortcut            | Action                      |
-|---------------------|----------------------------|
-| `Ctrl+P`            | Quick Open, Go to File     |
-| `Ctrl+Shift+P`      | Show Command Palette       |
-| `Ctrl+G`            | Go to Line                 |
-| `Ctrl+Tab`          | Navigate editor tabs       |
-| `Alt+←` / `Alt+→`   | Navigate back/forward      |
-| `Ctrl+\`            | Split editor               |
-| `Ctrl+1/2/3`        | Focus editor group         |
+### General
+- `Ctrl+S` / `Cmd+S`: Save file
+- `Ctrl+P` / `Cmd+P`: Quick file open
+- `Ctrl+Shift+P` / `Cmd+Shift+P`: Command palette
+- `Ctrl+,` / `Cmd+,`: Open settings
+- `Ctrl+B` / `Cmd+B`: Toggle sidebar
+- `Alt+Z` / `Option+Z`: Toggle word wrap
 
-### Code Editing
-| Shortcut                  | Action                                |
-|---------------------------|---------------------------------------|
-| `Ctrl+Space`              | Trigger suggestion                    |
-| `Ctrl+Shift+Space`        | Trigger parameter hints               |
-| `F12` or `Ctrl+Click`     | Go to Definition                      |
-| `Alt+F12`                 | Peek Definition                       |
-| `Shift+F12`               | Show References                       |
-| `F2`                      | Rename Symbol                         |
-| `Ctrl+.`                  | Quick Fix                             |
-| `Alt+↑` / `Alt+↓`         | Move line up/down                     |
-| `Ctrl+Shift+K`            | Delete line                           |
-| `Ctrl+/`                  | Toggle line comment                   |
-| `Alt+Shift+A`             | Toggle block comment                  |
-| `Ctrl+D`                  | Select next occurrence                |
-| `Ctrl+U`                  | Undo cursor position                  |
+### Editing
+- `Ctrl+Space` / `Cmd+Space`: Trigger suggestions
+- `Ctrl+X` / `Cmd+X`: Cut line (when nothing is selected)
+- `Ctrl+C` / `Cmd+C`: Copy line (when nothing is selected)
+- `Alt+↑` / `Option+↑`: Move line up
+- `Alt+↓` / `Option+↓`: Move line down
+- `Ctrl+Shift+K` / `Cmd+Shift+K`: Delete line
+- `Ctrl+Enter` / `Cmd+Enter`: Insert line below
+- `Ctrl+Shift+Enter` / `Cmd+Shift+Enter`: Insert line above
+- `Ctrl+/` / `Cmd+/`: Toggle line comment
+- `Ctrl+]` / `Cmd+]`: Indent line
+- `Ctrl+[` / `Cmd+[`: Outdent line
 
-### TypeScript Specific
-| Shortcut            | Action                              |
-|---------------------|-------------------------------------|
-| `Ctrl+Shift+I`      | Format document                     |
-| `F8`                | Go to next error/warning            |
-| `Shift+F8`          | Go to previous error/warning        |
-| `Ctrl+K Ctrl+I`     | Show hover information              |
+### Navigation
+- `Ctrl+G` / `Cmd+G`: Go to line
+- `Ctrl+T` / `Cmd+T`: Go to symbol
+- `F12`: Go to definition
+- `Alt+F12` / `Option+F12`: Peek definition
+- `Ctrl+Shift+O` / `Cmd+Shift+O`: Go to symbol in file
+- `Ctrl+Tab` / `Cmd+Tab`: Navigate editor tabs
 
-### Terminal & Debug
-| Shortcut            | Action                              |
-|---------------------|-------------------------------------|
-| `Ctrl+`` | Toggle terminal                     |
-| `F5`                | Start debugging                     |
-| `Ctrl+F5`           | Start without debugging             |
-| `F9`                | Toggle breakpoint                   |
-| `F10`               | Step over                           |
-| `F11`               | Step into                           |
-| `Shift+F11`         | Step out                            |
-| `F5` during debug   | Continue                            |
+### Search
+- `Ctrl+F` / `Cmd+F`: Find
+- `Ctrl+H` / `Cmd+H`: Replace
+- `Ctrl+Shift+F` / `Cmd+Shift+F`: Find in files
+- `Ctrl+Shift+H` / `Cmd+Shift+H`: Replace in files
 
-## Custom Keybindings
+### TypeScript/React Specific
+- `Ctrl+.` / `Cmd+.`: Quick fix
+- `F8`: Go to next error or warning
+- `Shift+F8`: Go to previous error or warning
+- `F2`: Rename symbol
+- `Ctrl+I` / `Cmd+I`: Format document (useful for TSX/JSX)
 
-To add these custom keybindings:
-1. Open Command Palette (`Ctrl+Shift+P`)
-2. Type "Preferences: Open Keyboard Shortcuts (JSON)"
-3. Add the following keybindings:
+## Recommended Custom Keybindings
+
+Create a `keybindings.json` file with these customizations for Roundabout development:
 
 ```json
 [
+  // Fast navigation between components and their test files
   {
-    "key": "ctrl+alt+r",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Start Development Server"
+    "key": "alt+t",
+    "command": "typescript.findAllFileReferences",
+    "when": "editorTextFocus && editorLangId == 'typescript' || editorLangId == 'typescriptreact'"
   },
+  
+  // Quick file creation for React components
   {
-    "key": "ctrl+alt+t",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Run Tests"
+    "key": "ctrl+alt+n",
+    "command": "explorer.newFile",
+    "when": "explorerViewletFocus"
   },
+  
+  // Toggle between related files (e.g., component and hooks)
   {
-    "key": "ctrl+alt+b",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Build Project"
-  },
-  {
-    "key": "ctrl+alt+l",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Lint Project"
-  },
-  {
-    "key": "ctrl+alt+f",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Format Code"
-  },
-  {
-    "key": "ctrl+alt+s",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Start Supabase Local"
-  },
-  {
-    "key": "ctrl+k ctrl+r",
-    "command": "editor.action.refactor",
-    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
-  },
-  {
-    "key": "ctrl+shift+r",
-    "command": "editor.action.rename",
-    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
-  },
-  {
-    "key": "alt+i",
-    "command": "editor.action.organizeImports",
-    "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/"
-  },
-  {
-    "key": "ctrl+k ctrl+c",
-    "command": "editor.action.commentLine",
-    "when": "editorTextFocus && !editorReadonly"
-  }
-]
-```
-
-## Project-Specific Shortcuts
-
-### React Component Navigation
-| Custom Shortcut     | Action                                 |
-|---------------------|----------------------------------------|
-| `Ctrl+Alt+C`        | List all components in project         |
-| `Ctrl+Alt+H`        | List all hooks in project              |
-| `Ctrl+Alt+P`        | List all pages in project              |
-
-Add these custom shortcuts with the following configuration:
-
-```json
-[
-  {
-    "key": "ctrl+alt+c",
+    "key": "alt+o",
     "command": "workbench.action.quickOpen",
-    "args": "components/ "
+    "args": {
+      "query": "${fileBasenameNoExtension}"
+    }
   },
+  
+  // Toggle terminal focus
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  
+  // Split editor vertically (useful for component/hook pairs)
+  {
+    "key": "ctrl+alt+v",
+    "command": "workbench.action.splitEditorRight"
+  },
+  
+  // Split editor horizontally (useful for component/test pairs)
   {
     "key": "ctrl+alt+h",
-    "command": "workbench.action.quickOpen",
-    "args": "hooks/ "
+    "command": "workbench.action.splitEditorDown"
   },
+  
+  // Quick format for React components
   {
-    "key": "ctrl+alt+p",
-    "command": "workbench.action.quickOpen",
-    "args": "pages/ "
+    "key": "ctrl+alt+f",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && editorLangId == 'typescriptreact'"
+  },
+  
+  // Quick import organization
+  {
+    "key": "ctrl+alt+i",
+    "command": "editor.action.organizeImports",
+    "when": "editorTextFocus && editorLangId == 'typescript' || editorLangId == 'typescriptreact'"
+  },
+  
+  // Quick access to component refactoring options
+  {
+    "key": "ctrl+alt+r",
+    "command": "editor.action.refactor",
+    "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
   }
 ]
 ```
 
-## Extension Shortcuts
+## Productivity Shortcuts for Roundabout Development
 
-### GitLens
-| Shortcut            | Action                             |
-|---------------------|-----------------------------------|
-| `Alt+B`             | Toggle File Blame                 |
-| `Alt+H`             | Show Line History                 |
-| `Ctrl+Shift+G G`    | Show Git Graph                    |
+### Custom Tasks
+- `Ctrl+Shift+B` / `Cmd+Shift+B`: Run default build task (configured in tasks.json)
+- `Ctrl+Shift+T` / `Cmd+Shift+T`: Run test task
 
-### ESLint
-| Shortcut            | Action                             |
-|---------------------|-----------------------------------|
-| `Ctrl+Alt+L`        | Fix all auto-fixable problems     |
+### Extension-specific Shortcuts
 
-### Prettier
-| Shortcut            | Action                             |
-|---------------------|-----------------------------------|
-| `Ctrl+Alt+F`        | Format document with Prettier     |
+#### ESLint
+- `Ctrl+Alt+L` / `Cmd+Option+L`: Fix all auto-fixable ESLint issues
 
-## Troubleshooting Keybindings
+#### Git
+- `Ctrl+Shift+G` / `Cmd+Shift+G`: Open source control panel
+- `Ctrl+Enter` / `Cmd+Enter`: Commit (when in source control message input)
+- `Alt+G P` / `Option+G P`: Git push
+- `Alt+G F` / `Option+G F`: Git fetch
 
-If keyboard shortcuts aren't working:
-1. Check for conflicts in the "Keyboard Shortcuts" view
-2. Verify extension status if it's an extension shortcut
-3. Restart VS Code after making changes to keybindings.json
-4. Check "when" clauses for context-specific bindings
+#### Tailwind CSS
+- `Ctrl+Space` / `Cmd+Space`: Trigger Tailwind CSS class suggestions (when in class attribute)
+
+## Multi-cursor and Selection Techniques
+
+- `Alt+Click` / `Option+Click`: Insert cursor
+- `Ctrl+Alt+↑/↓` / `Cmd+Option+↑/↓`: Insert cursor above/below
+- `Ctrl+D` / `Cmd+D`: Select current word and find next occurrence
+- `Ctrl+L` / `Cmd+L`: Select current line
+- `Shift+Alt+→` / `Shift+Option+→`: Expand selection
+- `Shift+Alt+←` / `Shift+Option+←`: Shrink selection
+- `Ctrl+Shift+L` / `Cmd+Shift+L`: Select all occurrences of current selection
+
+## Installation
+
+1. Open VS Code
+2. Press `Ctrl+Shift+P` / `Cmd+Shift+P` to open the command palette
+3. Type "Preferences: Open Keyboard Shortcuts (JSON)"
+4. Copy and paste the custom keybindings above
+5. Save the file
+
+These keybindings are designed to streamline Roundabout development workflows and can be customized further based on personal preferences.
+

@@ -2,340 +2,269 @@
 # Visual Studio Code Snippets for Roundabout
 
 ## Overview
-This document provides custom code snippets to accelerate development in the Roundabout project.
+This guide provides a collection of useful VS Code snippets to accelerate development with the Roundabout project.
 
-## Installing Snippets
+## Installation
 
-To add these snippets to your VS Code:
-1. Open Command Palette (`Ctrl+Shift+P`)
-2. Type "Preferences: Configure User Snippets"
-3. Select "New Global Snippets file..." or choose an existing language file
-4. Add the snippets below to the file
+1. In VS Code, go to File > Preferences > User Snippets
+2. Select "New Snippet file for Roundabout..."
+3. Name it "roundabout.code-snippets"
+4. Copy and paste the snippets below
 
 ## React Component Snippets
 
-### React Functional Component (`rfc`)
+### New Component
 ```json
-{
-  "React Functional Component": {
-    "prefix": "rfc",
-    "body": [
-      "import React from 'react';",
-      "",
-      "interface ${1:ComponentName}Props {",
-      "  $2",
-      "}",
-      "",
-      "const ${1:ComponentName} = ({ $3 }: ${1:ComponentName}Props) => {",
-      "  return (",
-      "    <div>",
-      "      $4",
-      "    </div>",
-      "  );",
-      "};",
-      "",
-      "export default ${1:ComponentName};"
-    ],
-    "description": "React Functional Component with TypeScript"
-  }
+"React Functional Component": {
+  "prefix": "rfc",
+  "body": [
+    "import React from 'react';",
+    "",
+    "interface ${1:ComponentName}Props {",
+    "  ${2:prop}: ${3:type};",
+    "}",
+    "",
+    "const ${1:ComponentName} = ({ ${2:prop} }: ${1:ComponentName}Props) => {",
+    "  return (",
+    "    <div>",
+    "      $0",
+    "    </div>",
+    "  );",
+    "};",
+    "",
+    "export default ${1:ComponentName};"
+  ],
+  "description": "Create a new React functional component with TypeScript"
 }
 ```
 
-### React Page Component (`rpage`)
+### New Page Component
 ```json
-{
-  "React Page Component": {
-    "prefix": "rpage",
-    "body": [
-      "import React from 'react';",
-      "import NavbarWithAuth from '@/components/NavbarWithAuth';",
-      "import Footer from '@/components/Footer';",
-      "",
-      "const ${1:PageName} = () => {",
-      "  return (",
-      "    <div className=\"min-h-screen flex flex-col\">",
-      "      <NavbarWithAuth />",
-      "      <main className=\"flex-grow p-4 md:p-8\">",
-      "        <div className=\"container mx-auto space-y-6\">",
-      "          <header>",
-      "            <h1 className=\"text-3xl md:text-4xl font-bold mb-2\">${2:Page Title}</h1>",
-      "            <p className=\"text-muted-foreground\">${3:Page description}</p>",
-      "          </header>",
-      "          ",
-      "          $0",
-      "        </div>",
-      "      </main>",
-      "      <Footer />",
-      "    </div>",
-      "  );",
-      "};",
-      "",
-      "export default ${1:PageName};"
-    ],
-    "description": "React Page Component with Layout"
-  }
+"React Page Component": {
+  "prefix": "rpage",
+  "body": [
+    "import React from 'react';",
+    "import NavbarWithAuth from '@/components/NavbarWithAuth';",
+    "import Footer from '@/components/Footer';",
+    "",
+    "const ${1:PageName} = () => {",
+    "  return (",
+    "    <div className=\"min-h-screen flex flex-col\">",
+    "      <NavbarWithAuth />",
+    "      <main className=\"flex-grow p-4 md:p-8\">",
+    "        <div className=\"container mx-auto space-y-6\">",
+    "          <h1 className=\"text-3xl md:text-4xl font-bold mb-2\">${1:PageName}</h1>",
+    "          $0",
+    "        </div>",
+    "      </main>",
+    "      <Footer />",
+    "    </div>",
+    "  );",
+    "};",
+    "",
+    "export default ${1:PageName};"
+  ],
+  "description": "Create a new page component with Roundabout layout"
 }
 ```
 
-## Hook Snippets
+## React Hooks Snippets
 
-### Custom React Hook (`rhook`)
+### useState Hook
 ```json
-{
-  "React Custom Hook": {
-    "prefix": "rhook",
-    "body": [
-      "import { useState, useEffect } from 'react';",
-      "",
-      "export const use${1:HookName} = ($2) => {",
-      "  const [${3:state}, set${3/(.*)/${3:/capitalize}/}] = useState($4);",
-      "",
-      "  useEffect(() => {",
-      "    $5",
-      "    ",
-      "    return () => {",
-      "      $6",
-      "    };",
-      "  }, [$7]);",
-      "",
-      "  const ${8:handler} = () => {",
-      "    $9",
-      "  };",
-      "",
-      "  return { ${3:state}, ${8:handler} };",
-      "};"
-    ],
-    "description": "Custom React Hook with TypeScript"
-  }
+"React useState Hook": {
+  "prefix": "rstate",
+  "body": [
+    "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState${2:<${3:type}>}(${4:initialValue});"
+  ],
+  "description": "Add a useState hook"
 }
 ```
 
-### Supabase Query Hook (`squery`)
+### useEffect Hook
 ```json
-{
-  "Supabase Query Hook": {
-    "prefix": "squery",
-    "body": [
-      "import { useQuery } from '@tanstack/react-query';",
-      "import { supabase } from '@/integrations/supabase/client';",
-      "",
-      "export const use${1:QueryName} = ($2) => {",
-      "  return useQuery({",
-      "    queryKey: ['${3:queryKey}', $4],",
-      "    queryFn: async () => {",
-      "      const { data, error } = await supabase",
-      "        .from('${5:tableName}')",
-      "        .select('$6')",
-      "        $7",
-      "",
-      "      if (error) throw error;",
-      "      return data;",
-      "    }",
-      "  });",
-      "};"
-    ],
-    "description": "Supabase Query Hook with React Query"
-  }
+"React useEffect Hook": {
+  "prefix": "reffect",
+  "body": [
+    "useEffect(() => {",
+    "  $0",
+    "  return () => {",
+    "    // Cleanup function",
+    "  };",
+    "}, [${1:dependencies}]);"
+  ],
+  "description": "Add a useEffect hook with cleanup"
+}
+```
+
+### useQuery Hook
+```json
+"React Query Hook": {
+  "prefix": "rquery",
+  "body": [
+    "const { data: ${1:data}, isLoading: ${2:isLoading}, error: ${3:error} } = useQuery({",
+    "  queryKey: ['${4:key}'],",
+    "  queryFn: ${5:fetchFunction},",
+    "});"
+  ],
+  "description": "Add a React Query useQuery hook"
+}
+```
+
+## Supabase Snippets
+
+### Supabase Query
+```json
+"Supabase Query": {
+  "prefix": "sbquery",
+  "body": [
+    "const { data: ${1:data}, error: ${2:error} } = await supabase",
+    "  .from('${3:table}')",
+    "  .select('${4:columns}')",
+    "  .eq('${5:column}', ${6:value});"
+  ],
+  "description": "Create a Supabase query"
+}
+```
+
+### Supabase Insert
+```json
+"Supabase Insert": {
+  "prefix": "sbinsert",
+  "body": [
+    "const { data: ${1:data}, error: ${2:error} } = await supabase",
+    "  .from('${3:table}')",
+    "  .insert([{",
+    "    ${4:column}: ${5:value}",
+    "  }]);"
+  ],
+  "description": "Create a Supabase insert operation"
+}
+```
+
+### Supabase Update
+```json
+"Supabase Update": {
+  "prefix": "sbupdate",
+  "body": [
+    "const { data: ${1:data}, error: ${2:error} } = await supabase",
+    "  .from('${3:table}')",
+    "  .update({ ${4:column}: ${5:value} })",
+    "  .eq('${6:matchColumn}', ${7:matchValue});"
+  ],
+  "description": "Create a Supabase update operation"
+}
+```
+
+### Supabase Delete
+```json
+"Supabase Delete": {
+  "prefix": "sbdelete",
+  "body": [
+    "const { error: ${1:error} } = await supabase",
+    "  .from('${2:table}')",
+    "  .delete()",
+    "  .eq('${3:column}', ${4:value});"
+  ],
+  "description": "Create a Supabase delete operation"
 }
 ```
 
 ## UI Component Snippets
 
-### Card Component (`uicard`)
+### Card Component
 ```json
-{
-  "UI Card Component": {
-    "prefix": "uicard",
-    "body": [
-      "import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';",
-      "",
-      "interface ${1:CardName}Props {",
-      "  title: string;",
-      "  description?: string;",
-      "  $2",
-      "}",
-      "",
-      "export const ${1:CardName} = ({ title, description, $3 }: ${1:CardName}Props) => {",
-      "  return (",
-      "    <Card>",
-      "      <CardHeader>",
-      "        <CardTitle>{title}</CardTitle>",
-      "        {description && <CardDescription>{description}</CardDescription>}",
-      "      </CardHeader>",
-      "      <CardContent>",
-      "        $0",
-      "      </CardContent>",
-      "      <CardFooter>",
-      "        $4",
-      "      </CardFooter>",
-      "    </Card>",
-      "  );",
-      "};"
-    ],
-    "description": "shadcn UI Card Component"
-  }
+"Shadcn Card Component": {
+  "prefix": "uicard",
+  "body": [
+    "<Card>",
+    "  <CardHeader>",
+    "    <CardTitle>${1:Title}</CardTitle>",
+    "    <CardDescription>${2:Description}</CardDescription>",
+    "  </CardHeader>",
+    "  <CardContent>",
+    "    $0",
+    "  </CardContent>",
+    "  <CardFooter>",
+    "    <Button>${3:Action}</Button>",
+    "  </CardFooter>",
+    "</Card>"
+  ],
+  "description": "Create a Shadcn UI Card component"
 }
 ```
 
-### Form Component (`uiform`)
+### Form Field
 ```json
-{
-  "UI Form Component": {
-    "prefix": "uiform",
-    "body": [
-      "import { zodResolver } from '@hookform/resolvers/zod';",
-      "import { useForm } from 'react-hook-form';",
-      "import * as z from 'zod';",
-      "import { Button } from '@/components/ui/button';",
-      "import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';",
-      "import { Input } from '@/components/ui/input';",
-      "",
-      "const formSchema = z.object({",
-      "  ${1:fieldName}: z.string().min(2, {",
-      "    message: '${2:Field} must be at least 2 characters.',",
-      "  }),",
-      "});",
-      "",
-      "export function ${3:FormName}() {",
-      "  const form = useForm<z.infer<typeof formSchema>>({",
-      "    resolver: zodResolver(formSchema),",
-      "    defaultValues: {",
-      "      ${1:fieldName}: '',",
-      "    },",
-      "  });",
-      "",
-      "  function onSubmit(values: z.infer<typeof formSchema>) {",
-      "    console.log(values);",
-      "    $0",
-      "  }",
-      "",
-      "  return (",
-      "    <Form {...form}>",
-      "      <form onSubmit={form.handleSubmit(onSubmit)} className=\"space-y-8\">",
-      "        <FormField",
-      "          control={form.control}",
-      "          name=\"${1:fieldName}\"",
-      "          render={({ field }) => (",
-      "            <FormItem>",
-      "              <FormLabel>${2:Field}</FormLabel>",
-      "              <FormControl>",
-      "                <Input placeholder=\"${4:Placeholder}\" {...field} />",
-      "              </FormControl>",
-      "              <FormMessage />",
-      "            </FormItem>",
-      "          )}",
-      "        />",
-      "        <Button type=\"submit\">Submit</Button>",
-      "      </form>",
-      "    </Form>",
-      "  );",
-      "}"
-    ],
-    "description": "shadcn UI Form with React Hook Form and Zod"
-  }
+"Shadcn Form Field": {
+  "prefix": "uiform",
+  "body": [
+    "<FormField",
+    "  control={form.control}",
+    "  name=\"${1:fieldName}\"",
+    "  render={({ field }) => (",
+    "    <FormItem>",
+    "      <FormLabel>${2:Label}</FormLabel>",
+    "      <FormControl>",
+    "        <Input placeholder=\"${3:Placeholder}\" {...field} />",
+    "      </FormControl>",
+    "      <FormDescription>${4:Description}</FormDescription>",
+    "      <FormMessage />",
+    "    </FormItem>",
+    "  )}",
+    "/>"
+  ],
+  "description": "Create a Shadcn UI Form Field"
 }
 ```
 
-## Testing Snippets
+## Project-Specific Snippets
 
-### Vitest Component Test (`vtest`)
+### Platform Connect Card
 ```json
-{
-  "Vitest Component Test": {
-    "prefix": "vtest",
-    "body": [
-      "import { describe, it, expect, vi } from 'vitest';",
-      "import { render, screen } from '@testing-library/react';",
-      "import userEvent from '@testing-library/user-event';",
-      "import ${1:ComponentName} from './${1:ComponentName}';",
-      "",
-      "describe('${1:ComponentName}', () => {",
-      "  it('should render correctly', () => {",
-      "    render(<${1:ComponentName} $2 />);",
-      "    ",
-      "    expect(screen.getByText('$3')).toBeInTheDocument();",
-      "  });",
-      "",
-      "  it('should handle user interaction', async () => {",
-      "    const user = userEvent.setup();",
-      "    const handleClick = vi.fn();",
-      "    ",
-      "    render(<${1:ComponentName} $2 onClick={handleClick} />);",
-      "    ",
-      "    await user.click(screen.getByRole('button', { name: /click me/i }));",
-      "    ",
-      "    expect(handleClick).toHaveBeenCalledTimes(1);",
-      "  });",
-      "});"
-    ],
-    "description": "Vitest Component Test"
-  }
+"Platform Connect Card": {
+  "prefix": "platform-card",
+  "body": [
+    "<PlatformCard",
+    "  name=\"${1:Platform Name}\"",
+    "  description=\"${2:Platform Description}\"",
+    "  icon={${3:Icon}}",
+    "  isConnected={${4:false}}",
+    "  onConnect={() => ${5:handleConnect()}}",
+    "/>"
+  ],
+  "description": "Add a Platform Connect Card"
 }
 ```
 
-## Platform-Specific Snippets
-
-### Platform Connection Component (`platform`)
+### Stat Card
 ```json
-{
-  "Platform Connection Component": {
-    "prefix": "platform",
-    "body": [
-      "import React from 'react';",
-      "import { Button } from '@/components/ui/button';",
-      "import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';",
-      "import { Badge } from '@/components/ui/badge';",
-      "",
-      "interface ${1:PlatformName}ConnectorProps {",
-      "  connected?: boolean;",
-      "  onConnect: () => void;",
-      "  onDisconnect: () => void;",
-      "}",
-      "",
-      "const ${1:PlatformName}Connector = ({ connected = false, onConnect, onDisconnect }: ${1:PlatformName}ConnectorProps) => {",
-      "  return (",
-      "    <Card>",
-      "      <CardHeader>",
-      "        <div className=\"flex items-center justify-between\">",
-      "          <CardTitle>${1:PlatformName}</CardTitle>",
-      "          {connected ? (",
-      "            <Badge variant=\"outline\" className=\"bg-green-500/10 text-green-500 border-green-500/20\">Connected</Badge>",
-      "          ) : (",
-      "            <Badge variant=\"outline\" className=\"bg-gray-500/10 text-gray-500 border-gray-500/20\">Not Connected</Badge>",
-      "          )}",
-      "        </div>",
-      "        <CardDescription>${2:Description}</CardDescription>",
-      "      </CardHeader>",
-      "      <CardContent>",
-      "        <div className=\"text-sm text-muted-foreground\">",
-      "          {connected ? (",
-      "            <p>Your ${1:PlatformName} account is connected and syncing data.</p>",
-      "          ) : (",
-      "            <p>Connect your ${1:PlatformName} account to start tracking metrics.</p>",
-      "          )}",
-      "        </div>",
-      "      </CardContent>",
-      "      <CardFooter>",
-      "        {connected ? (",
-      "          <Button variant=\"outline\" onClick={onDisconnect}>Disconnect</Button>",
-      "        ) : (",
-      "          <Button onClick={onConnect}>Connect ${1:PlatformName}</Button>",
-      "        )}",
-      "      </CardFooter>",
-      "    </Card>",
-      "  );",
-      "};",
-      "",
-      "export default ${1:PlatformName}Connector;"
-    ],
-    "description": "Platform Connection Component"
-  }
+"Stat Card": {
+  "prefix": "stat-card",
+  "body": [
+    "<StatCard",
+    "  title=\"${1:Title}\"",
+    "  value={${2:value}}",
+    "  change={${3:change}}",
+    "  trend=\"${4|positive,negative,neutral|}\"",
+    "  icon={${5:Icon}}",
+    "/>"
+  ],
+  "description": "Add a Stat Card component"
 }
 ```
 
-## Using Snippets
+## How to Use
 
-1. Type the snippet prefix (e.g., `rfc`)
-2. Press `Tab` to trigger the snippet
-3. Use `Tab` to navigate through the placeholders
-4. Fill in the required information
+Type the prefix (e.g., `rfc`) in a TypeScript or TSX file and press Tab to expand the snippet. Fill in the placeholders by typing and using Tab to move between them.
+
+## Customization
+
+You can customize these snippets or add your own by editing the `roundabout.code-snippets` file. Each snippet consists of:
+
+- `prefix`: The text that triggers the snippet
+- `body`: The expanded template (array of strings for multiple lines)
+- `description`: An optional description
+
+For more information on creating snippets, refer to the [VS Code documentation](https://code.visualstudio.com/docs/editor/userdefinedsnippets).
+

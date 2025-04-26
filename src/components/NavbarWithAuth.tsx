@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, BookOpen } from 'lucide-react';
 import AuthNav from './AuthNav';
 import { useAuth } from '@/hooks/use-auth';
 
@@ -29,6 +29,7 @@ const NavbarWithAuth = () => {
     { name: 'Communities', path: '/communities', protected: true },
     { name: 'Analytics', path: '/analytics', protected: true },
     { name: 'Monetization', path: '/monetization', protected: true },
+    { name: 'Documentation', path: '/docs', protected: false },
   ];
 
   const filteredNavItems = navItems.filter(item => !item.protected || user);
@@ -56,9 +57,11 @@ const NavbarWithAuth = () => {
                   <NavigationMenuLink
                     className={cn(
                       navigationMenuTriggerStyle(),
-                      isActive(item.path) ? "bg-muted" : "bg-transparent"
+                      isActive(item.path) ? "bg-muted" : "bg-transparent",
+                      item.name === "Documentation" ? "flex items-center gap-1" : ""
                     )}
                   >
+                    {item.name === "Documentation" && <BookOpen className="h-4 w-4" />}
                     {item.name}
                   </NavigationMenuLink>
                 </Link>
@@ -106,6 +109,7 @@ const NavbarWithAuth = () => {
                 )}
                 onClick={() => setMobileMenuOpen(false)}
               >
+                {item.name === "Documentation" && <BookOpen className="h-4 w-4 mr-2" />}
                 {item.name}
               </Link>
             ))}
