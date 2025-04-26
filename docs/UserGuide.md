@@ -33,17 +33,31 @@ The dashboard is your command center where you can:
 
 ### Adding Your Social Media Accounts
 
-1. Navigate to the "Platforms" section
-2. Click on the "Connect" tab
-3. Choose the platform you want to connect
+1. Navigate to the "Platforms" section from the main navigation
+2. Click on the "Connect" button for the platform you want to integrate
+3. Choose your connection method:
+   - OAuth authentication (recommended)
+   - API key and secret
 4. Follow the authentication steps for that platform
 5. Once connected, your account data will begin syncing
 
 ### Managing Platform Connections
 
-- View connection status in the "Platforms" section
-- Disconnect platforms anytime by clicking "Disconnect"
-- Update permissions or reconnect accounts as needed
+1. Go to the "Integrations" page from the main navigation
+2. View all your connected platforms in the "Platform Connections" tab
+3. For each platform, you can:
+   - Test the connection
+   - Update credentials
+   - View the last sync time
+   - Disconnect or reconnect as needed
+
+### Platform Settings
+
+Each platform connection can be configured with:
+- Content types to sync
+- Posting permissions
+- Analytics preferences
+- Notification settings
 
 ## Analytics
 
@@ -62,6 +76,14 @@ The Analytics section provides insights into:
 3. Track engagement trends
 4. Set growth goals based on historical data
 
+### Custom Reports
+
+Create custom reports focused on:
+- Platform comparisons
+- Time period analysis
+- Content type performance
+- Audience growth
+
 ## Engagement Features
 
 ### Reciprocal Engagement
@@ -78,6 +100,14 @@ The Analytics section provides insights into:
 - Identify your most engaged followers
 - Optimize content for better engagement
 
+### Automated Engagement
+
+Set up rules for automated engagement:
+- Like content with specific hashtags
+- Follow accounts in your niche
+- Reply to comments with AI assistance
+- Schedule engagement activities
+
 ## Community Features
 
 ### Joining Communities
@@ -93,6 +123,14 @@ The Analytics section provides insights into:
 - Share insights and strategies
 - Collaborate on content
 - Support each other's growth goals
+
+### Creating Your Own Community
+
+1. Click "Create Community" in the Communities section
+2. Set community name, description, and rules
+3. Choose privacy settings
+4. Invite initial members
+5. Start creating content and discussions
 
 ## Monetization Tools
 
@@ -111,6 +149,39 @@ Roundabout WebTraffic helps you monetize through:
 3. Set up your products or services
 4. Track revenue and analyze performance
 
+### Sponsorship Marketplace
+
+1. Create a creator profile
+2. Set your collaboration preferences
+3. Browse available brand partnerships
+4. Apply for relevant opportunities
+5. Manage your sponsorship deals
+
+## API Integrations
+
+### Managing Webhooks
+
+1. Go to the "Integrations" page
+2. Select the "Webhooks" tab
+3. Click "Create Webhook"
+4. Configure the webhook:
+   - URL endpoint
+   - Events to trigger on
+   - Security settings
+5. Test the webhook
+6. Save and activate
+
+### Data Import/Export
+
+1. Go to the "Integrations" page
+2. Select the "Data" tab
+3. Choose import or export:
+   - Import data from CSV or existing platform
+   - Export analytics, content, or audience data
+   - Schedule regular exports
+4. Configure format and destination
+5. Start the import/export process
+
 ## Profile Management
 
 ### Updating Your Profile
@@ -128,6 +199,7 @@ Roundabout WebTraffic helps you monetize through:
 - Control what information is visible
 - Manage notification preferences
 - Set communication preferences
+- Configure data sharing options
 
 ## Notifications
 
@@ -135,8 +207,9 @@ Roundabout WebTraffic helps you monetize through:
 
 1. Access notifications via the bell icon in the header
 2. View all notifications in one place
-3. Mark notifications as read
-4. Adjust notification settings in your profile
+3. Filter notifications by type
+4. Mark notifications as read
+5. Adjust notification settings in your profile
 
 ## Mobile Experience
 
@@ -145,6 +218,27 @@ Roundabout WebTraffic is fully optimized for mobile devices:
 - All features accessible on mobile
 - Simplified navigation for smaller screens
 - Optimized data usage for mobile connections
+
+## Documentation and Resources
+
+### Accessing Documentation
+
+1. Click on "Documentation" in the main navigation
+2. Browse through categories:
+   - Architecture
+   - No-Code Integrations
+   - VS Code Setup
+   - User Guides
+3. Use the search function to find specific topics
+4. Bookmark important pages for quick reference
+
+### Learning Resources
+
+Access additional resources:
+- Tutorial videos
+- Webinars
+- Case studies
+- Best practice guides
 
 ## Getting Help
 
@@ -155,6 +249,14 @@ Roundabout WebTraffic is fully optimized for mobile devices:
 - Email support for specific issues
 - Community forums for peer assistance
 
+### Troubleshooting
+
+If you encounter issues:
+1. Check the connection status
+2. Review recent platform changes
+3. Consult the troubleshooting guide
+4. Contact support with error details
+
 ## Best Practices
 
 1. **Connect All Your Platforms**: For the best experience, connect all your social media accounts.
@@ -163,6 +265,8 @@ Roundabout WebTraffic is fully optimized for mobile devices:
 4. **Use Analytics to Guide Decisions**: Let data inform your content strategy.
 5. **Update Your Profile**: Keep your information current for better networking opportunities.
 6. **Set Realistic Goals**: Track your progress against achievable growth targets.
+7. **Leverage Automation**: Use automated tools to save time on routine tasks.
+8. **Document Your Strategy**: Keep notes on what works and what doesn't.
 
 ## Advanced Features
 
@@ -181,5 +285,13 @@ Use our predictive tools to:
 - Forecast engagement trends
 - Plan content strategy based on predictions
 - Set realistic growth targets
+
+### Cross-Platform Posting
+
+Streamline your content workflow:
+- Create content once and post to multiple platforms
+- Customize format for each platform
+- Schedule optimal posting times
+- Track performance across platforms
 
 We hope this guide helps you make the most of Roundabout WebTraffic. Happy growing!
