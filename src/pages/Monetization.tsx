@@ -7,7 +7,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDevice } from '@/hooks/use-mobile';
+import { AlertCircle, Star, Package, Search, BarChart, Briefcase, LayoutGrid } from 'lucide-react';
 
 const Monetization = () => {
   const { isMobile } = useDevice();
@@ -38,7 +40,7 @@ const Monetization = () => {
                   <CardHeader>
                     <div className="flex justify-between">
                       <div className="p-2 rounded-lg bg-roundabout-light-purple text-roundabout-purple">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <AlertCircle size={24} />
                       </div>
                       <Badge>Popular</Badge>
                     </div>
@@ -77,7 +79,7 @@ const Monetization = () => {
                   <CardHeader>
                     <div className="flex justify-between">
                       <div className="p-2 rounded-lg bg-roundabout-light-blue text-roundabout-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z"/></svg>
+                        <Star size={24} />
                       </div>
                     </div>
                     <CardTitle className="mt-4">Premium Content</CardTitle>
@@ -115,7 +117,7 @@ const Monetization = () => {
                   <CardHeader>
                     <div className="flex justify-between">
                       <div className="p-2 rounded-lg bg-roundabout-yellow text-amber-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path><path d="M16.5 9.4 7.55 4.24"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line><circle cx="18.5" cy="15.5" r="2.5"></circle><path d="M20.27 17.27 22 19"></path></svg>
+                        <Search size={24} />
                       </div>
                     </div>
                     <CardTitle className="mt-4">Brand Partnerships</CardTitle>
@@ -152,7 +154,7 @@ const Monetization = () => {
                 <Card className="card-hover">
                   <CardHeader>
                     <div className="p-2 rounded-lg bg-roundabout-pink text-pink-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                      <BarChart size={24} />
                     </div>
                     <CardTitle className="mt-4">Affiliate Marketing</CardTitle>
                     <CardDescription>
@@ -188,7 +190,7 @@ const Monetization = () => {
                 <Card className="card-hover">
                   <CardHeader>
                     <div className="p-2 rounded-lg bg-roundabout-green text-green-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h3.9L12 5l4.1 3H20a2 2 0 0 1 1.2.4"/><line x1="12" y1="12" x2="12" y2="19"/><line x1="8" y1="16" x2="16" y2="16"/></svg>
+                      <Package size={24} />
                     </div>
                     <CardTitle className="mt-4">Digital Products</CardTitle>
                     <CardDescription>
@@ -224,7 +226,7 @@ const Monetization = () => {
                 <Card className="card-hover">
                   <CardHeader>
                     <div className="p-2 rounded-lg bg-roundabout-orange text-orange-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                      <Briefcase size={24} />
                     </div>
                     <CardTitle className="mt-4">Creator Fund</CardTitle>
                     <CardDescription>
