@@ -4,10 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { AlertCircleIcon, DownloadIcon, UploadIcon } from 'lucide-react';
+import { AlertCircleIcon, DownloadIcon, UploadIcon, FileIcon, CheckIcon } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { exportData, importData, getImportTemplate, ExportOptions } from '@/services/dataImportExportService';
 
 const DataExportImport = () => {
   const { toast } = useToast();
@@ -19,6 +22,7 @@ const DataExportImport = () => {
   const [isImporting, setIsImporting] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
   const [importStatus, setImportStatus] = useState("");
+  const [includeTimestamp, setIncludeTimestamp] = useState(true);
 
   const dataTypes = [
     { value: "all", label: "All Data" },
@@ -40,7 +44,7 @@ const DataExportImport = () => {
     setExportStatus("Starting export...");
     
     try {
-      // Simulate an export process
+      // Update progress through steps
       await simulateProgressAsync(setExportProgress, setExportStatus, [
         "Preparing data...",
         "Processing analytics...",
@@ -48,35 +52,46 @@ const DataExportImport = () => {
         "Finalizing export..."
       ]);
       
-      // In a real implementation, this would be an API call to generate the export
+      const options: ExportOptions = {
+        format: exportFormat as 'json' | 'csv' | 'excel',
+        dataType: exportType as 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements',
+        includeTimestamp
+      };
       
-      // Simulate file download
+      const blob = await exportData(options);
+      
+      // Create download link and trigger download
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with optional timestamp
+      const timestamp = includeTimestamp ? `-${new Date().toISOString().split('T')[0]}` : '';
+      link.download = `roundabout-${exportType}${timestamp}.${exportFormat}`;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Export Complete",
+        description: `Your ${exportType} data has been exported as ${exportFormat.toUpperCase()}.`
+      });
+      
+      setExportProgress(100);
+      setExportStatus("Export completed successfully.");
+      
       setTimeout(() => {
-        const link = document.createElement('a');
-        link.href = '#';
-        link.setAttribute('download', `roundabout-export-${Date.now()}.${exportFormat}`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        toast({
-          title: "Export Complete",
-          description: `Your ${exportType} data has been exported as ${exportFormat.toUpperCase()}.`
-        });
-        
-        setExportProgress(100);
-        setExportStatus("Export completed successfully.");
-        
-        setTimeout(() => {
-          setIsExporting(false);
-          setExportProgress(0);
-          setExportStatus("");
-        }, 3000);
-      }, 500);
+        setIsExporting(false);
+        setExportProgress(0);
+        setExportStatus("");
+      }, 3000);
     } catch (error) {
       toast({
         title: "Export Failed",
-        description: "There was an error exporting your data.",
+        description: error instanceof Error ? error.message : "An unknown error occurred.",
         variant: "destructive"
       });
       setExportStatus("Export failed.");
@@ -107,7 +122,7 @@ const DataExportImport = () => {
     setImportStatus("Starting import...");
     
     try {
-      // Simulate an import process
+      // Update progress through steps
       await simulateProgressAsync(setImportProgress, setImportStatus, [
         "Validating file...",
         "Processing data...",
@@ -115,15 +130,19 @@ const DataExportImport = () => {
         "Finalizing import..."
       ]);
       
-      // In a real implementation, this would be an API call to process the import
+      const result = await importData(file);
       
-      toast({
-        title: "Import Complete",
-        description: "Your data has been imported successfully."
-      });
-      
-      setImportProgress(100);
-      setImportStatus("Import completed successfully.");
+      if (result.success) {
+        toast({
+          title: "Import Complete",
+          description: `Successfully imported ${result.recordsImported} records.`
+        });
+        
+        setImportProgress(100);
+        setImportStatus(`Import completed successfully. ${result.recordsImported} records imported.`);
+      } else {
+        throw new Error(result.errors?.join(", ") || "Import failed.");
+      }
       
       setTimeout(() => {
         setIsImporting(false);
@@ -134,7 +153,7 @@ const DataExportImport = () => {
     } catch (error) {
       toast({
         title: "Import Failed",
-        description: "There was an error importing your data.",
+        description: error instanceof Error ? error.message : "An unknown error occurred.",
         variant: "destructive"
       });
       setImportStatus("Import failed.");
@@ -143,6 +162,34 @@ const DataExportImport = () => {
         setImportProgress(0);
         setImportStatus("");
       }, 3000);
+    }
+  };
+  
+  const handleDownloadTemplate = (dataType: string, format: string) => {
+    try {
+      const blob = getImportTemplate(dataType, format);
+      
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `roundabout-${dataType}-template.${format}`;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Template Downloaded",
+        description: `${dataType} template in ${format} format has been downloaded.`
+      });
+    } catch (error) {
+      toast({
+        title: "Template Download Failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred.",
+        variant: "destructive"
+      });
     }
   };
   
@@ -180,7 +227,7 @@ const DataExportImport = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label>Select Data to Export</label>
+              <Label>Select Data to Export</Label>
               <Select value={exportType} onValueChange={setExportType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select data type" />
@@ -194,7 +241,7 @@ const DataExportImport = () => {
             </div>
             
             <div className="space-y-2">
-              <label>Export Format</label>
+              <Label>Export Format</Label>
               <Select value={exportFormat} onValueChange={setExportFormat}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select format" />
@@ -205,6 +252,15 @@ const DataExportImport = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            
+            <div className="flex items-center space-x-2 pt-2">
+              <Checkbox 
+                id="timestamp" 
+                checked={includeTimestamp} 
+                onCheckedChange={(checked) => setIncludeTimestamp(!!checked)}
+              />
+              <Label htmlFor="timestamp">Include timestamp in filename</Label>
             </div>
             
             {isExporting && (
@@ -242,7 +298,7 @@ const DataExportImport = () => {
           <CardContent className="space-y-4">
             <form onSubmit={handleImport} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="importFile">Select File to Import</label>
+                <Label htmlFor="importFile">Select File to Import</Label>
                 <Input id="importFile" type="file" accept=".json,.csv,.xlsx,.xls" disabled={isImporting} />
               </div>
               
@@ -281,9 +337,12 @@ const DataExportImport = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {dataTypes.slice(1).map(type => (
-              <Card key={type.value}>
+              <Card key={type.value} className="bg-muted/40">
                 <CardHeader className="py-3">
-                  <CardTitle className="text-base">{type.label} Template</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <FileIcon className="h-5 w-5 text-primary" />
+                    <CardTitle className="text-base">{type.label} Template</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent className="py-2">
                   <div className="flex gap-2">
@@ -293,12 +352,7 @@ const DataExportImport = () => {
                         size="sm" 
                         variant="outline" 
                         className="flex-1"
-                        onClick={() => {
-                          toast({
-                            title: "Template Downloaded",
-                            description: `${type.label} template in ${format.label} format has been downloaded.`
-                          });
-                        }}
+                        onClick={() => handleDownloadTemplate(type.value, format.value)}
                       >
                         {format.label}
                       </Button>

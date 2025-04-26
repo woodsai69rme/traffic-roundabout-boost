@@ -1,16 +1,22 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Switch } from "@/components/ui/switch";
-import { AlertCircleIcon, CopyIcon, PlusCircleIcon } from 'lucide-react';
+import { AlertCircleIcon, CopyIcon, PlusCircleIcon, CheckIcon, XIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import type { Database } from "@/integrations/supabase/types";
-
-type Webhook = Database['public']['Tables']['webhooks']['Row'];
+import { 
+  fetchWebhooks, 
+  createWebhook, 
+  updateWebhook, 
+  deleteWebhook, 
+  triggerTestEvent,
+  getCallbackUrl 
+} from '@/services/webhookService';
+import type { Webhook } from '@/services/webhookService';
 
 const WebhookIntegration = () => {
   const { toast } = useToast();
@@ -23,6 +29,7 @@ const WebhookIntegration = () => {
     active: true
   });
   const [showAddForm, setShowAddForm] = useState(false);
+  const [testingWebhookId, setTestingWebhookId] = useState<string | null>(null);
 
   const eventOptions = [
     { id: 'post.created', name: 'Post Created' },
@@ -33,27 +40,16 @@ const WebhookIntegration = () => {
   ];
   
   useEffect(() => {
-    fetchWebhooks();
+    loadWebhooks();
   }, []);
   
-  const fetchWebhooks = async () => {
+  const loadWebhooks = async () => {
     setIsLoading(true);
     try {
-      const { data: user } = await supabase.auth.getUser();
-      
-      if (!user.user) {
-        throw new Error("User not authenticated");
-      }
-      
-      const { data, error } = await supabase
-        .from('webhooks')
-        .select('*')
-        .eq('user_id', user.user.id);
-      
-      if (error) throw error;
-      setWebhooks(data || []);
+      const data = await fetchWebhooks();
+      setWebhooks(data);
     } catch (error) {
-      console.error("Error fetching webhooks:", error);
+      console.error("Error loading webhooks:", error);
       toast({
         title: "Error Loading Webhooks",
         description: "Failed to load webhooks. Please try again.",
@@ -70,30 +66,19 @@ const WebhookIntegration = () => {
         throw new Error("Name and URL are required");
       }
       
-      const { data: user } = await supabase.auth.getUser();
-      
-      if (!user.user) {
-        throw new Error("User not authenticated");
-      }
-      
-      const { error } = await supabase
-        .from('webhooks')
-        .insert({
-          user_id: user.user.id,
-          name: newWebhook.name,
-          url: newWebhook.url,
-          events: newWebhook.events || [],
-          active: newWebhook.active
-        });
-      
-      if (error) throw error;
+      await createWebhook({
+        name: newWebhook.name,
+        url: newWebhook.url,
+        events: newWebhook.events || [],
+        active: newWebhook.active ?? true
+      });
       
       toast({
         title: "Webhook Created",
         description: "Your webhook has been created successfully."
       });
       
-      await fetchWebhooks();
+      await loadWebhooks();
       setNewWebhook({
         name: '',
         url: '',
@@ -112,12 +97,7 @@ const WebhookIntegration = () => {
   
   const handleToggleWebhook = async (id: string, active: boolean) => {
     try {
-      const { error } = await supabase
-        .from('webhooks')
-        .update({ active })
-        .eq('id', id);
-      
-      if (error) throw error;
+      await updateWebhook(id, { active });
       
       setWebhooks(webhooks.map(webhook => 
         webhook.id === id ? { ...webhook, active } : webhook
@@ -138,14 +118,8 @@ const WebhookIntegration = () => {
   
   const handleDeleteWebhook = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('webhooks')
-        .delete()
-        .eq('id', id);
-      
-      if (error) throw error;
-      
-      await fetchWebhooks();
+      await deleteWebhook(id);
+      await loadWebhooks();
       
       toast({
         title: "Webhook Deleted",
@@ -172,17 +146,39 @@ const WebhookIntegration = () => {
     });
   };
   
+  const handleTestWebhook = async (webhookId: string) => {
+    setTestingWebhookId(webhookId);
+    try {
+      // Test with the first event type in the webhook's events list
+      const webhook = webhooks.find(w => w.id === webhookId);
+      if (!webhook || webhook.events.length === 0) {
+        throw new Error("No events configured for this webhook");
+      }
+      
+      const eventToTest = webhook.events[0];
+      await triggerTestEvent(webhookId, eventToTest);
+      
+      toast({
+        title: "Test Sent Successfully",
+        description: "The test payload was sent to your webhook URL."
+      });
+    } catch (error) {
+      toast({
+        title: "Test Failed",
+        description: error instanceof Error ? error.message : "Failed to send test payload",
+        variant: "destructive"
+      });
+    } finally {
+      setTestingWebhookId(null);
+    }
+  };
+  
   const copyWebhookUrl = (url: string) => {
     navigator.clipboard.writeText(url);
     toast({
       title: "URL Copied",
       description: "Webhook URL copied to clipboard."
     });
-  };
-  
-  const getCallbackUrl = () => {
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/api/webhook/callback`;
   };
   
   return (
@@ -319,13 +315,28 @@ const WebhookIntegration = () => {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="pt-2">
+              <CardFooter className="pt-2 flex justify-between">
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="text-destructive border-destructive hover:bg-destructive/10 ml-auto"
+                  disabled={testingWebhookId === webhook.id}
+                  onClick={() => handleTestWebhook(webhook.id)}
+                >
+                  {testingWebhookId === webhook.id ? (
+                    <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
+                  ) : (
+                    <CheckIcon className="h-4 w-4 mr-2" />
+                  )}
+                  Test Webhook
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="text-destructive border-destructive hover:bg-destructive/10"
                   onClick={() => handleDeleteWebhook(webhook.id)}
                 >
+                  <XIcon className="h-4 w-4 mr-2" />
                   Delete
                 </Button>
               </CardFooter>
