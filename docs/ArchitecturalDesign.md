@@ -35,6 +35,7 @@ The application follows these data flow patterns:
 1. **Component State**: Local component state for UI-specific concerns.
 2. **React Query**: For server state management, caching, and synchronization.
 3. **API Services**: Abstraction layer for backend communication.
+4. **Auth Context**: User authentication state managed globally via context.
 
 ## Key Design Decisions
 
@@ -66,7 +67,7 @@ Key performance strategies include:
 The application uses a hybrid approach for state management:
 - Local component state for UI concerns
 - React Query for server state
-- Context API for theme and global UI state
+- Context API for theme and authentication state
 
 ### 5. Authentication and Authorization
 
@@ -74,6 +75,15 @@ User authentication is handled through Supabase with:
 - JWT-based authentication
 - Role-based access control
 - Protected routes
+- Persistent sessions across page reloads
+
+### 6. Notification System
+
+Real-time notification system implementation:
+- Centralized notification management
+- Visual indicators for unread notifications
+- Support for various notification types
+- Read state tracking
 
 ## Integration Points
 
@@ -83,6 +93,7 @@ The application integrates with multiple social media platforms through:
 - OAuth authentication
 - REST API communication
 - Webhook listeners for real-time updates
+- Profile data synchronization
 
 ### 2. Analytics Services
 
@@ -90,6 +101,7 @@ Integration with analytics providers for:
 - User engagement tracking
 - Growth metrics
 - Content performance analysis
+- Trend identification
 
 ### 3. Payment Processors
 
@@ -106,12 +118,22 @@ The architecture supports scalability through:
 - Lazy loading of features
 - Modular design allowing for independent scaling of features
 
+## Security Implementation
+
+Key security measures include:
+- JWT-based authentication
+- Protected routes requiring authentication
+- Secure data access patterns
+- Input validation and sanitization
+- Environment variable management for sensitive data
+
 ## Future Technical Directions
 
 1. **Micro-Frontend Architecture**: As the application grows, consider splitting into domain-specific micro-frontends.
 2. **Server Components**: Evaluate React Server Components for improved performance.
 3. **Edge Computing**: Move more logic to edge functions for reduced latency.
 4. **Advanced Caching**: Implement more sophisticated caching strategies for improved performance.
+5. **AI-Powered Features**: Leverage machine learning for content recommendations and insights.
 
 ## Conclusion
 

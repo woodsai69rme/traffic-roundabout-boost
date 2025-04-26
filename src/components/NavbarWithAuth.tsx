@@ -10,7 +10,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import ThemeToggle from '@/components/ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Menu, X } from 'lucide-react';
 import AuthNav from './AuthNav';
 import { useAuth } from '@/hooks/use-auth';

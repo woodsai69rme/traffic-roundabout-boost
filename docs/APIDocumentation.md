@@ -3,544 +3,459 @@
 
 ## Overview
 
-The Roundabout WebTraffic API provides programmatic access to platform data, analytics, and functionality. This documentation covers the available endpoints, authentication requirements, and common usage patterns.
+The Roundabout WebTraffic API provides programmatic access to user data, analytics, content management, and platform integrations. This document outlines the available endpoints, authentication methods, and data structures.
 
 ## Authentication
 
-### Authentication Methods
+### JWT Authentication
 
-All API requests require authentication using one of the following methods:
-
-1. **JWT Bearer Token**
-   - Obtained through standard authentication flow
-   - Included in Authorization header: `Authorization: Bearer <token>`
-   - Expires after 24 hours and requires renewal
-
-2. **API Key Authentication**
-   - Available for server-to-server integrations
-   - Included as header: `X-API-Key: <api_key>`
-   - Rate limits apply based on subscription tier
-
-### Obtaining Access Tokens
+All API requests require authentication via a JWT token. This token should be included in the Authorization header of all requests.
 
 ```
-POST /api/auth/token
-
-{
-  "email": "user@example.com",
-  "password": "secure_password"
-}
-
-Response:
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expires_in": 86400
-}
+Authorization: Bearer <your_jwt_token>
 ```
 
-### Refreshing Tokens
+### Getting a Token
+
+Tokens are obtained through the authentication process:
+
+1. User logs in through the application
+2. JWT token is issued and stored securely
+3. Token is automatically included in API requests
+
+### Token Expiration
+
+Tokens expire after 24 hours. The application automatically handles refresh tokens to maintain the session.
+
+## Base URL
+
+All API endpoints are relative to:
 
 ```
-POST /api/auth/refresh
-
-{
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-
-Response:
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expires_in": 86400
-}
+https://api.roundabout.webtraffic/v1
 ```
 
-## Core API Endpoints
+## User Endpoints
 
-### User Management
+### Get Current User
 
-#### Get Current User
+Retrieves the profile information for the authenticated user.
 
 ```
-GET /api/users/me
+GET /user
+```
 
-Response:
+#### Response
+
+```json
 {
-  "id": "user-uuid",
+  "id": "user_123",
   "email": "user@example.com",
   "username": "creator123",
-  "full_name": "Creator Name",
-  "profile_image": "https://example.com/profile.jpg",
-  "created_at": "2025-01-15T12:00:00Z",
-  "subscription_tier": "professional",
-  "is_verified": true
+  "fullName": "Creator Name",
+  "avatarUrl": "https://example.com/avatar.jpg",
+  "createdAt": "2023-04-15T10:30:00Z",
+  "preferences": {
+    "theme": "dark",
+    "emailNotifications": true
+  }
 }
 ```
 
-#### Update User Profile
+### Update User Profile
+
+Updates the user profile information.
 
 ```
-PATCH /api/users/me
+PUT /user
+```
 
+#### Request Body
+
+```json
 {
-  "full_name": "Updated Name",
-  "bio": "Content creator specializing in tech tutorials",
-  "profile_image": "base64_encoded_image_data"
+  "username": "newusername",
+  "fullName": "New Name",
+  "bio": "Creator and content strategist"
 }
+```
 
-Response:
+#### Response
+
+```json
 {
-  "id": "user-uuid",
-  "full_name": "Updated Name",
-  "bio": "Content creator specializing in tech tutorials",
-  "profile_image": "https://example.com/updated-profile.jpg",
-  "updated_at": "2025-04-26T14:30:00Z"
+  "id": "user_123",
+  "email": "user@example.com",
+  "username": "newusername",
+  "fullName": "New Name",
+  "bio": "Creator and content strategist",
+  "avatarUrl": "https://example.com/avatar.jpg",
+  "updatedAt": "2023-04-16T14:22:00Z"
 }
 ```
 
-### Platform Connections
+## Platform Endpoints
 
-#### List Connected Platforms
+### List Connected Platforms
+
+Retrieves all platforms connected to the user account.
 
 ```
-GET /api/platforms
+GET /platforms
+```
 
-Response:
+#### Response
+
+```json
 {
   "platforms": [
     {
-      "platform_id": "youtube",
+      "id": "platform_123",
+      "type": "youtube",
+      "username": "CreatorChannel",
       "connected": true,
-      "username": "TechCreator",
-      "followers": 15000,
-      "last_synced": "2025-04-25T10:15:00Z",
-      "status": "active"
-    },
-    {
-      "platform_id": "instagram",
-      "connected": true,
-      "username": "tech.creator",
-      "followers": 8500,
-      "last_synced": "2025-04-25T10:20:00Z",
-      "status": "active"
-    }
-  ]
-}
-```
-
-#### Connect Platform
-
-```
-POST /api/platforms/connect
-
-{
-  "platform_id": "tiktok",
-  "auth_code": "oauth_code_from_platform"
-}
-
-Response:
-{
-  "platform_id": "tiktok",
-  "connected": true,
-  "username": "techcreator",
-  "status": "active",
-  "connected_at": "2025-04-26T15:00:00Z"
-}
-```
-
-#### Disconnect Platform
-
-```
-DELETE /api/platforms/{platform_id}
-
-Response:
-{
-  "platform_id": "tiktok",
-  "status": "disconnected",
-  "disconnected_at": "2025-04-26T16:00:00Z"
-}
-```
-
-### Analytics
-
-#### Get Cross-Platform Analytics
-
-```
-GET /api/analytics?period=30d
-
-Response:
-{
-  "period": "30d",
-  "start_date": "2025-03-27T00:00:00Z",
-  "end_date": "2025-04-26T23:59:59Z",
-  "summary": {
-    "follower_growth": 1250,
-    "engagement_rate": 4.8,
-    "total_engagement": 28500,
-    "impression_count": 450000
-  },
-  "platforms": {
-    "youtube": {
-      "subscriber_growth": 800,
-      "views": 125000,
-      "watch_time_hours": 8500,
-      "engagement_rate": 5.2
-    },
-    "instagram": {
-      "follower_growth": 450,
-      "likes": 15000,
-      "comments": 2200,
-      "engagement_rate": 4.5
-    }
-  },
-  "trend": [
-    {
-      "date": "2025-03-27",
-      "followers_total": 22500,
-      "engagement": 950
-    },
-    // Additional daily data points...
-  ]
-}
-```
-
-#### Get Platform-Specific Analytics
-
-```
-GET /api/analytics/{platform_id}?period=30d&metrics=followers,engagement
-
-Response:
-{
-  "platform_id": "youtube",
-  "period": "30d",
-  "metrics": {
-    "followers": {
-      "start": 14200,
-      "end": 15000,
-      "growth": 800,
-      "growth_percentage": 5.63
-    },
-    "engagement": {
-      "likes": 24500,
-      "comments": 3800,
-      "shares": 1200,
-      "total": 29500,
-      "rate": 5.2
-    }
-  },
-  "daily_data": [
-    {
-      "date": "2025-03-27",
-      "followers": 14250,
-      "engagement": {
-        "likes": 810,
-        "comments": 125,
-        "shares": 40
+      "connectedAt": "2023-03-10T09:45:00Z",
+      "metrics": {
+        "followers": 24000,
+        "engagement": 4.2,
+        "growth": 8.7
       }
     },
-    // Additional daily data points...
+    {
+      "id": "platform_456",
+      "type": "instagram",
+      "username": "creator_official",
+      "connected": true,
+      "connectedAt": "2023-02-05T16:20:00Z",
+      "metrics": {
+        "followers": 15800,
+        "engagement": 5.1,
+        "growth": 3.2
+      }
+    }
   ]
 }
 ```
 
-### Content
+### Connect Platform
 
-#### Get Content Items
+Initiates the OAuth flow to connect a new platform.
 
 ```
-GET /api/content?platform=youtube&limit=10&page=1
+POST /platforms/connect
+```
 
-Response:
+#### Request Body
+
+```json
 {
-  "total": 45,
-  "page": 1,
-  "limit": 10,
-  "has_more": true,
+  "platform": "tiktok",
+  "redirectUrl": "https://roundabout.webtraffic/callback"
+}
+```
+
+#### Response
+
+```json
+{
+  "authUrl": "https://tiktok.com/oauth?client_id=xyz&redirect=...",
+  "state": "random_state_string"
+}
+```
+
+### Disconnect Platform
+
+Removes a platform connection.
+
+```
+DELETE /platforms/{platformId}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Platform successfully disconnected"
+}
+```
+
+## Analytics Endpoints
+
+### Get Overview Analytics
+
+Retrieves summary analytics across all platforms.
+
+```
+GET /analytics/overview
+```
+
+#### Query Parameters
+
+- `timeframe`: day, week, month, year (default: month)
+- `startDate`: ISO date (optional)
+- `endDate`: ISO date (optional)
+
+#### Response
+
+```json
+{
+  "timeframe": "month",
+  "startDate": "2023-03-01T00:00:00Z",
+  "endDate": "2023-03-31T23:59:59Z",
+  "metrics": {
+    "totalFollowers": 45800,
+    "followerGrowth": 2150,
+    "growthPercentage": 4.9,
+    "totalEngagement": 12340,
+    "engagementRate": 4.5,
+    "views": 250000,
+    "averageWatchTime": "4:32"
+  },
+  "platforms": [
+    {
+      "platform": "youtube",
+      "followers": 24000,
+      "growth": 1200,
+      "engagementRate": 4.2
+    },
+    {
+      "platform": "instagram",
+      "followers": 15800,
+      "growth": 950,
+      "engagementRate": 5.1
+    }
+  ]
+}
+```
+
+### Get Engagement Analytics
+
+Retrieves detailed engagement analytics.
+
+```
+GET /analytics/engagement
+```
+
+#### Query Parameters
+
+- `platform`: Filter by platform (optional)
+- `timeframe`: day, week, month, year (default: month)
+- `startDate`: ISO date (optional)
+- `endDate`: ISO date (optional)
+
+#### Response
+
+```json
+{
+  "timeframe": "month",
+  "engagementBreakdown": {
+    "likes": 8500,
+    "comments": 1240,
+    "shares": 650,
+    "saves": 450
+  },
+  "engagementSources": {
+    "organic": 65,
+    "reciprocal": 25,
+    "paid": 10
+  },
+  "engagementByTime": [
+    {
+      "hour": 0,
+      "percentage": 2
+    },
+    {
+      "hour": 1,
+      "percentage": 1
+    },
+    // ... additional hours ...
+    {
+      "hour": 23,
+      "percentage": 3
+    }
+  ],
+  "engagementByDay": [
+    {
+      "day": "Monday",
+      "percentage": 12
+    },
+    // ... additional days ...
+    {
+      "day": "Sunday",
+      "percentage": 18
+    }
+  ]
+}
+```
+
+## Content Endpoints
+
+### Get Recent Content
+
+Retrieves recently published content across platforms.
+
+```
+GET /content/recent
+```
+
+#### Query Parameters
+
+- `platform`: Filter by platform (optional)
+- `limit`: Number of items to return (default: 20)
+- `offset`: Pagination offset (default: 0)
+
+#### Response
+
+```json
+{
+  "total": 156,
   "items": [
     {
-      "id": "content-uuid-1",
+      "id": "content_123",
       "platform": "youtube",
-      "platform_content_id": "abc123",
-      "title": "How to Build a Website in 2025",
+      "type": "video",
+      "title": "How to Grow Your Channel",
       "url": "https://youtube.com/watch?v=abc123",
-      "thumbnail": "https://example.com/thumbnail.jpg",
-      "published_at": "2025-04-20T14:00:00Z",
+      "publishedAt": "2023-04-10T15:30:00Z",
+      "thumbnailUrl": "https://example.com/thumbnail.jpg",
       "metrics": {
         "views": 12500,
-        "likes": 1800,
-        "comments": 320,
-        "shares": 250
+        "likes": 850,
+        "comments": 120,
+        "shares": 45
       }
     },
-    // Additional content items...
+    // ... additional content items ...
   ]
 }
 ```
 
-#### Create Content Draft
+## Monetization Endpoints
+
+### Get Monetization Overview
+
+Retrieves monetization summary data.
 
 ```
-POST /api/content
-
-{
-  "title": "10 AI Tools for Content Creators",
-  "description": "Exploring the best AI tools to enhance your content creation workflow",
-  "tags": ["AI", "ContentCreation", "Tools"],
-  "scheduled_for": "2025-05-01T10:00:00Z",
-  "platforms": ["youtube", "instagram"]
-}
-
-Response:
-{
-  "id": "draft-uuid",
-  "title": "10 AI Tools for Content Creators",
-  "description": "Exploring the best AI tools to enhance your content creation workflow",
-  "tags": ["AI", "ContentCreation", "Tools"],
-  "scheduled_for": "2025-05-01T10:00:00Z",
-  "platforms": ["youtube", "instagram"],
-  "status": "draft",
-  "created_at": "2025-04-26T16:30:00Z"
-}
+GET /monetization/overview
 ```
 
-### Monetization
+#### Response
 
-#### Get Earnings Summary
-
-```
-GET /api/monetization/earnings?period=all_time
-
-Response:
+```json
 {
-  "period": "all_time",
+  "totalRevenue": 5240.50,
   "currency": "USD",
-  "total_earnings": 4285.42,
-  "pending_payout": 842.18,
-  "next_payout_date": "2025-05-15",
-  "sources": {
-    "platform_revenue": 2145.76,
-    "premium_content": 840.50,
-    "brand_partnerships": 1000.00,
-    "affiliate_marketing": 299.16
-  },
-  "monthly_breakdown": [
+  "periodRevenue": 1250.75,
+  "previousPeriodRevenue": 1050.25,
+  "growthPercentage": 19.1,
+  "sources": [
     {
-      "month": "2025-04",
-      "earnings": 1055.93
+      "source": "sponsorships",
+      "amount": 3000.00,
+      "percentage": 57.2
     },
     {
-      "month": "2025-03",
-      "earnings": 925.47
+      "source": "affiliate",
+      "amount": 1240.50,
+      "percentage": 23.7
     },
-    // Additional months...
+    {
+      "source": "products",
+      "amount": 1000.00,
+      "percentage": 19.1
+    }
   ]
 }
 ```
 
-#### Get Available Monetization Options
+## Error Handling
 
-```
-GET /api/monetization/options
+### Error Codes
 
-Response:
+The API uses standard HTTP status codes:
+
+- `200 OK`: Request succeeded
+- `201 Created`: Resource created successfully
+- `400 Bad Request`: Invalid request parameters
+- `401 Unauthorized`: Authentication required
+- `403 Forbidden`: Insufficient permissions
+- `404 Not Found`: Resource not found
+- `429 Too Many Requests`: Rate limit exceeded
+- `500 Internal Server Error`: Server-side error
+
+### Error Response Format
+
+```json
 {
-  "eligible_options": [
-    {
-      "id": "platform_revenue",
-      "name": "Platform Revenue Sharing",
-      "description": "Earn a share of platform revenue based on your engagement",
-      "status": "active",
-      "requirements": {
-        "minimum_followers": 1000,
-        "content_guidelines": "URL_to_guidelines"
-      },
-      "commission_rate": "70%"
-    },
-    {
-      "id": "premium_content",
-      "name": "Premium Content",
-      "description": "Create exclusive content for subscribers",
-      "status": "active",
-      "requirements": {
-        "account_age": "30 days",
-        "content_count": 5
-      },
-      "commission_rate": "85%"
-    },
-    // Additional monetization options...
-  ]
-}
-```
-
-### Engagement System
-
-#### Get Engagement Tasks
-
-```
-GET /api/engagement/tasks
-
-Response:
-{
-  "available_tasks": 12,
-  "credits_available": 25,
-  "daily_limit": 50,
-  "tasks": [
-    {
-      "id": "task-uuid-1",
-      "platform": "instagram",
-      "content_url": "https://instagram.com/p/abc123",
-      "creator_username": "design.inspiration",
-      "task_type": "like_comment",
-      "credits_reward": 2,
-      "expires_at": "2025-04-26T23:59:59Z"
-    },
-    // Additional tasks...
-  ]
-}
-```
-
-#### Complete Engagement Task
-
-```
-POST /api/engagement/tasks/{task_id}/complete
-
-{
-  "proof": {
-    "type": "comment",
-    "content": "This is amazing content! Love the insights.",
-    "screenshot": "base64_encoded_image_data"
-  }
-}
-
-Response:
-{
-  "task_id": "task-uuid-1",
-  "status": "completed",
-  "credits_earned": 2,
-  "total_credits": 27,
-  "completed_at": "2025-04-26T17:00:00Z"
-}
-```
-
-## Webhooks
-
-### Available Events
-
-Roundabout WebTraffic provides webhooks for real-time notifications of important events:
-
-- `user.profile.updated`
-- `platform.connected`
-- `platform.disconnected`
-- `content.published`
-- `analytics.milestone`
-- `monetization.payout`
-
-### Webhook Configuration
-
-```
-POST /api/webhooks
-
-{
-  "url": "https://your-service.com/webhook-endpoint",
-  "events": ["platform.connected", "content.published"],
-  "secret": "your_webhook_secret"
-}
-
-Response:
-{
-  "id": "webhook-uuid",
-  "url": "https://your-service.com/webhook-endpoint",
-  "events": ["platform.connected", "content.published"],
-  "created_at": "2025-04-26T17:30:00Z",
-  "status": "active"
-}
-```
-
-### Webhook Payload Example
-
-```
-POST https://your-service.com/webhook-endpoint
-
-Headers:
-X-Roundabout-Signature: t=1650986400,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
-X-Roundabout-Event: platform.connected
-
-Body:
-{
-  "event": "platform.connected",
-  "created_at": "2025-04-26T17:35:00Z",
-  "data": {
-    "user_id": "user-uuid",
-    "platform": "tiktok",
-    "username": "techcreator",
-    "follower_count": 5200
+  "error": {
+    "code": "invalid_request",
+    "message": "Missing required parameter: platform",
+    "status": 400,
+    "details": {
+      "field": "platform",
+      "reason": "required"
+    }
   }
 }
 ```
 
 ## Rate Limits
 
-API requests are subject to rate limits based on subscription tier:
+API requests are subject to rate limiting:
 
-- **Basic**: 60 requests per minute
-- **Professional**: 120 requests per minute
-- **Enterprise**: 300 requests per minute
+- 100 requests per minute per user
+- 1,000 requests per hour per user
 
-Rate limit headers are included in all API responses:
-
-```
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 58
-X-RateLimit-Reset: 1650986460
-```
-
-## Error Handling
-
-The API uses standard HTTP status codes and returns descriptive error messages:
+Rate limit headers are included in all responses:
 
 ```
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1617981236
+```
+
+## Webhooks
+
+### Available Events
+
+- `user.updated`: Triggered when user profile is updated
+- `platform.connected`: Triggered when a new platform is connected
+- `platform.disconnected`: Triggered when a platform is disconnected
+- `content.published`: Triggered when new content is published
+- `milestone.reached`: Triggered when user reaches a growth milestone
+
+### Webhook Format
+
+```json
 {
-  "error": {
-    "code": "authentication_failed",
-    "message": "Invalid or expired access token",
-    "status": 401,
-    "documentation_url": "https://docs.roundaboutwebtraffic.com/api/errors#authentication_failed"
+  "id": "event_123",
+  "type": "platform.connected",
+  "created": 1617981236,
+  "data": {
+    "userId": "user_123",
+    "platform": "tiktok",
+    "username": "creator_tiktok"
   }
 }
 ```
 
-Common error codes:
+## SDKs and Libraries
 
-- `authentication_failed`: Authentication issues (401)
-- `permission_denied`: Authorization issues (403)
-- `resource_not_found`: Requested resource does not exist (404)
-- `validation_error`: Invalid request parameters (400)
-- `rate_limit_exceeded`: Too many requests (429)
-- `server_error`: Unexpected server error (500)
+Roundabout WebTraffic provides official libraries for common programming languages:
 
-## SDK Support
-
-Official SDKs are available for:
-
-- JavaScript/TypeScript
-- Python
-- PHP
-- Ruby
-- Java
-
-SDKs can be found at: https://github.com/roundaboutwebtraffic/sdks
+- JavaScript/TypeScript: `@roundabout/api-client`
+- Python: `roundabout-api`
+- PHP: `roundabout/api-client`
 
 ## API Versioning
 
-The API is versioned to ensure compatibility as features evolve:
+The API is versioned through the URL path (e.g., `/v1/`). When breaking changes are introduced, a new version will be released while maintaining support for previous versions for at least 12 months.
 
-- Current stable version: `v1`
-- Access versioned endpoints via URL path: `/api/v1/users/me`
-- Deprecation notices will be provided at least 6 months in advance
+## Support
 
-## Conclusion
+For API support, please contact:
 
-This documentation covers the core functionality of the Roundabout WebTraffic API. For additional endpoints, parameters, and examples, please refer to our interactive API explorer at https://api.roundaboutwebtraffic.com/explorer.
-
-For support with API integration, please contact api-support@roundaboutwebtraffic.com.
+- Email: api-support@roundabout.webtraffic
+- Documentation: https://developers.roundabout.webtraffic/docs

@@ -5,12 +5,73 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AreaChart, BarChart, LineChart } from '@/components/ui/chart';
+import { ChartContainer } from '@/components/ui/chart';
 import { useDevice } from '@/hooks/use-mobile';
 import DashboardSummary from '@/components/DashboardSummary';
 import PlatformOverview from '@/components/PlatformOverview';
 import EngagementStats from '@/components/EngagementStats';
 import RecentActivity from '@/components/RecentActivity';
+import {
+  ResponsiveContainer,
+  LineChart as RechartsLineChart,
+  Line,
+  BarChart as RechartsBarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  AreaChart as RechartsAreaChart,
+  Area
+} from 'recharts';
+
+// Create wrapper components for charts
+const LineChart = ({ data, height }) => (
+  <ChartContainer config={{}} className="h-[300px]">
+    <RechartsLineChart data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="value" stroke="#8884d8" />
+    </RechartsLineChart>
+  </ChartContainer>
+);
+
+const BarChart = ({ data, height }) => (
+  <ChartContainer config={{}} className="h-[300px]">
+    <RechartsBarChart data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="value" fill="#8884d8" />
+    </RechartsBarChart>
+  </ChartContainer>
+);
+
+const AreaChart = ({ data, categories, height }) => (
+  <ChartContainer config={{}} className="h-[300px]">
+    <RechartsAreaChart data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      {categories.map((category, index) => (
+        <Area 
+          key={category} 
+          type="monotone" 
+          dataKey={category} 
+          stackId="1"
+          stroke={index === 0 ? "#8884d8" : index === 1 ? "#82ca9d" : "#ffc658"} 
+          fill={index === 0 ? "#8884d8" : index === 1 ? "#82ca9d" : "#ffc658"} 
+        />
+      ))}
+    </RechartsAreaChart>
+  </ChartContainer>
+);
 
 const Dashboard = () => {
   const { user } = useAuth();
