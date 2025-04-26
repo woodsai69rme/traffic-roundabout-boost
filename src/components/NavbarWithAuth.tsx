@@ -15,12 +15,12 @@ import {
   Link as LinkIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useMobile } from '@/hooks/use-mobile';
-import ThemeToggle from './ThemeToggle';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 
 const NavbarWithAuth = () => {
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   
   const navItems = [

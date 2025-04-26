@@ -1,3 +1,4 @@
+
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -17,6 +18,8 @@ import Profile from './pages/Profile';
 import Documentation from './pages/Documentation';
 import NotFound from './pages/NotFound';
 import SocialApiIntegrationPage from './components/ApiIntegrations/SocialApiIntegrationPage';
+import DocPage from './components/DocPage';
+import DocPageContent from './components/DocPageContent';
 
 const queryClient = new QueryClient();
 
