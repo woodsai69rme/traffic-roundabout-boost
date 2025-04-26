@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from './ThemeToggle';
 
 const Navbar = () => {
   return (
@@ -18,6 +19,9 @@ const Navbar = () => {
           <Link to="/" className="text-foreground/80 hover:text-primary transition-colors">
             Home
           </Link>
+          <Link to="/platforms" className="text-foreground/80 hover:text-primary transition-colors">
+            Platforms
+          </Link>
           <Link to="/dashboard" className="text-foreground/80 hover:text-primary transition-colors">
             Dashboard
           </Link>
@@ -27,6 +31,7 @@ const Navbar = () => {
         </div>
         
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Button variant="outline" size="sm" className="hidden sm:flex">
             Log In
           </Button>
