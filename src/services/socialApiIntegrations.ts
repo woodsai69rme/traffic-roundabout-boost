@@ -1,5 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export interface SocialApiConfig {
   platform: string;
@@ -35,7 +36,6 @@ export async function fetchApiConfigurations(): Promise<SocialApiConfig[]> {
       throw new Error("User not authenticated");
     }
 
-    // In a real implementation, this would fetch from a Supabase table
     const { data, error } = await supabase
       .from('platform_connections')
       .select('*')
@@ -43,7 +43,15 @@ export async function fetchApiConfigurations(): Promise<SocialApiConfig[]> {
 
     if (error) throw error;
 
-    return data || [];
+    return data?.map(config => ({
+      platform: config.platform,
+      apiKey: config.api_key || undefined,
+      apiSecret: config.api_secret || undefined,
+      accessToken: config.access_token || undefined,
+      accessTokenSecret: config.access_token_secret || undefined,
+      connected: config.connected || false,
+      lastUpdated: config.last_updated || new Date().toISOString()
+    })) || [];
   } catch (error) {
     console.error("Error fetching API configurations:", error);
     return [];
@@ -59,7 +67,6 @@ export async function updateApiConfiguration(config: SocialApiConfig): Promise<b
       throw new Error("User not authenticated");
     }
 
-    // In a real implementation, this would update a Supabase table
     const { error } = await supabase
       .from('platform_connections')
       .upsert({
@@ -90,7 +97,6 @@ export async function disconnectPlatform(platformId: string): Promise<boolean> {
       throw new Error("User not authenticated");
     }
 
-    // In a real implementation, this would update a Supabase table
     const { error } = await supabase
       .from('platform_connections')
       .update({ 

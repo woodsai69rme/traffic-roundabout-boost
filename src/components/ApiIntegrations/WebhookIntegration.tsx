@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,16 +7,10 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Switch } from "@/components/ui/switch";
 import { AlertCircleIcon, CopyIcon, PlusCircleIcon } from 'lucide-react';
-import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Webhook {
-  id: string;
-  name: string;
-  url: string;
-  events: string[];
-  active: boolean;
-}
+type Webhook = Database['public']['Tables']['webhooks']['Row'];
 
 const WebhookIntegration = () => {
   const { toast } = useToast();
@@ -46,7 +39,6 @@ const WebhookIntegration = () => {
   const fetchWebhooks = async () => {
     setIsLoading(true);
     try {
-      // In a real implementation, this would fetch from a Supabase table
       const { data: user } = await supabase.auth.getUser();
       
       if (!user.user) {
@@ -78,23 +70,21 @@ const WebhookIntegration = () => {
         throw new Error("Name and URL are required");
       }
       
-      // In a real implementation, this would save to a Supabase table
       const { data: user } = await supabase.auth.getUser();
       
       if (!user.user) {
         throw new Error("User not authenticated");
       }
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('webhooks')
         .insert({
           user_id: user.user.id,
           name: newWebhook.name,
           url: newWebhook.url,
-          events: newWebhook.events,
+          events: newWebhook.events || [],
           active: newWebhook.active
-        })
-        .select();
+        });
       
       if (error) throw error;
       
@@ -103,7 +93,7 @@ const WebhookIntegration = () => {
         description: "Your webhook has been created successfully."
       });
       
-      setWebhooks([...(data || []), ...webhooks]);
+      await fetchWebhooks();
       setNewWebhook({
         name: '',
         url: '',
@@ -122,7 +112,6 @@ const WebhookIntegration = () => {
   
   const handleToggleWebhook = async (id: string, active: boolean) => {
     try {
-      // In a real implementation, this would update a Supabase table
       const { error } = await supabase
         .from('webhooks')
         .update({ active })
@@ -149,7 +138,6 @@ const WebhookIntegration = () => {
   
   const handleDeleteWebhook = async (id: string) => {
     try {
-      // In a real implementation, this would delete from a Supabase table
       const { error } = await supabase
         .from('webhooks')
         .delete()
@@ -157,7 +145,7 @@ const WebhookIntegration = () => {
       
       if (error) throw error;
       
-      setWebhooks(webhooks.filter(webhook => webhook.id !== id));
+      await fetchWebhooks();
       
       toast({
         title: "Webhook Deleted",

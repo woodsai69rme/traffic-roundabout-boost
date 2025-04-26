@@ -9,7 +9,75 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      platform_connections: {
+        Row: {
+          access_token: string | null
+          access_token_secret: string | null
+          api_key: string | null
+          api_secret: string | null
+          connected: boolean | null
+          id: string
+          last_updated: string | null
+          platform: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          access_token_secret?: string | null
+          api_key?: string | null
+          api_secret?: string | null
+          connected?: boolean | null
+          id?: string
+          last_updated?: string | null
+          platform: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          access_token_secret?: string | null
+          api_key?: string | null
+          api_secret?: string | null
+          connected?: boolean | null
+          id?: string
+          last_updated?: string | null
+          platform?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      webhooks: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          events: string[]
+          id: string
+          name: string
+          updated_at: string | null
+          url: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          events: string[]
+          id?: string
+          name: string
+          updated_at?: string | null
+          url: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          events?: string[]
+          id?: string
+          name?: string
+          updated_at?: string | null
+          url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
