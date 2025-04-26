@@ -1,25 +1,22 @@
-
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider, useAuth } from "./hooks/use-auth";
-import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import Platforms from "./pages/Platforms";
-import Communities from "./pages/Communities";
-import Analytics from "./pages/Analytics";
-import Monetization from "./pages/Monetization";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
-import Documentation from "./pages/Documentation";
-import DocPage from "./components/DocPage";
-import DocPageContent from "./components/DocPageContent";
-import SocialApiIntegrationPage from "./components/ApiIntegrations/SocialApiIntegrationPage";
+import Index from './pages/Index';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Platforms from './pages/Platforms';
+import Communities from './pages/Communities';
+import Monetization from './pages/Monetization';
+import Profile from './pages/Profile';
+import Documentation from './pages/Documentation';
+import NotFound from './pages/NotFound';
+import SocialApiIntegrationPage from './components/ApiIntegrations/SocialApiIntegrationPage';
 
 const queryClient = new QueryClient();
 
