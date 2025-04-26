@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import Documentation from "./pages/Documentation";
 import DocPage from "./components/DocPage";
 import DocPageContent from "./components/DocPageContent";
+import SocialApiIntegrationPage from "./components/ApiIntegrations/SocialApiIntegrationPage";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
               <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/monetization" element={<ProtectedRoute><Monetization /></ProtectedRoute>} />
+              <Route path="/integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
               
               {/* Documentation Routes */}
               <Route path="/docs" element={<Documentation />} />

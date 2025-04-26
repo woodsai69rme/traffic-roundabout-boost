@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Code } from 'lucide-react';
 
 const Navbar = () => {
   return (
@@ -28,6 +28,9 @@ const Navbar = () => {
           </Link>
           <Link to="/profile" className="text-foreground/80 hover:text-primary transition-colors">
             Profile
+          </Link>
+          <Link to="/integrations" className="text-foreground/80 hover:text-primary transition-colors">
+            Integrations
           </Link>
           <Link to="/docs" className="text-foreground/80 hover:text-primary transition-colors flex items-center gap-1">
             <BookOpen className="h-4 w-4" />

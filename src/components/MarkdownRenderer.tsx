@@ -47,22 +47,24 @@ const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
         blockquote: ({ node, ...props }) => (
           <blockquote className="border-l-4 border-primary/30 pl-4 italic my-4" {...props} />
         ),
-        code({ inline, className, children, ...props }) {
+        code({ className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
-          return !inline && match ? (
+          const isInline = !match;
+          
+          return isInline ? (
+            <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props}>
+              {children}
+            </code>
+          ) : (
             <SyntaxHighlighter
               style={oneDark}
-              language={match[1]}
+              language={match ? match[1] : ''}
               PreTag="div"
               className="rounded-md my-4"
               {...props}
             >
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
-          ) : (
-            <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props}>
-              {children}
-            </code>
           );
         },
         table: ({ node, ...props }) => (
