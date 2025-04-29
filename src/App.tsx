@@ -1,8 +1,7 @@
 
-import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./hooks/use-auth";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./hooks/use-auth";
+import { Toaster } from './components/ui/toaster';
 import Index from './pages/Index';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -43,7 +42,7 @@ const DocRoute = ({ path, title }: { path: string, title: string }) => {
 };
 
 const App = () => (
-  <BrowserRouter>
+  <>
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
@@ -117,7 +116,7 @@ const App = () => (
       <Route path="*" element={<NotFound />} />
     </Routes>
     <Toaster />
-  </BrowserRouter>
+  </>
 );
 
 export default App;
