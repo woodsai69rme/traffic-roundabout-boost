@@ -1,12 +1,25 @@
 
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export interface ThemeProviderProps {
+  children: React.ReactNode;
+  defaultTheme?: string;
+  enableSystem?: boolean;
+}
+
+export function ThemeProvider({
+  children,
+  defaultTheme = "dark",
+  enableSystem = true,
+}: ThemeProviderProps) {
   return (
-    <NextThemesProvider defaultTheme="system" enableSystem attribute="class">
+    <NextThemesProvider 
+      defaultTheme={defaultTheme} 
+      enableSystem={enableSystem} 
+      attribute="class"
+    >
       {children}
     </NextThemesProvider>
   );

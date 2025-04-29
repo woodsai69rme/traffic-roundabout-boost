@@ -1,5 +1,16 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { SocialApiConfig } from "./socialApiIntegrations";
+import { 
+  convertToCSV,
+  readFileContents,
+  generateTemplateData
+} from "@/utils/dataConversionUtils";
+import {
+  generateMockAnalytics,
+  generateMockPosts,
+  generateMockEngagements
+} from "@/utils/mockDataGenerators";
 
 export interface ExportOptions {
   format: 'json' | 'csv' | 'excel';
@@ -162,23 +173,7 @@ export const importData = async (file: File): Promise<ImportResult> => {
  */
 export const getImportTemplate = (dataType: string, format: string): Blob => {
   // In a real app, this would generate proper templates
-  
-  // For now, return mock templates
-  const templateData = {
-    json: {
-      'analytics': { date: 'YYYY-MM-DD', views: 0, engagements: 0, followers: 0 },
-      'posts': { content: 'Post content', platform: 'platform_id', scheduledFor: 'YYYY-MM-DD' },
-      'accounts': { platform: 'platform_id', apiKey: 'your_api_key', connected: true },
-      'engagements': { date: 'YYYY-MM-DD', type: 'like|comment', postId: 'post_id' }
-    },
-    csv: {
-      'analytics': 'date,views,engagements,followers\nYYYY-MM-DD,0,0,0',
-      'posts': 'content,platform,scheduledFor\nPost content,platform_id,YYYY-MM-DD',
-      'accounts': 'platform,apiKey,connected\nplatform_id,your_api_key,true',
-      'engagements': 'date,type,postId\nYYYY-MM-DD,like,post_id'
-    },
-    excel: 'This would be an Excel template in a production environment.'
-  };
+  const templateData = generateTemplateData();
   
   let content: string;
   let mimeType: string;
@@ -225,167 +220,4 @@ const fetchPlatformConnections = async (userId: string): Promise<SocialApiConfig
     connected: item.connected || false,
     lastUpdated: item.last_updated || new Date().toISOString()
   }));
-};
-
-// Helper function to read file contents based on type
-const readFileContents = async (file: File, fileType: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    
-    reader.onload = (event) => {
-      try {
-        const content = event.target?.result;
-        
-        if (typeof content !== 'string') {
-          throw new Error('Failed to read file content');
-        }
-        
-        switch (fileType) {
-          case 'json':
-            resolve(JSON.parse(content));
-            break;
-            
-          case 'csv':
-            resolve(parseCSV(content));
-            break;
-            
-          case 'xlsx':
-          case 'xls':
-            // In a real app, this would use a library to parse Excel files
-            resolve({ message: 'Excel parsing would be implemented in production' });
-            break;
-            
-          default:
-            throw new Error(`Unsupported file type: ${fileType}`);
-        }
-      } catch (error) {
-        reject(error);
-      }
-    };
-    
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    
-    if (fileType === 'json' || fileType === 'csv' || fileType === 'txt') {
-      reader.readAsText(file);
-    } else {
-      reader.readAsArrayBuffer(file);
-    }
-  });
-};
-
-// Helper function to convert data to CSV
-const convertToCSV = (data: any[]): string => {
-  if (!data || !data.length) return '';
-  
-  // For an array of objects, extract headers from the first object
-  const headers = Object.keys(data[0]);
-  
-  // Create the header row
-  const csvRows = [headers.join(',']);
-  
-  // Add data rows
-  for (const row of data) {
-    const values = headers.map(header => {
-      const value = row[header];
-      return typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value;
-    });
-    csvRows.push(values.join(','));
-  }
-  
-  return csvRows.join('\n');
-};
-
-// Helper function to parse CSV
-const parseCSV = (csv: string): any[] => {
-  // This is a very simplified CSV parser
-  // In a real app, you would use a CSV parsing library
-  
-  const lines = csv.split('\n');
-  const headers = lines[0].split(',');
-  const result = [];
-  
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    
-    const values = lines[i].split(',');
-    const row: Record<string, string> = {};
-    
-    for (let j = 0; j < headers.length; j++) {
-      row[headers[j]] = values[j];
-    }
-    
-    result.push(row);
-  }
-  
-  return result;
-};
-
-// Helper to generate mock analytics data
-const generateMockAnalytics = (): any[] => {
-  const days = 30;
-  const result = [];
-  
-  for (let i = 0; i < days; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    
-    result.push({
-      date: date.toISOString().split('T')[0],
-      views: Math.floor(Math.random() * 1000),
-      engagements: Math.floor(Math.random() * 500),
-      clicks: Math.floor(Math.random() * 200),
-      followers: 1000 + Math.floor(Math.random() * 50) - 25
-    });
-  }
-  
-  return result;
-};
-
-// Helper to generate mock posts data
-const generateMockPosts = (): any[] => {
-  const count = 20;
-  const platforms = ['twitter', 'facebook', 'instagram', 'linkedin'];
-  const result = [];
-  
-  for (let i = 0; i < count; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() - Math.floor(Math.random() * 30));
-    
-    result.push({
-      id: `post_${i}_${Date.now()}`,
-      content: `This is a sample post #${i}`,
-      platform: platforms[Math.floor(Math.random() * platforms.length)],
-      published: Math.random() > 0.2,
-      publishedAt: date.toISOString(),
-      likes: Math.floor(Math.random() * 100),
-      shares: Math.floor(Math.random() * 30),
-      comments: Math.floor(Math.random() * 20)
-    });
-  }
-  
-  return result;
-};
-
-// Helper to generate mock engagements data
-const generateMockEngagements = (): any[] => {
-  const count = 50;
-  const types = ['like', 'comment', 'share', 'follow'];
-  const platforms = ['twitter', 'facebook', 'instagram', 'linkedin'];
-  const result = [];
-  
-  for (let i = 0; i < count; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() - Math.floor(Math.random() * 30));
-    
-    result.push({
-      id: `eng_${i}_${Date.now()}`,
-      type: types[Math.floor(Math.random() * types.length)],
-      platform: platforms[Math.floor(Math.random() * platforms.length)],
-      postId: `post_${Math.floor(Math.random() * 20)}_${Date.now() - 86400000}`,
-      userId: `user_${Math.floor(Math.random() * 1000)}`,
-      createdAt: date.toISOString()
-    });
-  }
-  
-  return result;
 };

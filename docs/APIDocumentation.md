@@ -325,7 +325,7 @@ GET /content/recent
         "comments": 120,
         "shares": 45
       }
-    },
+    }
     // ... additional content items ...
   ]
 }
@@ -367,6 +367,73 @@ GET /monetization/overview
       "percentage": 19.1
     }
   ]
+}
+```
+
+## Webhooks
+
+### Available Events
+
+- `user.updated`: Triggered when user profile is updated
+- `platform.connected`: Triggered when a new platform is connected
+- `platform.disconnected`: Triggered when a platform is disconnected
+- `content.published`: Triggered when new content is published
+- `milestone.reached`: Triggered when user reaches a growth milestone
+
+### Webhook Format
+
+```json
+{
+  "id": "event_123",
+  "type": "platform.connected",
+  "created": 1617981236,
+  "data": {
+    "userId": "user_123",
+    "platform": "tiktok",
+    "username": "creator_tiktok"
+  }
+}
+```
+
+## Data Import/Export
+
+### Export Data
+
+```
+POST /data/export
+```
+
+#### Request Body
+
+```json
+{
+  "format": "json",
+  "dataType": "all",
+  "includeTimestamp": true
+}
+```
+
+#### Response
+
+A blob containing the exported data in the requested format.
+
+### Import Data
+
+```
+POST /data/import
+```
+
+#### Request Body
+
+This endpoint accepts form data with a file upload.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "recordsImported": 42,
+  "errors": []
 }
 ```
 
@@ -414,31 +481,6 @@ Rate limit headers are included in all responses:
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 95
 X-RateLimit-Reset: 1617981236
-```
-
-## Webhooks
-
-### Available Events
-
-- `user.updated`: Triggered when user profile is updated
-- `platform.connected`: Triggered when a new platform is connected
-- `platform.disconnected`: Triggered when a platform is disconnected
-- `content.published`: Triggered when new content is published
-- `milestone.reached`: Triggered when user reaches a growth milestone
-
-### Webhook Format
-
-```json
-{
-  "id": "event_123",
-  "type": "platform.connected",
-  "created": 1617981236,
-  "data": {
-    "userId": "user_123",
-    "platform": "tiktok",
-    "username": "creator_tiktok"
-  }
-}
 ```
 
 ## SDKs and Libraries
