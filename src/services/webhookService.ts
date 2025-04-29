@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 export interface Webhook {
@@ -9,6 +10,11 @@ export interface Webhook {
   user_id: string;
   created_at: string;
   updated_at: string;
+}
+
+interface WebhookError extends Error {
+  code?: string;
+  details?: string;
 }
 
 /**
@@ -27,8 +33,11 @@ export const fetchWebhooks = async (): Promise<Webhook[]> => {
     .eq('user_id', user.user.id);
   
   if (error) {
+    const webhookError = new Error("Error fetching webhooks: " + error.message) as WebhookError;
+    webhookError.code = error.code;
+    webhookError.details = error.details;
     console.error("Error fetching webhooks:", error);
-    throw error;
+    throw webhookError;
   }
   
   return data || [];
@@ -58,8 +67,11 @@ export const createWebhook = async (webhook: Omit<Webhook, 'id' | 'user_id' | 'c
     .single();
   
   if (error) {
+    const webhookError = new Error("Error creating webhook: " + error.message) as WebhookError;
+    webhookError.code = error.code;
+    webhookError.details = error.details;
     console.error("Error creating webhook:", error);
-    throw error;
+    throw webhookError;
   }
   
   return data;
@@ -87,8 +99,11 @@ export const updateWebhook = async (id: string, updates: Partial<Omit<Webhook, '
     .single();
   
   if (error) {
+    const webhookError = new Error("Error updating webhook: " + error.message) as WebhookError;
+    webhookError.code = error.code;
+    webhookError.details = error.details;
     console.error("Error updating webhook:", error);
-    throw error;
+    throw webhookError;
   }
   
   return data;
@@ -111,8 +126,11 @@ export const deleteWebhook = async (id: string): Promise<boolean> => {
     .eq('user_id', user.user.id);
   
   if (error) {
+    const webhookError = new Error("Error deleting webhook: " + error.message) as WebhookError;
+    webhookError.code = error.code;
+    webhookError.details = error.details;
     console.error("Error deleting webhook:", error);
-    throw error;
+    throw webhookError;
   }
   
   return true;
@@ -137,8 +155,11 @@ export const triggerTestEvent = async (id: string, eventType: string): Promise<b
     .single();
   
   if (fetchError) {
+    const webhookError = new Error("Error fetching webhook: " + fetchError.message) as WebhookError;
+    webhookError.code = fetchError.code;
+    webhookError.details = fetchError.details;
     console.error("Error fetching webhook:", fetchError);
-    throw fetchError;
+    throw webhookError;
   }
   
   if (!webhook) {
@@ -148,18 +169,23 @@ export const triggerTestEvent = async (id: string, eventType: string): Promise<b
   // In a real implementation, this would be a call to a backend service
   // that sends a test payload to the webhook URL
   
-  // For demonstration purposes, we'll simulate a successful test
   try {
-    // In reality, this would be done on the server-side to avoid CORS issues
-    // and to keep webhook URLs private
-    
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // For demonstration purposes, we'll log the event we would send
+    console.log(`[Webhook Test] Sending ${eventType} event to ${webhook.url}`);
+    console.log(`[Webhook Test] Payload:`, {
+      event: eventType,
+      timestamp: new Date().toISOString(),
+      user_id: user.user.id,
+      test: true
+    });
     
     return true;
   } catch (error) {
     console.error("Error triggering test event:", error);
-    throw error;
+    throw new Error(`Failed to trigger test event: ${error instanceof Error ? error.message : String(error)}`);
   }
 };
 
@@ -168,7 +194,6 @@ export const triggerTestEvent = async (id: string, eventType: string): Promise<b
  */
 export const getCallbackUrl = (): string => {
   // In a real application, this would be a stable URL for your webhook endpoint
-  // This is just for demonstration
   const baseUrl = window.location.origin;
   return `${baseUrl}/api/webhook/callback`;
 };

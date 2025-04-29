@@ -2,7 +2,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "./ThemeProvider";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -10,7 +10,7 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider defaultTheme="dark" attribute="class" enableSystem>
+    <ThemeProvider defaultTheme="dark" enableSystem>
       {children}
     </ThemeProvider>
   );

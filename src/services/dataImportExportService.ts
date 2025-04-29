@@ -37,45 +37,12 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
   // In a real implementation, this would fetch data from various tables
   // based on the options.dataType value
   
-  let data: any = {}; // Initialize data as an object, not an array
-  
   try {
     // Simulate data fetching and processing delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    switch (options.dataType) {
-      case 'all':
-        // Fetch all data types
-        const platformConfigs = await fetchPlatformConnections(user.user.id);
-        // In a real app, we would fetch analytics, posts, etc. here
-        
-        data = {
-          platforms: platformConfigs, // Now this is a valid property of an object
-          analytics: generateMockAnalytics(),
-          posts: generateMockPosts(),
-          engagements: generateMockEngagements()
-        };
-        break;
-        
-      case 'analytics':
-        data = generateMockAnalytics();
-        break;
-        
-      case 'posts':
-        data = generateMockPosts();
-        break;
-        
-      case 'accounts':
-        data = await fetchPlatformConnections(user.user.id);
-        break;
-        
-      case 'engagements':
-        data = generateMockEngagements();
-        break;
-        
-      default:
-        throw new Error(`Unsupported data type: ${options.dataType}`);
-    }
+    // Fetch or generate the data based on options
+    const data = await fetchDataForExport(options.dataType, user.user.id);
     
     // Prepare the export data with metadata
     const exportData = {
@@ -88,39 +55,8 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
       data
     };
     
-    // Convert to the requested format
-    let blob: Blob;
-    
-    switch (options.format) {
-      case 'json':
-        blob = new Blob(
-          [JSON.stringify(exportData, null, 2)], 
-          { type: 'application/json' }
-        );
-        break;
-        
-      case 'csv':
-        // In a real app, this would properly convert the data to CSV
-        blob = new Blob(
-          [convertToCSV(Array.isArray(data) ? data : [data])], 
-          { type: 'text/csv' }
-        );
-        break;
-        
-      case 'excel':
-        // In a real app, this would use a library like xlsx to create Excel files
-        // For now, we'll return a plain text file with a message
-        blob = new Blob(
-          ['This would be an Excel file in a production environment.'],
-          { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
-        );
-        break;
-        
-      default:
-        throw new Error(`Unsupported export format: ${options.format}`);
-    }
-    
-    return blob;
+    // Convert to the requested format and return as Blob
+    return convertDataToFormat(exportData, options.format);
   } catch (error) {
     console.error("Error exporting data:", error);
     throw error;
@@ -201,8 +137,77 @@ export const getImportTemplate = (dataType: string, format: string): Blob => {
   return new Blob([content], { type: mimeType });
 };
 
-// Helper function to fetch platform connections
-const fetchPlatformConnections = async (userId: string): Promise<SocialApiConfig[]> => {
+/**
+ * Helper function to fetch data for export
+ */
+async function fetchDataForExport(dataType: string, userId: string): Promise<any> {
+  switch (dataType) {
+    case 'all':
+      const platformConfigs = await fetchPlatformConnections(userId);
+      // In a real app, we would fetch analytics, posts, etc. here
+      
+      return {
+        platforms: platformConfigs,
+        analytics: generateMockAnalytics(),
+        posts: generateMockPosts(),
+        engagements: generateMockEngagements()
+      };
+      
+    case 'analytics':
+      return generateMockAnalytics();
+      
+    case 'posts':
+      return generateMockPosts();
+      
+    case 'accounts':
+      return await fetchPlatformConnections(userId);
+      
+    case 'engagements':
+      return generateMockEngagements();
+      
+    default:
+      throw new Error(`Unsupported data type: ${dataType}`);
+  }
+}
+
+/**
+ * Helper function to convert data to the requested format
+ */
+function convertDataToFormat(data: any, format: string): Blob {
+  switch (format) {
+    case 'json':
+      return new Blob(
+        [JSON.stringify(data, null, 2)], 
+        { type: 'application/json' }
+      );
+      
+    case 'csv':
+      // For CSV, we need to flatten the data structure if it's nested
+      const flattenedData = Array.isArray(data.data) 
+        ? data.data 
+        : [data.data];
+      
+      return new Blob(
+        [convertToCSV(flattenedData)], 
+        { type: 'text/csv' }
+      );
+      
+    case 'excel':
+      // In a real app, this would use a library like xlsx to create Excel files
+      return new Blob(
+        ['This would be an Excel file in a production environment.'],
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
+  }
+}
+
+/**
+ * Helper function to fetch platform connections
+ */
+async function fetchPlatformConnections(userId: string): Promise<SocialApiConfig[]> {
   const { data, error } = await supabase
     .from('platform_connections')
     .select('*')
@@ -220,4 +225,4 @@ const fetchPlatformConnections = async (userId: string): Promise<SocialApiConfig
     connected: item.connected || false,
     lastUpdated: item.last_updated || new Date().toISOString()
   }));
-};
+}

@@ -1,68 +1,54 @@
 
 /**
- * Helper functions for converting and parsing different data formats
+ * Utility functions for converting data between different formats
  */
 
 /**
- * Convert data to CSV format
- * @param data Array of objects to be converted to CSV
+ * Convert an array of objects to CSV format
+ * @param data Array of objects to convert
  * @returns CSV formatted string
  */
-export const convertToCSV = (data: any[]): string => {
-  if (!data || !data.length) return '';
+export const convertToCSV = (data: Record<string, any>[]): string => {
+  if (data.length === 0) return '';
   
-  // For an array of objects, extract headers from the first object
+  // Extract headers from the first object
   const headers = Object.keys(data[0]);
   
-  // Create the header row
-  const csvRows = [headers.join(',')];
+  // Create CSV header row
+  const headerRow = headers.join(',');
   
-  // Add data rows
-  for (const row of data) {
-    const values = headers.map(header => {
-      const value = row[header];
-      return typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value;
-    });
-    csvRows.push(values.join(','));
-  }
+  // Create CSV data rows
+  const rows = data.map(obj => 
+    headers.map(header => {
+      const value = obj[header];
+      
+      // Handle null/undefined
+      if (value === null || value === undefined) return '';
+      
+      // Handle strings (escape quotes and commas)
+      if (typeof value === 'string') {
+        return `"${value.replace(/"/g, '""')}"`;
+      }
+      
+      // Handle objects/arrays (convert to JSON string)
+      if (typeof value === 'object') {
+        return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+      }
+      
+      // Return as-is for numbers, booleans
+      return value;
+    }).join(',')
+  );
   
-  return csvRows.join('\n');
+  // Combine header and rows
+  return [headerRow, ...rows].join('\n');
 };
 
 /**
- * Parse CSV string to array of objects
- * @param csv CSV formatted string
- * @returns Array of objects
- */
-export const parseCSV = (csv: string): any[] => {
-  // This is a simplified CSV parser
-  // In a real app, you would use a CSV parsing library
-  
-  const lines = csv.split('\n');
-  const headers = lines[0].split(',');
-  const result = [];
-  
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    
-    const values = lines[i].split(',');
-    const row: Record<string, string> = {};
-    
-    for (let j = 0; j < headers.length; j++) {
-      row[headers[j]] = values[j];
-    }
-    
-    result.push(row);
-  }
-  
-  return result;
-};
-
-/**
- * Read file contents based on file type
- * @param file File to read
- * @param fileType Type of file (json, csv, xlsx, etc)
- * @returns Promise resolving to parsed file content
+ * Read contents of a file based on its type
+ * @param file File object to read
+ * @param fileType Type of file (json, csv, excel)
+ * @returns Promise resolving to the file contents
  */
 export const readFileContents = async (file: File, fileType: string): Promise<any> => {
   return new Promise((resolve, reject) => {
@@ -70,36 +56,53 @@ export const readFileContents = async (file: File, fileType: string): Promise<an
     
     reader.onload = (event) => {
       try {
-        const content = event.target?.result;
-        
-        if (typeof content !== 'string') {
-          throw new Error('Failed to read file content');
-        }
+        const result = event.target?.result as string;
         
         switch (fileType) {
           case 'json':
-            resolve(JSON.parse(content));
+            resolve(JSON.parse(result));
             break;
             
           case 'csv':
-            resolve(parseCSV(content));
+            // Basic CSV parsing - in a real app, use a proper CSV parser
+            const lines = result.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+              if (!lines[i].trim()) continue;
+              
+              const values = lines[i].split(',');
+              const row = {};
+              
+              for (let j = 0; j < headers.length; j++) {
+                // @ts-ignore - Dynamic property assignment
+                row[headers[j]] = values[j]?.trim() || '';
+              }
+              
+              data.push(row);
+            }
+            
+            resolve(data);
             break;
             
           case 'xlsx':
           case 'xls':
-            // In a real app, this would use a library to parse Excel files
-            resolve({ message: 'Excel parsing would be implemented in production' });
+            // In a real app, use a library like xlsx to parse Excel files
+            resolve({ error: 'Excel parsing requires a dedicated library' });
             break;
             
           default:
-            throw new Error(`Unsupported file type: ${fileType}`);
+            resolve(result);
         }
       } catch (error) {
         reject(error);
       }
     };
     
-    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.onerror = () => {
+      reject(new Error('Error reading file'));
+    };
     
     if (fileType === 'json' || fileType === 'csv' || fileType === 'txt') {
       reader.readAsText(file);
@@ -110,23 +113,77 @@ export const readFileContents = async (file: File, fileType: string): Promise<an
 };
 
 /**
- * Generate template data for different formats
+ * Generate template data for various formats
  * @returns Object containing template data for different formats
  */
 export const generateTemplateData = () => {
+  const jsonTemplates = {
+    analytics: [
+      {
+        date: "2023-01-01",
+        platform: "twitter",
+        followers: 1240,
+        engagement: 3.2,
+        impressions: 5600,
+        clicks: 230
+      },
+      {
+        date: "2023-01-02",
+        platform: "twitter",
+        followers: 1255,
+        engagement: 3.5,
+        impressions: 6100,
+        clicks: 245
+      }
+    ],
+    posts: [
+      {
+        id: "post_001",
+        platform: "twitter",
+        content: "Sample post content",
+        published: true,
+        publishedAt: "2023-01-01T12:00:00Z",
+        metrics: {
+          likes: 45,
+          comments: 12,
+          shares: 8
+        }
+      }
+    ],
+    accounts: [
+      {
+        platform: "twitter",
+        username: "example_user",
+        apiKey: "YOUR_API_KEY",
+        apiSecret: "YOUR_API_SECRET",
+        accessToken: "YOUR_ACCESS_TOKEN",
+        accessTokenSecret: "YOUR_ACCESS_TOKEN_SECRET"
+      }
+    ],
+    engagements: [
+      {
+        id: "eng_001",
+        type: "like",
+        platform: "twitter",
+        postId: "post_001",
+        userId: "user_123",
+        createdAt: "2023-01-01T12:30:00Z"
+      }
+    ]
+  };
+  
+  const csvTemplates = {
+    analytics: 'date,platform,followers,engagement,impressions,clicks\n2023-01-01,twitter,1240,3.2,5600,230\n2023-01-02,twitter,1255,3.5,6100,245',
+    posts: 'id,platform,content,published,publishedAt,likes,comments,shares\npost_001,twitter,"Sample post content",true,2023-01-01T12:00:00Z,45,12,8',
+    accounts: 'platform,username,apiKey,apiSecret,accessToken,accessTokenSecret\ntwitter,example_user,YOUR_API_KEY,YOUR_API_SECRET,YOUR_ACCESS_TOKEN,YOUR_ACCESS_TOKEN_SECRET',
+    engagements: 'id,type,platform,postId,userId,createdAt\neng_001,like,twitter,post_001,user_123,2023-01-01T12:30:00Z'
+  };
+  
+  const excel = 'This would be an Excel file template in a production environment.';
+  
   return {
-    json: {
-      'analytics': { date: 'YYYY-MM-DD', views: 0, engagements: 0, followers: 0 },
-      'posts': { content: 'Post content', platform: 'platform_id', scheduledFor: 'YYYY-MM-DD' },
-      'accounts': { platform: 'platform_id', apiKey: 'your_api_key', connected: true },
-      'engagements': { date: 'YYYY-MM-DD', type: 'like|comment', postId: 'post_id' }
-    },
-    csv: {
-      'analytics': 'date,views,engagements,followers\nYYYY-MM-DD,0,0,0',
-      'posts': 'content,platform,scheduledFor\nPost content,platform_id,YYYY-MM-DD',
-      'accounts': 'platform,apiKey,connected\nplatform_id,your_api_key,true',
-      'engagements': 'date,type,postId\nYYYY-MM-DD,like,post_id'
-    },
-    excel: 'This would be an Excel template in a production environment.'
+    json: jsonTemplates,
+    csv: csvTemplates,
+    excel
   };
 };

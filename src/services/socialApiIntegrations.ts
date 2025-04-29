@@ -43,7 +43,7 @@ export const fetchApiConfigurations = async (): Promise<SocialApiConfig[]> => {
   
   if (error) {
     console.error("Error fetching API configs:", error);
-    throw error;
+    throw new Error(`Failed to fetch API configurations: ${error.message}`);
   }
   
   return data.map(item => ({
@@ -80,7 +80,7 @@ export const getPlatformConfig = async (platformId: string): Promise<SocialApiCo
       return null;
     }
     console.error("Error fetching platform config:", error);
-    throw error;
+    throw new Error(`Failed to fetch platform configuration: ${error.message}`);
   }
   
   if (!data) return null;
@@ -133,7 +133,7 @@ export const updateApiConfiguration = async (config: SocialApiConfig): Promise<b
   
   if (error) {
     console.error("Error updating API config:", error);
-    throw error;
+    throw new Error(`Failed to update API configuration: ${error.message}`);
   }
   
   return true;
@@ -151,13 +151,16 @@ export const disconnectPlatform = async (platformId: string): Promise<boolean> =
   
   const { error } = await supabase
     .from('platform_connections')
-    .update({ connected: false, last_updated: new Date().toISOString() })
+    .update({ 
+      connected: false, 
+      last_updated: new Date().toISOString() 
+    })
     .eq('user_id', user.user.id)
     .eq('platform', platformId);
   
   if (error) {
     console.error("Error disconnecting platform:", error);
-    throw error;
+    throw new Error(`Failed to disconnect platform: ${error.message}`);
   }
   
   return true;
@@ -181,10 +184,38 @@ export const deletePlatformConnection = async (platformId: string): Promise<bool
   
   if (error) {
     console.error("Error deleting platform connection:", error);
-    throw error;
+    throw new Error(`Failed to delete platform connection: ${error.message}`);
   }
   
   return true;
+};
+
+/**
+ * Test a platform connection using the provided credentials
+ */
+export const testPlatformConnection = async (config: SocialApiConfig): Promise<boolean> => {
+  // In a real implementation, this would make a test API call to the platform
+  // using the provided credentials to verify they work
+  
+  // For now, we'll simulate an API call
+  try {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    // For demonstration purposes, let's say the test passes if all required fields are filled
+    const requiredFields = ['apiKey', 'apiSecret', 'accessToken', 'accessTokenSecret'];
+    const missingFields = requiredFields.filter(field => !config[field as keyof SocialApiConfig]);
+    
+    if (missingFields.length > 0) {
+      throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+    }
+    
+    // In reality, this would test the connection by making an actual API call
+    return true;
+  } catch (error) {
+    console.error(`Connection test failed for ${config.platform}:`, error);
+    throw error;
+  }
 };
 
 /**
@@ -258,12 +289,7 @@ export const fetchPlatformMetrics = async (platform: string): Promise<PlatformMe
     throw new Error(`Platform ${platform} is not connected`);
   }
   
-  // In a real implementation, this would use the appropriate API client for the platform
-  // and make authenticated requests to fetch metrics
   try {
-    // For demonstration, we're still returning mock data
-    // but in a real implementation, this would be actual API calls
-    
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
@@ -278,34 +304,6 @@ export const fetchPlatformMetrics = async (platform: string): Promise<PlatformMe
   } catch (error) {
     console.error(`Error fetching metrics for ${platform}:`, error);
     throw new Error(`Failed to fetch metrics: ${error instanceof Error ? error.message : String(error)}`);
-  }
-};
-
-/**
- * Test a platform connection using the provided credentials
- */
-export const testPlatformConnection = async (config: SocialApiConfig): Promise<boolean> => {
-  // In a real implementation, this would make a test API call to the platform
-  // using the provided credentials to verify they work
-  
-  // For now, we'll simulate an API call
-  try {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // For demonstration purposes, let's say the test passes if all required fields are filled
-    const requiredFields = ['apiKey', 'apiSecret', 'accessToken', 'accessTokenSecret'];
-    const missingFields = requiredFields.filter(field => !config[field as keyof SocialApiConfig]);
-    
-    if (missingFields.length > 0) {
-      throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-    }
-    
-    // In reality, this would test the connection by making an actual API call
-    return true;
-  } catch (error) {
-    console.error(`Connection test failed for ${config.platform}:`, error);
-    throw error;
   }
 };
 
@@ -348,11 +346,7 @@ export const schedulePost = async (
     throw new Error(`Platform ${platform} is not connected`);
   }
   
-  // In a real implementation, this would either:
-  // 1. Use the platform's scheduling API if available
-  // 2. Store the scheduled post in your database and use a cron job to publish it at the scheduled time
-  
-  // For demonstration purposes, we'll just simulate a successful scheduling
+  // Simulate API call delay
   await new Promise(resolve => setTimeout(resolve, 800));
   
   const postTime = scheduledTime || new Date(Date.now() + 3600000); // Default 1 hour from now
@@ -376,9 +370,7 @@ export const publishPost = async (
     throw new Error(`Platform ${platform} is not connected`);
   }
   
-  // In a real implementation, this would use the platform's API to publish a post
-  
-  // For demonstration purposes, we'll simulate a successful post
+  // Simulate API call delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   
   const now = new Date();
