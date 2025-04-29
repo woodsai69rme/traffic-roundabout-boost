@@ -26,7 +26,7 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
   // In a real implementation, this would fetch data from various tables
   // based on the options.dataType value
   
-  let data: any[] = [];
+  let data: any = {}; // Initialize data as an object, not an array
   
   try {
     // Simulate data fetching and processing delay
@@ -39,8 +39,7 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
         // In a real app, we would fetch analytics, posts, etc. here
         
         data = {
-          platforms: platformConfigs,
-          // Other data would be included here
+          platforms: platformConfigs, // Now this is a valid property of an object
           analytics: generateMockAnalytics(),
           posts: generateMockPosts(),
           engagements: generateMockEngagements()
@@ -92,7 +91,7 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
       case 'csv':
         // In a real app, this would properly convert the data to CSV
         blob = new Blob(
-          [convertToCSV(data)], 
+          [convertToCSV(Array.isArray(data) ? data : [data])], 
           { type: 'text/csv' }
         );
         break;
@@ -275,14 +274,14 @@ const readFileContents = async (file: File, fileType: string): Promise<any> => {
 };
 
 // Helper function to convert data to CSV
-const convertToCSV = (data: any): string => {
+const convertToCSV = (data: any[]): string => {
   if (!data || !data.length) return '';
   
   // For an array of objects, extract headers from the first object
   const headers = Object.keys(data[0]);
   
   // Create the header row
-  const csvRows = [headers.join(',')];
+  const csvRows = [headers.join(',']);
   
   // Add data rows
   for (const row of data) {
