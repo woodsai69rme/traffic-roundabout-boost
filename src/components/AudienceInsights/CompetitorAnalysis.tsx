@@ -20,6 +20,10 @@ import { ChartContainer } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 
+interface CompetitorAnalysisProps {
+  platform?: string;
+}
+
 // Sample data - in a real app, this would come from API
 const competitorRadarData = [
   { subject: 'Engagement', A: 120, B: 110, C: 140, fullMark: 150 },
@@ -74,7 +78,10 @@ const competitorInsightsData = [
   },
 ];
 
-const CompetitorAnalysis = () => {
+const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => {
+  // In a real app, you would filter or fetch data based on the platform
+  console.log(`Showing competitor analysis for platform: ${platform || 'all'}`);
+  
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

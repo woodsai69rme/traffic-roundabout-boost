@@ -16,6 +16,10 @@ import {
 } from 'recharts';
 import { ChartContainer } from '@/components/ui/chart';
 
+interface HashtagAnalyticsProps {
+  platform?: string;
+}
+
 // Sample data - in a real app, this would come from API
 const hashtagPerformanceData = [
   { name: '#marketing', reach: 8500, engagement: 720, posts: 24 },
@@ -33,8 +37,11 @@ const trendingHashtagsData = [
   { hashtag: '#contentcalendar', volume: 4800, growth: '+19%', category: 'Strategy' },
 ];
 
-const HashtagAnalytics = () => {
+const HashtagAnalytics: React.FC<HashtagAnalyticsProps> = ({ platform }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
+  
+  // In a real app, you would filter or fetch data based on the platform
+  console.log(`Showing hashtag analytics for platform: ${platform || 'all'}`);
   
   return (
     <div className="space-y-6">

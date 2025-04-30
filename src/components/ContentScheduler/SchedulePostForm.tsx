@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -83,7 +82,7 @@ const SchedulePostForm = ({ onSubmit, onCancel }: SchedulePostFormProps) => {
         onSubmit({
           platform: selectedPlatform,
           content,
-          date: dateTime,
+          scheduledDate: dateTime,
           mediaUrls
         });
       }

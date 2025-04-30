@@ -4,6 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { ChartContainer } from '@/components/ui/chart';
 
+interface AudienceDemographicsProps {
+  platform?: string;
+}
+
 // Sample data - in a real app, this would come from API
 const ageData = [
   { name: '18-24', value: 25, fill: '#8884d8' },
@@ -54,7 +58,10 @@ const renderCustomizedLabel = ({
   );
 };
 
-const AudienceDemographics = () => {
+const AudienceDemographics: React.FC<AudienceDemographicsProps> = ({ platform }) => {
+  // In a real app, you would filter or fetch data based on the platform
+  console.log(`Showing demographics for platform: ${platform || 'all'}`);
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card>

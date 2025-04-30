@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,6 +9,32 @@ import { cn } from '@/lib/utils';
 import { schedulePost } from '@/services/socialApiIntegrations';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
+
+// Define a simple component for displaying day cells with scheduled posts
+interface DayWithScheduledPostsProps {
+  day: Date;
+  className?: string;
+  children?: React.ReactNode;
+  posts: any[];
+  onPostClick?: (post: any) => void;
+}
+
+const DayWithScheduledPosts: React.FC<DayWithScheduledPostsProps> = ({
+  day,
+  className,
+  children,
+  posts,
+  onPostClick
+}) => {
+  return (
+    <div className={cn(className, "relative")}>
+      {children}
+      {posts.length > 0 && (
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
+      )}
+    </div>
+  );
+};
 
 const ContentCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -36,6 +64,11 @@ const ContentCalendar = () => {
 
   const handleDateSelect = (newDate: Date | undefined) => {
     setDate(newDate);
+  };
+
+  const handlePostClick = (post: any) => {
+    console.log("Post clicked:", post);
+    // Implement post click functionality
   };
 
   const handleSchedulePost = async (postData: any) => {
@@ -93,24 +126,6 @@ const ContentCalendar = () => {
   // Get platforms with posts on the selected date
   const platformsWithPosts = [...new Set(getPostsForSelectedDate().map(post => post.platform))];
 
-  const customComponents: CustomComponents = {
-    Day: (props) => {
-      const dateStr = format(props.day, 'yyyy-MM-dd');
-      const dayPosts = scheduledPosts.filter(post => {
-        if (!post.scheduledTime) return false;
-        return format(new Date(post.scheduledTime), 'yyyy-MM-dd') === dateStr;
-      });
-      
-      return (
-        <DayWithScheduledPosts 
-          {...props}
-          posts={dayPosts}
-          onPostClick={handlePostClick}
-        />
-      );
-    }
-  };
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
       <Card className="lg:col-span-2">
@@ -125,7 +140,7 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              day: ({ day, ...props }) => (
+              Day: ({ day, ...props }) => (
                 <div
                   {...props}
                   className={cn(
@@ -142,7 +157,7 @@ const ContentCalendar = () => {
             }}
           />
           <div className="mt-4">
-            <SchedulePostForm onSchedule={handleSchedulePost} />
+            <SchedulePostForm onSubmit={handleSchedulePost} />
           </div>
         </CardContent>
       </Card>
