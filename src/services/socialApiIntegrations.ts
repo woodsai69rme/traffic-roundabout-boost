@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 export interface SocialApiConfig {
@@ -516,7 +515,6 @@ export const updateScheduledPost = async (post: Post): Promise<Post> => {
   // In a real app, this would update the database
   return {
     ...post,
-    lastUpdated: new Date().toISOString()
   };
 };
 

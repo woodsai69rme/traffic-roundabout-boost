@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,6 +92,24 @@ const ContentCalendar = () => {
 
   // Get platforms with posts on the selected date
   const platformsWithPosts = [...new Set(getPostsForSelectedDate().map(post => post.platform))];
+
+  const customComponents: CustomComponents = {
+    Day: (props) => {
+      const dateStr = format(props.day, 'yyyy-MM-dd');
+      const dayPosts = scheduledPosts.filter(post => {
+        if (!post.scheduledTime) return false;
+        return format(new Date(post.scheduledTime), 'yyyy-MM-dd') === dateStr;
+      });
+      
+      return (
+        <DayWithScheduledPosts 
+          {...props}
+          posts={dayPosts}
+          onPostClick={handlePostClick}
+        />
+      );
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, User } from 'lucide-react';
@@ -10,7 +11,7 @@ import {
 import { useDevice } from '@/hooks/use-mobile';
 import { useAuth } from '@/hooks/use-auth';
 import { Link, useNavigate } from 'react-router-dom';
-import ThemeToggle from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 
 const NavbarWithAuth = () => {

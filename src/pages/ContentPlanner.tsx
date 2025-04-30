@@ -1,13 +1,56 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ContentCalendar from '@/components/ContentScheduler/ContentCalendar';
+import ScheduledPostsList from '@/components/ContentScheduler/ScheduledPostsList';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { fetchScheduledPosts, Post } from '@/services/socialApiIntegrations';
+import { useToast } from '@/hooks/use-toast';
 
 const ContentPlanner = () => {
+  const [scheduledPosts, setScheduledPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadScheduledPosts();
+  }, []);
+
+  const loadScheduledPosts = async () => {
+    try {
+      setIsLoading(true);
+      const posts = await fetchScheduledPosts();
+      setScheduledPosts(posts);
+    } catch (error) {
+      console.error("Error loading scheduled posts:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load scheduled posts. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditPost = (post: Post) => {
+    // To be implemented with a modal form
+    console.log("Edit post:", post);
+  };
+
+  const handleDeletePost = (post: Post) => {
+    // To be implemented with confirmation
+    console.log("Delete post:", post);
+  };
+
+  const handlePublishNow = (post: Post) => {
+    // To be implemented
+    console.log("Publish now:", post);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWithAuth />
@@ -45,10 +88,18 @@ const ContentPlanner = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Your content queue will appear here.</p>
-                    <Button className="mt-4">Create Content</Button>
-                  </div>
+                  {isLoading ? (
+                    <div className="text-center py-8">
+                      <p>Loading posts...</p>
+                    </div>
+                  ) : (
+                    <ScheduledPostsList 
+                      posts={scheduledPosts}
+                      onEdit={handleEditPost}
+                      onDelete={handleDeletePost}
+                      onPublishNow={handlePublishNow}
+                    />
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
