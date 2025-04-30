@@ -18,12 +18,51 @@ export interface PlatformMetrics {
   impressions: number;
   clicks: number;
   lastUpdated: string;
+  demographics?: PlatformDemographics;
+  growth?: number;
+  reachRate?: number;
+}
+
+export interface PlatformDemographics {
+  age?: Record<string, number>;
+  gender?: Record<string, number>;
+  location?: Record<string, number>;
+  languages?: Record<string, number>;
+}
+
+export interface Post {
+  id: string;
+  platform: string;
+  content: string;
+  mediaUrls?: string[];
+  scheduledTime?: string;
+  publishedTime?: string;
+  stats?: PostStats;
+}
+
+export interface PostStats {
+  likes?: number;
+  comments?: number;
+  shares?: number;
+  saves?: number;
+  clicks?: number;
+  impressions?: number;
+  engagement?: number;
 }
 
 export interface ApiError {
   message: string;
   code?: string;
   status?: number;
+}
+
+export interface HashtagAnalytics {
+  hashtag: string;
+  posts: number;
+  engagement: number;
+  reach: number;
+  growth: number;
+  trending: boolean;
 }
 
 /**
@@ -194,10 +233,6 @@ export const deletePlatformConnection = async (platformId: string): Promise<bool
  * Test a platform connection using the provided credentials
  */
 export const testPlatformConnection = async (config: SocialApiConfig): Promise<boolean> => {
-  // In a real implementation, this would make a test API call to the platform
-  // using the provided credentials to verify they work
-  
-  // For now, we'll simulate an API call
   try {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
@@ -299,7 +334,31 @@ export const fetchPlatformMetrics = async (platform: string): Promise<PlatformMe
       engagement: Math.random() * 5,
       impressions: Math.floor(Math.random() * 50000),
       clicks: Math.floor(Math.random() * 2000),
-      lastUpdated: new Date().toISOString()
+      growth: (Math.random() * 10) - 2, // -2 to +8 percent
+      reachRate: Math.random() * 20 + 10, // 10-30%
+      lastUpdated: new Date().toISOString(),
+      demographics: {
+        age: {
+          '18-24': 15 + Math.floor(Math.random() * 15),
+          '25-34': 25 + Math.floor(Math.random() * 20),
+          '35-44': 15 + Math.floor(Math.random() * 15),
+          '45-54': 10 + Math.floor(Math.random() * 10),
+          '55+': 5 + Math.floor(Math.random() * 5)
+        },
+        gender: {
+          'male': 40 + Math.floor(Math.random() * 20),
+          'female': 40 + Math.floor(Math.random() * 20),
+          'other': Math.floor(Math.random() * 5)
+        },
+        location: {
+          'United States': 40 + Math.floor(Math.random() * 20),
+          'United Kingdom': 10 + Math.floor(Math.random() * 10),
+          'Canada': 5 + Math.floor(Math.random() * 10),
+          'Germany': 5 + Math.floor(Math.random() * 5),
+          'Australia': 5 + Math.floor(Math.random() * 5),
+          'Other': 10 + Math.floor(Math.random() * 10)
+        }
+      }
     };
   } catch (error) {
     console.error(`Error fetching metrics for ${platform}:`, error);
@@ -310,7 +369,7 @@ export const fetchPlatformMetrics = async (platform: string): Promise<PlatformMe
 /**
  * Fetch latest posts from a platform
  */
-export const fetchLatestPosts = async (platform: string, limit = 10): Promise<any[]> => {
+export const fetchLatestPosts = async (platform: string, limit = 10): Promise<Post[]> => {
   const config = await getPlatformConfig(platform);
   if (!config || !config.connected) {
     throw new Error(`Platform ${platform} is not connected`);
@@ -324,11 +383,16 @@ export const fetchLatestPosts = async (platform: string, limit = 10): Promise<an
     id: `post_${i}_${Date.now()}`,
     platform,
     content: `Mock post ${i + 1} from ${platform}`,
-    engagement: Math.floor(Math.random() * 100),
-    likes: Math.floor(Math.random() * 50),
-    shares: Math.floor(Math.random() * 20),
-    comments: Math.floor(Math.random() * 10),
-    date: new Date(Date.now() - Math.random() * 604800000).toISOString() // Random time in last week
+    publishedTime: new Date(Date.now() - Math.random() * 604800000).toISOString(), // Random time in last week
+    stats: {
+      likes: Math.floor(Math.random() * 50),
+      comments: Math.floor(Math.random() * 20),
+      shares: Math.floor(Math.random() * 10),
+      saves: Math.floor(Math.random() * 5),
+      clicks: Math.floor(Math.random() * 100),
+      impressions: Math.floor(Math.random() * 500),
+      engagement: Math.random() * 5 + 1 // 1-6%
+    }
   }));
 };
 
@@ -379,4 +443,251 @@ export const publishPost = async (
     id: `post_${platform}_${Date.now()}`,
     publishedTime: now.toISOString()
   };
+};
+
+/**
+ * Fetch scheduled posts for a platform or all platforms
+ */
+export const fetchScheduledPosts = async (platform?: string): Promise<Post[]> => {
+  const { data: user } = await supabase.auth.getUser();
+  
+  if (!user.user) {
+    throw new Error("User not authenticated");
+  }
+
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 600));
+  
+  // Mock data - in a real app this would come from a database
+  const mockScheduledPosts: Post[] = [
+    {
+      id: 'scheduled_1',
+      platform: 'twitter',
+      content: 'Check out our latest product update! #tech #innovation',
+      scheduledTime: new Date(Date.now() + 3600000).toISOString(),
+    },
+    {
+      id: 'scheduled_2',
+      platform: 'instagram',
+      content: 'Behind the scenes look at our design process',
+      mediaUrls: ['/placeholder.svg'],
+      scheduledTime: new Date(Date.now() + 7200000).toISOString(),
+    },
+    {
+      id: 'scheduled_3',
+      platform: 'linkedin',
+      content: 'We\'re excited to announce our new partnership with Acme Inc.',
+      scheduledTime: new Date(Date.now() + 86400000).toISOString(),
+    },
+    {
+      id: 'scheduled_4',
+      platform: 'facebook',
+      content: 'Join our upcoming webinar on social media strategy',
+      mediaUrls: ['/placeholder.svg'],
+      scheduledTime: new Date(Date.now() + 172800000).toISOString(),
+    }
+  ];
+  
+  if (platform) {
+    return mockScheduledPosts.filter(post => post.platform === platform);
+  }
+  
+  return mockScheduledPosts;
+};
+
+/**
+ * Delete a scheduled post
+ */
+export const deleteScheduledPost = async (postId: string): Promise<boolean> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // In a real app, this would delete from a database
+  return true;
+};
+
+/**
+ * Update a scheduled post
+ */
+export const updateScheduledPost = async (post: Post): Promise<Post> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 700));
+  
+  // In a real app, this would update the database
+  return {
+    ...post,
+    lastUpdated: new Date().toISOString()
+  };
+};
+
+/**
+ * Get best time to post recommendations for a platform
+ */
+export const getBestTimeToPost = async (platform: string): Promise<{day: string, time: string}[]> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 600));
+  
+  // Mock data - in a real app this would be based on audience analytics
+  const mockTimes: Record<string, {day: string, time: string}[]> = {
+    'twitter': [
+      { day: 'Monday', time: '8:00' },
+      { day: 'Wednesday', time: '12:00' },
+      { day: 'Friday', time: '15:00' },
+    ],
+    'instagram': [
+      { day: 'Tuesday', time: '11:00' },
+      { day: 'Thursday', time: '17:00' },
+      { day: 'Saturday', time: '20:00' },
+    ],
+    'facebook': [
+      { day: 'Monday', time: '15:00' },
+      { day: 'Wednesday', time: '13:00' },
+      { day: 'Friday', time: '10:00' },
+    ],
+    'linkedin': [
+      { day: 'Tuesday', time: '9:00' },
+      { day: 'Thursday', time: '16:00' },
+      { day: 'Wednesday', time: '11:00' },
+    ]
+  };
+  
+  return mockTimes[platform] || [];
+};
+
+/**
+ * Get hashtag analytics and recommendations
+ */
+export const getHashtagAnalytics = async (platform: string, query?: string): Promise<HashtagAnalytics[]> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 700));
+  
+  // Mock data - in a real app this would come from platform analytics
+  const mockHashtags: HashtagAnalytics[] = [
+    { 
+      hashtag: '#marketing', 
+      posts: 8500, 
+      engagement: 4.2, 
+      reach: 25000, 
+      growth: 15,
+      trending: true 
+    },
+    { 
+      hashtag: '#socialmedia', 
+      posts: 12500, 
+      engagement: 3.8, 
+      reach: 45000, 
+      growth: 8,
+      trending: true 
+    },
+    { 
+      hashtag: '#contentcreator', 
+      posts: 7200, 
+      engagement: 5.1, 
+      reach: 18000, 
+      growth: 22,
+      trending: true 
+    },
+    { 
+      hashtag: '#digitalmarketing', 
+      posts: 9600, 
+      engagement: 3.5, 
+      reach: 28000, 
+      growth: 5,
+      trending: false 
+    },
+    { 
+      hashtag: '#branding', 
+      posts: 6300, 
+      engagement: 4.0, 
+      reach: 15000, 
+      growth: 12,
+      trending: false 
+    },
+  ];
+  
+  if (query) {
+    return mockHashtags.filter(tag => tag.hashtag.includes(query));
+  }
+  
+  return mockHashtags;
+};
+
+/**
+ * Get competitor analysis data
+ */
+export const getCompetitorAnalysis = async (platform: string, competitors: string[]): Promise<any> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 900));
+  
+  // Mock data - in a real app this would come from analyzing competitor accounts
+  return {
+    followersComparison: {
+      you: 8500,
+      competitors: competitors.map((name, i) => ({ 
+        name, 
+        value: 5000 + (i * 4000) + Math.floor(Math.random() * 2000) 
+      }))
+    },
+    engagementComparison: {
+      you: 4.2,
+      competitors: competitors.map((name, i) => ({ 
+        name, 
+        value: 2.8 + (Math.random() * 3) 
+      }))
+    },
+    postFrequencyComparison: {
+      you: 5.2, // posts per week
+      competitors: competitors.map((name, i) => ({ 
+        name, 
+        value: 3.5 + (Math.random() * 5) 
+      }))
+    },
+    contentTypeBreakdown: {
+      you: {
+        image: 45,
+        video: 30,
+        text: 15,
+        other: 10
+      },
+      competitors: competitors.map((name) => ({ 
+        name, 
+        image: 20 + Math.floor(Math.random() * 40),
+        video: 20 + Math.floor(Math.random() * 30),
+        text: 10 + Math.floor(Math.random() * 20),
+        other: 5 + Math.floor(Math.random() * 10)
+      }))
+    }
+  };
+};
+
+/**
+ * Get audience demographics for a platform
+ */
+export const getAudienceDemographics = async (platform: string): Promise<PlatformDemographics> => {
+  // Get the platform metrics which include demographics
+  const metrics = await fetchPlatformMetrics(platform);
+  
+  return metrics.demographics || {
+    age: {},
+    gender: {},
+    location: {},
+    languages: {}
+  };
+};
+
+/**
+ * Get content performance by type
+ */
+export const getContentPerformanceByType = async (platform: string): Promise<any> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 700));
+  
+  // Mock data - in a real app this would come from content analytics
+  return [
+    { type: 'Image', engagement: 4.2, impressions: 1200, clicks: 85 },
+    { type: 'Video', engagement: 5.8, impressions: 1800, clicks: 120 },
+    { type: 'Carousel', engagement: 6.1, impressions: 1500, clicks: 105 },
+    { type: 'Text', engagement: 2.9, impressions: 950, clicks: 42 },
+    { type: 'Link', engagement: 3.5, impressions: 1100, clicks: 95 },
+  ];
 };

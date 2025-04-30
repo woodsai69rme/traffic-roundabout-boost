@@ -16,6 +16,8 @@ import NotFound from './pages/NotFound';
 import SocialApiIntegrationPage from './components/ApiIntegrations/SocialApiIntegrationPage';
 import DocPage from './components/DocPage';
 import DocPageContent from './components/DocPageContent';
+import ContentPlanner from './pages/ContentPlanner';
+import AudienceInsights from './pages/AudienceInsights';
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -54,6 +56,8 @@ const App = () => (
       <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
       <Route path="/monetization" element={<ProtectedRoute><Monetization /></ProtectedRoute>} />
       <Route path="/integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
+      <Route path="/content-planner" element={<ProtectedRoute><ContentPlanner /></ProtectedRoute>} />
+      <Route path="/audience-insights" element={<ProtectedRoute><AudienceInsights /></ProtectedRoute>} />
       
       {/* Documentation Routes */}
       <Route path="/docs" element={<Documentation />} />

@@ -1,117 +1,98 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { Menu, User } from 'lucide-react';
 import {
-  LayoutDashboard,
-  BarChart3,
-  Users,
-  Layers,
-  DollarSign,
-  UserCircle,
-  Menu,
-  X,
-  BookOpen,
-  Link as LinkIcon
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { ThemeToggle } from './ThemeToggle';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useDevice } from '@/hooks/use-mobile';
+import { useAuth } from '@/hooks/use-auth';
+import { Link, useNavigate } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 
 const NavbarWithAuth = () => {
-  const isMobile = useIsMobile();
-  const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { isMobile } = useDevice();
   
-  const navItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: 'Analytics', href: '/analytics', icon: <BarChart3 className="h-5 w-5" /> },
-    { name: 'Platforms', href: '/platforms', icon: <Layers className="h-5 w-5" /> },
-    { name: 'Communities', href: '/communities', icon: <Users className="h-5 w-5" /> },
-    { name: 'Monetization', href: '/monetization', icon: <DollarSign className="h-5 w-5" /> },
-    { name: 'Integrations', href: '/integrations', icon: <LinkIcon className="h-5 w-5" /> },
-    { name: 'Documentation', href: '/documentation', icon: <BookOpen className="h-5 w-5" /> },
-  ];
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
   
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue h-8 w-8 rounded-md"></div>
+    <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-md border-b">
+      <div className="container flex items-center justify-between h-16 mx-auto px-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={toggleMobileMenu}>
+            <Menu className="h-6 w-6" />
+          </Button>
+          
+          <Link to="/" className="flex items-center gap-2">
             <span className="text-xl font-bold">Roundabout</span>
           </Link>
-          
-          {/* Desktop Navigation */}
-          {!isMobile && (
-            <nav className="mx-6 flex-1">
-              <ul className="flex space-x-4">
-                {navItems.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-muted"
-                    >
-                      {item.icon}
-                      <span className="ml-2">{item.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
-          
-          {/* Right-side menu */}
-          <div className="flex items-center space-x-1 sm:space-x-2">
-            <ThemeToggle />
-            <NotificationCenter />
-            <Link to="/profile">
-              <Button variant="ghost" size="icon" className="rounded-full" aria-label="Profile">
-                <UserCircle className="h-5 w-5" />
-              </Button>
-            </Link>
-            
-            {isMobile && (
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={toggleMenu}
-                aria-label="Menu"
-              >
-                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
-            )}
-          </div>
         </div>
         
-        {/* Mobile menu */}
-        {isMobile && (
-          <div className={cn(
-            "fixed inset-x-0 top-16 bg-background border-b border-border pt-2 pb-4 px-4 transition-all duration-200 transform",
-            isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
-          )}>
-            <nav>
-              <ul className="space-y-1">
-                {navItems.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-muted"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.icon}
-                      <span className="ml-2">{item.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        )}
+        <nav className={`lg:flex lg:items-center lg:gap-x-6 ${isMobile ? 'hidden' : 'block'}`}>
+          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Dashboard</Link>
+          <Link to="/analytics" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Analytics</Link>
+          <Link to="/platforms" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Platforms</Link>
+          <Link to="/content-planner" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Content Planner</Link>
+          <Link to="/audience-insights" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Audience Insights</Link>
+          <Link to="/communities" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Communities</Link>
+          <Link to="/monetization" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Monetization</Link>
+          <Link to="/integrations" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Integrations</Link>
+        </nav>
+        
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <NotificationCenter />
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                {user?.avatarUrl ? (
+                  <img src={user.avatarUrl} alt={user?.username || 'User'} className="h-8 w-8 rounded-full object-cover" />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                    <User className="h-4 w-4" />
+                  </div>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/documentation')}>Documentation</DropdownMenuItem>
+              <DropdownMenuItem>
+                <a href="https://roundaboutsocial.canny.io/feature-requests" target="_blank" rel="noopener noreferrer">
+                  Request a Feature
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
+      
+      {/* Mobile menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden border-t">
+          <div className="container px-4 py-3 mx-auto space-y-1">
+            <Link to="/dashboard" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Dashboard</Link>
+            <Link to="/analytics" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Analytics</Link>
+            <Link to="/platforms" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Platforms</Link>
+            <Link to="/content-planner" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Content Planner</Link>
+            <Link to="/audience-insights" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Audience Insights</Link>
+            <Link to="/communities" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Communities</Link>
+            <Link to="/monetization" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Monetization</Link>
+            <Link to="/integrations" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Integrations</Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
