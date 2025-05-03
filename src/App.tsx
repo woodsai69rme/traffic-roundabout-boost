@@ -18,6 +18,7 @@ import DocPage from './components/DocPage';
 import DocPageContent from './components/DocPageContent';
 import ContentPlanner from './pages/ContentPlanner';
 import AudienceInsights from './pages/AudienceInsights';
+import AIContentCreator from './pages/AIContentCreator';
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -58,6 +59,7 @@ const App = () => (
       <Route path="/integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
       <Route path="/content-planner" element={<ProtectedRoute><ContentPlanner /></ProtectedRoute>} />
       <Route path="/audience-insights" element={<ProtectedRoute><AudienceInsights /></ProtectedRoute>} />
+      <Route path="/ai-content-creator" element={<ProtectedRoute><AIContentCreator /></ProtectedRoute>} />
       
       {/* Documentation Routes */}
       <Route path="/docs" element={<Documentation />} />

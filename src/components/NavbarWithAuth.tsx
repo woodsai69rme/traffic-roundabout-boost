@@ -1,99 +1,153 @@
-
-import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Menu, User } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useDevice } from '@/hooks/use-mobile';
-import { useAuth } from '@/hooks/use-auth';
-import { Link, useNavigate } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
+import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileText } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
+import { useAuth } from '@/hooks/use-auth';
+import UserProfileCard from './UserProfileCard';
 
 const NavbarWithAuth = () => {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const { isMobile } = useDevice();
-  
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-  
+  const { user, isLoading, signOut } = useAuth();
+
+  const mainNavItems = [
+    {
+      title: 'Dashboard',
+      href: '/dashboard',
+      icon: <Gauge className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Analytics',
+      href: '/analytics',
+      icon: <PieChart className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Audience',
+      href: '/audience-insights',
+      icon: <Users className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Content',
+      href: '#',
+      icon: <Layout className="h-4 w-4 mr-2" />,
+      subItems: [
+        {
+          title: 'Content Planner',
+          href: '/content-planner',
+          description: 'Schedule and manage your content calendar'
+        },
+        {
+          title: 'AI Content Creator',
+          href: '/ai-content-creator',
+          description: 'Generate engaging content with AI'
+        }
+      ]
+    },
+    {
+      title: 'Communities',
+      href: '/communities',
+      icon: <Users className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Monetization',
+      href: '/monetization',
+      icon: <DollarSign className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Docs',
+      href: '/docs',
+      icon: <FileText className="h-4 w-4 mr-2" />
+    }
+  ];
+
   return (
-    <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-md border-b">
-      <div className="container flex items-center justify-between h-16 mx-auto px-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={toggleMobileMenu}>
-            <Menu className="h-6 w-6" />
-          </Button>
-          
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold">Roundabout</span>
+          <Link to="/" className="mr-6 flex items-center space-x-2">
+            <Sparkles className="h-6 w-6" />
+            <span className="hidden font-bold sm:inline-block">
+              Roundabout
+            </span>
           </Link>
+          
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              {mainNavItems.map((item) => 
+                item.subItems ? (
+                  <NavigationMenuItem key={item.title}>
+                    <NavigationMenuTrigger className="h-auto">
+                      <span className="flex items-center">
+                        {item.icon}
+                        {item.title}
+                      </span>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                        {item.subItems.map((subItem) => (
+                          <li key={subItem.title} className="row-span-3">
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={subItem.href}
+                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                              >
+                                <div className="mb-2 mt-4 text-lg font-medium">
+                                  {subItem.title}
+                                </div>
+                                <p className="text-sm leading-tight text-muted-foreground">
+                                  {subItem.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                ) : (
+                  <NavigationMenuItem key={item.title}>
+                    <Link to={item.href}>
+                      <NavigationMenuLink 
+                        className={cn(
+                          "flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary"
+                        )}
+                      >
+                        {item.icon}
+                        {item.title}
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                )
+              )}
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
         
-        <nav className={`lg:flex lg:items-center lg:gap-x-6 ${isMobile ? 'hidden' : 'block'}`}>
-          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Dashboard</Link>
-          <Link to="/analytics" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Analytics</Link>
-          <Link to="/platforms" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Platforms</Link>
-          <Link to="/content-planner" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Content Planner</Link>
-          <Link to="/audience-insights" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Audience Insights</Link>
-          <Link to="/communities" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Communities</Link>
-          <Link to="/monetization" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Monetization</Link>
-          <Link to="/integrations" className="text-sm font-medium hover:text-primary transition-colors px-3 py-2">Integrations</Link>
-        </nav>
-        
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <NotificationCenter />
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="md:hidden" asChild>
+            <Link to="/notifications">
+              <NotificationCenter />
+            </Link>
+          </Button>
+          <div className="hidden md:flex">
+            <NotificationCenter />
+          </div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} alt={user?.username || 'User'} className="h-8 w-8 rounded-full object-cover" />
-                ) : (
-                  <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                    <User className="h-4 w-4" />
-                  </div>
-                )}
+          <ThemeToggle />
+          
+          {!isLoading && user ? (
+            <UserProfileCard />
+          ) : (
+            !isLoading && (
+              <Button asChild>
+                <Link to="/login">Sign In</Link>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/documentation')}>Documentation</DropdownMenuItem>
-              <DropdownMenuItem>
-                <a href="https://roundaboutsocial.canny.io/feature-requests" target="_blank" rel="noopener noreferrer">
-                  Request a Feature
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            )
+          )}
         </div>
       </div>
-      
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t">
-          <div className="container px-4 py-3 mx-auto space-y-1">
-            <Link to="/dashboard" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Dashboard</Link>
-            <Link to="/analytics" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Analytics</Link>
-            <Link to="/platforms" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Platforms</Link>
-            <Link to="/content-planner" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Content Planner</Link>
-            <Link to="/audience-insights" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Audience Insights</Link>
-            <Link to="/communities" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Communities</Link>
-            <Link to="/monetization" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Monetization</Link>
-            <Link to="/integrations" className="block px-3 py-2 text-sm rounded-md hover:bg-muted">Integrations</Link>
-          </div>
-        </div>
-      )}
     </header>
   );
 };

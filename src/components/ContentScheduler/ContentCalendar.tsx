@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,6 +13,8 @@ import PostsList from './PostsList';
 // Define a simple component for displaying day cells with scheduled posts
 interface DayWithScheduledPostsProps {
   day: Date;
+  displayMonth: Date;
+  date: Date;
   className?: string;
   children?: React.ReactNode;
   posts: any[];
@@ -140,20 +142,25 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: ({ day, ...props }) => (
-                <div
-                  {...props}
-                  className={cn(
-                    props.className,
-                    hasPostsOnDate(day) && 'relative'
-                  )}
-                >
-                  {props.children}
-                  {hasPostsOnDate(day) && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
-                  )}
-                </div>
-              ),
+              Day: (props) => {
+                const day = props.date;
+                return (
+                  <div
+                    className={cn(
+                      props.className,
+                      hasPostsOnDate(day) && 'relative'
+                    )}
+                    onClick={props.onClick}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    {props.children}
+                    {hasPostsOnDate(day) && (
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
+                    )}
+                  </div>
+                );
+              },
             }}
           />
           <div className="mt-4">
@@ -167,11 +174,7 @@ const ContentCalendar = () => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>
-                {date ? new Date(date).toLocaleDateString('en-US', { 
-                  weekday: 'long',
-                  month: 'long', 
-                  day: 'numeric' 
-                }) : 'No date selected'}
+                {date ? format(date, 'EEEE, MMMM d') : 'No date selected'}
               </CardTitle>
               <CardDescription>
                 {getPostsForSelectedDate().length} post{getPostsForSelectedDate().length !== 1 ? 's' : ''} scheduled
@@ -207,16 +210,16 @@ const ContentCalendar = () => {
                           <div 
                             key={post.id}
                             className="p-3 mb-2 border rounded-md bg-muted/50"
+                            onClick={() => handlePostClick(post)}
                           >
                             <div className="flex items-center gap-2 mb-2">
-                              <div className={`w-2 h-2 rounded-full bg-${post.platform === 'twitter' ? 'blue' : post.platform === 'instagram' ? 'purple' : 'blue'}-500`}></div>
+                              <div className={`w-2 h-2 rounded-full ${
+                                post.platform === 'twitter' ? 'bg-blue-500' : 
+                                post.platform === 'instagram' ? 'bg-purple-500' : 'bg-blue-500'
+                              }`}></div>
                               <span className="text-xs uppercase font-medium">{post.platform}</span>
                               <span className="text-xs text-muted-foreground ml-auto">
-                                {new Date(post.date).toLocaleTimeString('en-US', { 
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                  hour12: true
-                                })}
+                                {format(new Date(post.date), 'h:mm a')}
                               </span>
                             </div>
                             <p className="text-sm">{post.content}</p>

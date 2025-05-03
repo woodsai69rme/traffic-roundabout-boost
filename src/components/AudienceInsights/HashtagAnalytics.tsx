@@ -1,20 +1,10 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ChartContainer } from '@/components/ui/chart';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface HashtagAnalyticsProps {
   platform?: string;
@@ -22,126 +12,101 @@ interface HashtagAnalyticsProps {
 
 // Sample data - in a real app, this would come from API
 const hashtagPerformanceData = [
-  { name: '#marketing', reach: 8500, engagement: 720, posts: 24 },
-  { name: '#socialmedia', reach: 12400, engagement: 980, posts: 32 },
-  { name: '#digitalmarketing', reach: 7800, engagement: 620, posts: 18 },
-  { name: '#contentcreator', reach: 9600, engagement: 840, posts: 28 },
-  { name: '#analytics', reach: 6200, engagement: 480, posts: 15 },
+  { hashtag: '#marketing', reach: 12500, engagement: 520 },
+  { hashtag: '#socialmedia', reach: 9800, engagement: 450 },
+  { hashtag: '#contentcreator', reach: 7600, engagement: 380 },
+  { hashtag: '#business', reach: 5400, engagement: 290 },
+  { hashtag: '#entrepreneur', reach: 4200, engagement: 240 },
 ];
 
-const trendingHashtagsData = [
-  { hashtag: '#reels', volume: 12500, growth: '+15%', category: 'Content Format' },
-  { hashtag: '#socialtips', volume: 8700, growth: '+23%', category: 'Education' },
-  { hashtag: '#creator', volume: 15300, growth: '+8%', category: 'Identity' },
-  { hashtag: '#algorithm', volume: 6200, growth: '+32%', category: 'Technical' },
-  { hashtag: '#contentcalendar', volume: 4800, growth: '+19%', category: 'Strategy' },
+const trendsData = [
+  { hashtag: '#trending1', posts: 1250000, growth: '+125%' },
+  { hashtag: '#trending2', posts: 980000, growth: '+86%' },
+  { hashtag: '#trending3', posts: 760000, growth: '+62%' },
+  { hashtag: '#trending4', posts: 540000, growth: '+45%' },
+  { hashtag: '#trending5', posts: 420000, growth: '+32%' },
+];
+
+const recommendedHashtags = [
+  { category: 'Industry Specific', hashtags: ['#marketing', '#digitalmarketing', '#contentcreation', '#branding'] },
+  { category: 'Business General', hashtags: ['#business', '#entrepreneur', '#startup', '#smallbusiness'] },
+  { category: 'Growth & Success', hashtags: ['#success', '#growth', '#motivation', '#goals'] },
+  { category: 'Community', hashtags: ['#community', '#network', '#connections', '#collaboration'] },
 ];
 
 const HashtagAnalytics: React.FC<HashtagAnalyticsProps> = ({ platform }) => {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  
   // In a real app, you would filter or fetch data based on the platform
   console.log(`Showing hashtag analytics for platform: ${platform || 'all'}`);
   
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <CardTitle>Hashtag Analytics</CardTitle>
-              <CardDescription>
-                Performance analysis of your most used hashtags
-              </CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Search hashtags..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-[250px]"
-              />
-              <Button variant="secondary">Search</Button>
-            </div>
-          </div>
+          <CardTitle>Your Hashtag Performance</CardTitle>
+          <CardDescription>Impact of hashtags used in your content</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={{}} className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={hashtagPerformanceData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="hashtag" />
                 <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
                 <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
                 <Tooltip />
                 <Legend />
-                <Bar yAxisId="left" dataKey="reach" name="Reach" fill="#8884d8" />
-                <Bar yAxisId="right" dataKey="engagement" name="Engagement" fill="#82ca9d" />
+                <Bar yAxisId="left" dataKey="reach" fill="#8884d8" name="Reach" />
+                <Bar yAxisId="right" dataKey="engagement" fill="#82ca9d" name="Engagement" />
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>
-          
-          <div className="mt-6">
-            <h4 className="font-medium text-sm mb-3">Recommended Hashtags</h4>
-            <div className="flex flex-wrap gap-2">
-              {['#socialmediastrategy', '#contentcreation', '#digitalmarketer', '#growthhacking', '#brandawareness', '#socialmediamarketing', '#influencermarketing', '#analytics']
-                .map((tag, index) => (
-                  <Badge key={index} variant="secondary" className="px-3 py-1">
-                    {tag}
-                  </Badge>
-                ))}
-            </div>
-          </div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Trending Hashtags</CardTitle>
-          <CardDescription>
-            Popular and growing hashtags in your industry
-          </CardDescription>
+          <CardDescription>Popular hashtags in your niche</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 font-medium">Hashtag</th>
-                  <th className="text-left py-3 font-medium">Volume</th>
-                  <th className="text-left py-3 font-medium">Growth</th>
-                  <th className="text-left py-3 font-medium">Category</th>
-                  <th className="text-right py-3 font-medium">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {trendingHashtagsData.map((item, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="py-3 font-medium">{item.hashtag}</td>
-                    <td className="py-3">{item.volume.toLocaleString()} posts</td>
-                    <td className="py-3 text-green-500">{item.growth}</td>
-                    <td className="py-3">
-                      <Badge variant="outline" className="font-normal">
-                        {item.category}
-                      </Badge>
-                    </td>
-                    <td className="py-3 text-right">
-                      <Button variant="ghost" size="sm">Add to List</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          
-          <div className="mt-6 p-4 bg-muted rounded-md">
-            <h4 className="font-medium mb-2">Hashtag Strategy Tips</h4>
-            <ul className="space-y-2 list-disc pl-5 text-sm text-muted-foreground">
-              <li>Mix popular hashtags with niche ones for better reach</li>
-              <li>Keep hashtags relevant to your content</li>
-              <li>Use trending hashtags within 24-48 hours of them gaining popularity</li>
-              <li>Create branded hashtags for campaigns</li>
-            </ul>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Hashtag</TableHead>
+                <TableHead>Posts</TableHead>
+                <TableHead>Growth</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {trendsData.map((trend, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{trend.hashtag}</TableCell>
+                  <TableCell>{trend.posts.toLocaleString()}</TableCell>
+                  <TableCell className="text-green-600">{trend.growth}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Card className="md:col-span-2">
+        <CardHeader>
+          <CardTitle>Recommended Hashtags</CardTitle>
+          <CardDescription>Suggested hashtags to improve your content reach</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {recommendedHashtags.map((category, index) => (
+              <div key={index}>
+                <h3 className="text-sm font-medium mb-2">{category.category}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.hashtags.map((hashtag, hIndex) => (
+                    <Badge key={hIndex} variant="secondary">{hashtag}</Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>

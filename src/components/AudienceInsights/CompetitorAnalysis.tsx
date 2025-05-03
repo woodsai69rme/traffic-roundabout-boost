@@ -1,81 +1,38 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend
-} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { ChartContainer } from '@/components/ui/chart';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 
 interface CompetitorAnalysisProps {
   platform?: string;
 }
 
 // Sample data - in a real app, this would come from API
-const competitorRadarData = [
-  { subject: 'Engagement', A: 120, B: 110, C: 140, fullMark: 150 },
-  { subject: 'Growth Rate', A: 98, B: 130, C: 100, fullMark: 150 },
-  { subject: 'Post Frequency', A: 86, B: 130, C: 70, fullMark: 150 },
-  { subject: 'Audience Size', A: 99, B: 100, C: 65, fullMark: 150 },
-  { subject: 'Content Quality', A: 85, B: 90, C: 110, fullMark: 150 },
-  { subject: 'Response Time', A: 65, B: 85, C: 120, fullMark: 150 },
-];
-
 const growthComparisonData = [
-  { month: 'Jan', you: 4000, competitor1: 2400, competitor2: 3200 },
-  { month: 'Feb', you: 4500, competitor1: 2700, competitor2: 3400 },
-  { month: 'Mar', you: 5100, competitor1: 3100, competitor2: 3800 },
-  { month: 'Apr', you: 5900, competitor1: 3500, competitor2: 4100 },
-  { month: 'May', you: 6800, competitor1: 3800, competitor2: 4300 },
-  { month: 'Jun', you: 7800, competitor1: 4000, competitor2: 4800 },
+  { name: 'Jan', you: 2100, competitor1: 2400, competitor2: 1900 },
+  { name: 'Feb', you: 2300, competitor1: 2500, competitor2: 2000 },
+  { name: 'Mar', you: 2600, competitor1: 2600, competitor2: 2200 },
+  { name: 'Apr', you: 2900, competitor1: 2750, competitor2: 2400 },
+  { name: 'May', you: 3200, competitor1: 2900, competitor2: 2600 },
+  { name: 'Jun', you: 3800, competitor1: 3100, competitor2: 2900 },
+  { name: 'Jul', you: 4200, competitor1: 3300, competitor2: 3200 },
 ];
 
-const competitorInsightsData = [
-  {
-    name: 'Competitor A',
-    followers: '24.5K',
-    engagement: '4.2%',
-    postFrequency: '5.2/week',
-    trending: true,
-    topContent: 'Video tutorials'
-  },
-  {
-    name: 'Competitor B',
-    followers: '18.3K',
-    engagement: '3.7%',
-    postFrequency: '3.8/week',
-    trending: false,
-    topContent: 'Industry reports'
-  },
-  {
-    name: 'Competitor C',
-    followers: '31.2K',
-    engagement: '2.9%',
-    postFrequency: '7.1/week',
-    trending: true,
-    topContent: 'Customer testimonials'
-  },
-  {
-    name: 'Your Account',
-    followers: '22.7K',
-    engagement: '3.8%',
-    postFrequency: '4.5/week',
-    trending: true,
-    topContent: 'Product demos'
-  },
+const engagementComparisonData = [
+  { metric: 'Engagement Rate', you: 4.2, competitor1: 3.8, competitor2: 4.5 },
+  { metric: 'Likes per Post', you: 320, competitor1: 280, competitor2: 350 },
+  { metric: 'Comments per Post', you: 45, competitor1: 32, competitor2: 50 },
+  { metric: 'Shares per Post', you: 28, competitor1: 22, competitor2: 30 },
+  { metric: 'Saves per Post', you: 65, competitor1: 55, competitor2: 70 },
+];
+
+const competitorProfiles = [
+  { name: 'Competitor 1', followers: '125K', posts: 458, engagementRate: '3.8%', contentTypes: 'Photos, Videos, Stories' },
+  { name: 'Competitor 2', followers: '95K', posts: 623, engagementRate: '4.5%', contentTypes: 'Live Streams, Photos, Reels' },
+  { name: 'Competitor 3', followers: '210K', posts: 312, engagementRate: '3.2%', contentTypes: 'Videos, Carousels' },
+  { name: 'Competitor 4', followers: '78K', posts: 520, engagementRate: '4.1%', contentTypes: 'Photos, Stories, Guides' },
 ];
 
 const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => {
@@ -83,144 +40,78 @@ const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => 
   console.log(`Showing competitor analysis for platform: ${platform || 'all'}`);
   
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Competitive Analysis</CardTitle>
-            <CardDescription>
-              Compare your performance against competitors
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{}} className="h-[350px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={competitorRadarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" />
-                  <PolarRadiusAxis angle={30} domain={[0, 150]} />
-                  <Radar
-                    name="Your Brand"
-                    dataKey="A"
-                    stroke="#8884d8"
-                    fill="#8884d8"
-                    fillOpacity={0.6}
-                  />
-                  <Radar
-                    name="Competitor 1"
-                    dataKey="B"
-                    stroke="#82ca9d"
-                    fill="#82ca9d"
-                    fillOpacity={0.6}
-                  />
-                  <Radar
-                    name="Competitor 2"
-                    dataKey="C"
-                    stroke="#ffc658"
-                    fill="#ffc658"
-                    fillOpacity={0.6}
-                  />
-                  <Legend />
-                  <Tooltip />
-                </RadarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Card className="md:col-span-3">
+        <CardHeader>
+          <CardTitle>Follower Growth Comparison</CardTitle>
+          <CardDescription>How your follower growth compares with competitors</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={{}} className="h-[350px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={growthComparisonData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="you" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} name="Your Account" />
+                <Line type="monotone" dataKey="competitor1" stroke="#82ca9d" activeDot={{ r: 6 }} name="Competitor 1" />
+                <Line type="monotone" dataKey="competitor2" stroke="#ffc658" activeDot={{ r: 6 }} name="Competitor 2" />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Follower Growth Comparison</CardTitle>
-            <CardDescription>
-              6-month follower growth trends
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{}} className="h-[350px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={growthComparisonData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="you"
-                    name="Your Brand"
-                    stroke="#8884d8"
-                    strokeWidth={2}
-                    activeDot={{ r: 8 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="competitor1"
-                    name="Competitor 1"
-                    stroke="#82ca9d"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="competitor2"
-                    name="Competitor 2"
-                    stroke="#ffc658"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="md:col-span-2">
+        <CardHeader>
+          <CardTitle>Engagement Metrics Comparison</CardTitle>
+          <CardDescription>How your engagement metrics compare with competitors</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={{}} className="h-[350px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={engagementComparisonData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="metric" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="you" fill="#8884d8" name="Your Account" />
+                <Bar dataKey="competitor1" fill="#82ca9d" name="Competitor 1" />
+                <Bar dataKey="competitor2" fill="#ffc658" name="Competitor 2" />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Competitor Insights</CardTitle>
-          <CardDescription>
-            Key metrics and content strategy analysis
-          </CardDescription>
+          <CardTitle>Competitor Profiles</CardTitle>
+          <CardDescription>Key metrics of your main competitors</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Account</TableHead>
-                <TableHead>Followers</TableHead>
-                <TableHead>Engagement</TableHead>
-                <TableHead>Post Frequency</TableHead>
-                <TableHead>Trending</TableHead>
-                <TableHead>Top Content</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {competitorInsightsData.map((competitor, index) => (
-                <TableRow key={index} className={competitor.name === 'Your Account' ? 'bg-muted/50' : ''}>
-                  <TableCell className="font-medium">{competitor.name}</TableCell>
-                  <TableCell>{competitor.followers}</TableCell>
-                  <TableCell>{competitor.engagement}</TableCell>
-                  <TableCell>{competitor.postFrequency}</TableCell>
-                  <TableCell>
-                    {competitor.trending ? (
-                      <Badge className="bg-green-500/20 text-green-500 border-green-500/20">
-                        Trending Up
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20">
-                        Stable
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>{competitor.topContent}</TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Followers</TableHead>
+                  <TableHead>Eng. Rate</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          
-          <div className="mt-6 p-4 bg-muted rounded-md">
-            <h4 className="font-medium mb-2">Strategy Insights</h4>
-            <ul className="space-y-2 list-disc pl-5 text-sm text-muted-foreground">
-              <li>Competitor A is gaining traction with video content - consider increasing video production</li>
-              <li>Your engagement rate is above industry average, but posting frequency could be increased</li>
-              <li>Competitor C has higher follower count but lower engagement - focus on quality over quantity</li>
-            </ul>
+              </TableHeader>
+              <TableBody>
+                {competitorProfiles.map((competitor, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{competitor.name}</TableCell>
+                    <TableCell>{competitor.followers}</TableCell>
+                    <TableCell>{competitor.engagementRate}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

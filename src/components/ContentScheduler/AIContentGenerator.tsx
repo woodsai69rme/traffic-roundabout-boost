@@ -1,217 +1,313 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Sparkles, RefreshCw, Loader2, Image, Copy } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from '@/components/ui/select';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
+import { RefreshCcw, Copy, ThumbsUp, ThumbsDown, Sparkles, Loader2 } from 'lucide-react';
 
 interface AIContentGeneratorProps {
-  onGeneratedContent?: (content: { text: string, mediaUrls?: string[] }) => void;
+  onUseContent?: (content: string) => void;
 }
 
-const AIContentGenerator = ({ onGeneratedContent }: AIContentGeneratorProps) => {
-  const [prompt, setPrompt] = useState('');
-  const [contentType, setContentType] = useState('caption');
-  const [platformType, setPlatformType] = useState('instagram');
-  const [generating, setGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState('');
-  const { toast } = useToast();
+const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({ onUseContent }) => {
+  const [topic, setTopic] = useState<string>('');
+  const [platform, setPlatform] = useState<string>('twitter');
+  const [tone, setTone] = useState<string>('professional');
+  const [language, setLanguage] = useState<string>('english');
+  const [contentLength, setContentLength] = useState<number[]>([2]); // 1-3 scale (short, medium, long)
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [generatedContent, setGeneratedContent] = useState<string>('');
+  const [generatedOptions, setGeneratedOptions] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const contentTypes = [
-    { value: 'caption', label: 'Caption' },
-    { value: 'hashtags', label: 'Hashtags' },
-    { value: 'idea', label: 'Content Idea' },
-    { value: 'story', label: 'Story' },
-  ];
-
-  const platformTypes = [
-    { value: 'instagram', label: 'Instagram' },
-    { value: 'twitter', label: 'Twitter/X' },
-    { value: 'facebook', label: 'Facebook' },
-    { value: 'tiktok', label: 'TikTok' },
-    { value: 'linkedin', label: 'LinkedIn' },
-  ];
-
-  const handleGenerate = () => {
-    if (!prompt) {
-      toast({
-        title: "Input required",
-        description: "Please provide a prompt for content generation.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setGenerating(true);
-    setGeneratedText('');
+  // Mock content generation
+  const generateContent = () => {
+    if (!topic) return;
     
-    // Simulate AI content generation
+    setIsGenerating(true);
+    setIsLoading(true);
+    
+    // Simulate API call delay
     setTimeout(() => {
-      let result = '';
+      const contentTemplates = {
+        twitter: {
+          professional: [
+            `Looking to improve your ${topic} strategy? Our latest guide breaks down everything you need to know to stay ahead of the competition. #${topic.replace(/\s+/g, '')} #BusinessTips`,
+            `The future of ${topic} is here. Discover how innovative companies are leveraging new technologies to transform their approach. #${topic.replace(/\s+/g, '')} #Innovation`,
+            `We've compiled the top 5 ${topic} trends for 2025. Click the link in bio to learn how to implement them in your business. #${topic.replace(/\s+/g, '')} #TrendAlert`
+          ],
+          casual: [
+            `Just dropped: our honest thoughts about ${topic}! 👀 What's your take? Drop a comment below! #${topic.replace(/\s+/g, '')} #JustSaying`,
+            `Can't stop thinking about ${topic} lately... anyone else obsessed? Share your experiences below! ✨ #${topic.replace(/\s+/g, '')} #ObsessedWithIt`,
+            `Hot take: ${topic} is changing everything about how we work. Agree or disagree? 🔥 #${topic.replace(/\s+/g, '')} #HotTake`
+          ],
+          humorous: [
+            `When someone says they don't care about ${topic} 👁️👄👁️ #${topic.replace(/\s+/g, '')} #TheAudacity`,
+            `Me explaining ${topic} to my friends for the 100th time while they pretend to listen 🤣 #${topic.replace(/\s+/g, '')} #SorryNotSorry`,
+            `Nobody: \nAbsolutely no one: \nMe at 3 AM: *researching everything about ${topic}* #${topic.replace(/\s+/g, '')} #CantSleep`
+          ]
+        },
+        instagram: {
+          professional: [
+            `📈 Elevate your ${topic} strategy with our proven framework.\n\nIn our latest case study, we demonstrate how businesses are achieving 3x results by implementing these key principles.\n\nSwipe up to learn more!\n\n#${topic.replace(/\s+/g, '')} #BusinessGrowth #ProfessionalDevelopment`,
+            `🚀 The definitive guide to mastering ${topic} in 2025.\n\nWe've interviewed 20+ industry experts to compile the most comprehensive resource available.\n\nSave this post for later!\n\n#${topic.replace(/\s+/g, '')} #ExpertTips #IndustryInsights`
+          ],
+          casual: [
+            `✨ Vibing with ${topic} today! ✨\n\nSharing some of my favorite ways to incorporate this into my daily routine. Which one are you trying first?\n\n#${topic.replace(/\s+/g, '')} #DailyVibes #LifestyleTips`,
+            `Just hanging out with my favorite ${topic} setup! 🙌\n\nWhat's your go-to approach? Drop it in the comments!\n\n#${topic.replace(/\s+/g, '')} #WeekendVibes #ShareYourSetup`
+          ],
+          humorous: [
+            `When your ${topic} game is strong but your bank account is weak 😂💸\n\nTag someone who relates too hard!\n\n#${topic.replace(/\s+/g, '')} #BrokeButHappy #WorthEveryPenny`,
+            `POV: You're trying to explain ${topic} to your parents 🤦‍♀️\n\nAnyone else's family completely clueless about what you do?\n\n#${topic.replace(/\s+/g, '')} #FamilyProblems #TheyJustDontGetIt`
+          ]
+        }
+      };
+
+      // Default to twitter if platform doesn't exist in templates
+      const platformContent = contentTemplates[platform] || contentTemplates.twitter;
+      // Default to professional if tone doesn't exist in templates
+      const toneContent = platformContent[tone] || platformContent.professional;
       
-      switch (contentType) {
-        case 'caption':
-          if (platformType === 'instagram') {
-            result = "✨ Exploring new horizons and embracing the journey! Every step forward is a chance to discover something amazing. What adventures are you embarking on this week? #ExploreMore #JourneyOfDiscovery";
-          } else if (platformType === 'twitter') {
-            result = "Taking the leap into new possibilities! Sometimes the biggest growth comes from stepping outside your comfort zone. What's your next big move?";
-          } else {
-            result = "Embracing change and discovering new opportunities along the way. The path forward isn't always clear, but that's where the most exciting discoveries happen!";
-          }
-          break;
-        case 'hashtags':
-          result = "#ContentCreator #DigitalMarketing #SocialMediaTips #GrowthStrategy #EngagementBoost #CreativeContent #BrandPresence #TrendingNow #SocialMediaManager #OnlinePresence";
-          break;
-        case 'idea':
-          result = "Behind-the-scenes video showing your workflow process from start to finish. This humanizes your brand and gives followers insight into how you create the content they love.";
-          break;
-        case 'story':
-          result = "Start with a question sticker asking your audience about their biggest challenge related to your niche. Follow up with 3-4 slides offering quick tips or solutions addressing those pain points. End with a CTA to your latest content or product that provides more comprehensive help.";
-          break;
-      }
+      // Select random options
+      const shuffled = [...toneContent].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 3);
       
-      setGeneratedText(result);
-      setGenerating(false);
-    }, 2000);
+      setGeneratedOptions(selected);
+      setGeneratedContent(selected[0]);
+      setIsGenerating(false);
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleUseContent = () => {
-    if (generatedText && onGeneratedContent) {
-      onGeneratedContent({ text: generatedText });
-      toast({
-        title: "Content applied",
-        description: "The AI generated content has been applied to your post."
-      });
+    if (onUseContent && generatedContent) {
+      onUseContent(generatedContent);
     }
   };
 
-  const handleCopyContent = () => {
-    if (generatedText) {
-      navigator.clipboard.writeText(generatedText);
-      toast({
-        title: "Copied to clipboard",
-        description: "The generated content has been copied to your clipboard."
-      });
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedContent);
+  };
+
+  const selectOption = (content: string) => {
+    setGeneratedContent(content);
+  };
+
+  const getLengthLabel = (value: number) => {
+    switch (value) {
+      case 1: return "Short";
+      case 2: return "Medium";
+      case 3: return "Long";
+      default: return "Medium";
     }
   };
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="flex items-center">
-          <Sparkles className="h-5 w-5 mr-2 text-primary" />
+        <CardTitle className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-primary" />
           AI Content Generator
         </CardTitle>
+        <CardDescription>Create engaging content for your social media posts</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-4">
-          <div className="w-full md:w-[calc(50%-0.5rem)]">
-            <Label htmlFor="contentType">Content Type</Label>
-            <Select value={contentType} onValueChange={setContentType}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select content type" />
-              </SelectTrigger>
-              <SelectContent>
-                {contentTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-full md:w-[calc(50%-0.5rem)]">
-            <Label htmlFor="platformType">Platform</Label>
-            <Select value={platformType} onValueChange={setPlatformType}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select platform" />
-              </SelectTrigger>
-              <SelectContent>
-                {platformTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        <div>
-          <Label htmlFor="prompt">Prompt</Label>
-          <Textarea 
-            id="prompt"
-            placeholder="Enter a prompt for the AI (e.g., 'Write a caption about digital marketing tips')"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            rows={3}
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <Label>Generated Content</Label>
-            {generatedText && (
-              <Button size="sm" variant="ghost" onClick={handleCopyContent} className="h-8 px-2">
-                <Copy className="h-3.5 w-3.5 mr-1" />
-                Copy
-              </Button>
-            )}
-          </div>
-          <div className="min-h-[150px] bg-muted/50 rounded-md p-3 text-sm">
-            {generating ? (
-              <div className="flex items-center justify-center h-full">
-                <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                <span>Generating content...</span>
+      
+      <CardContent>
+        <Tabs defaultValue="generate" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="generate">Generate</TabsTrigger>
+            <TabsTrigger value="results" disabled={!generatedContent}>Results</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="generate" className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Topic or Keywords</label>
+              <Input
+                placeholder="e.g., social media marketing, fashion trends, healthy recipes"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Platform</label>
+              <Select value={platform} onValueChange={setPlatform}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select platform" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="twitter">Twitter</SelectItem>
+                  <SelectItem value="instagram">Instagram</SelectItem>
+                  <SelectItem value="facebook">Facebook</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="tiktok">TikTok</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Tone</label>
+              <Select value={tone} onValueChange={setTone}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select tone" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="professional">Professional</SelectItem>
+                  <SelectItem value="casual">Casual</SelectItem>
+                  <SelectItem value="humorous">Humorous</SelectItem>
+                  <SelectItem value="inspirational">Inspirational</SelectItem>
+                  <SelectItem value="educational">Educational</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Language</label>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select language" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="english">English</SelectItem>
+                  <SelectItem value="spanish">Spanish</SelectItem>
+                  <SelectItem value="french">French</SelectItem>
+                  <SelectItem value="german">German</SelectItem>
+                  <SelectItem value="chinese">Chinese</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium">Content Length</label>
+                <span className="text-sm text-muted-foreground">{getLengthLabel(contentLength[0])}</span>
               </div>
-            ) : generatedText ? (
-              <div className="whitespace-pre-wrap">{generatedText}</div>
-            ) : (
-              <div className="text-muted-foreground text-center h-full flex flex-col justify-center">
-                <p>Generated content will appear here</p>
-                <p className="text-xs">Click the Generate button to create content based on your prompt</p>
-              </div>
+              <Slider
+                defaultValue={[2]}
+                max={3}
+                min={1}
+                step={1}
+                value={contentLength}
+                onValueChange={setContentLength}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="results" className="space-y-4">
+            {generatedContent && (
+              <>
+                <div className="space-y-4">
+                  <Textarea
+                    value={generatedContent}
+                    onChange={(e) => setGeneratedContent(e.target.value)}
+                    className="min-h-[150px]"
+                  />
+                  
+                  <div className="flex justify-between">
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard()}>
+                        <Copy className="h-4 w-4 mr-1" /> Copy
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={generateContent} disabled={!topic || isLoading}>
+                        <RefreshCcw className="h-4 w-4 mr-1" /> Regenerate
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="icon">
+                        <ThumbsDown className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon">
+                        <ThumbsUp className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                
+                {generatedOptions.length > 1 && (
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">Other options:</h4>
+                    {generatedOptions.map((option, index) => (
+                      option !== generatedContent && (
+                        <div 
+                          key={index} 
+                          className="p-3 border rounded-md hover:bg-accent cursor-pointer"
+                          onClick={() => selectOption(option)}
+                        >
+                          <p className="text-sm">{option}</p>
+                        </div>
+                      )
+                    ))}
+                  </div>
+                )}
+              </>
             )}
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
+      
       <CardFooter className="flex justify-between">
-        <Button
-          variant="outline"
-          onClick={handleGenerate}
-          disabled={generating || !prompt}
-          className="w-full md:w-auto"
-        >
-          {generating ? (
-            <>
+        <Button variant="outline" onClick={() => {
+          setTopic('');
+          setPlatform('twitter');
+          setTone('professional');
+          setLanguage('english');
+          setContentLength([2]);
+          setGeneratedContent('');
+          setGeneratedOptions([]);
+        }}>
+          Reset
+        </Button>
+        <div className="flex gap-2">
+          {isGenerating ? (
+            <Button disabled>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Generating
-            </>
+              Generating...
+            </Button>
           ) : (
             <>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Generate
+              <Button variant="secondary" onClick={generateContent} disabled={!topic || isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Generate
+                  </>
+                )}
+              </Button>
+              {generatedContent && (
+                <Button onClick={handleUseContent}>
+                  Use Content
+                </Button>
+              )}
             </>
           )}
-        </Button>
-        <Button
-          onClick={handleUseContent}
-          disabled={!generatedText || generating}
-          className="w-full md:w-auto md:ml-2"
-        >
-          Use this content
-        </Button>
+        </div>
       </CardFooter>
     </Card>
   );
