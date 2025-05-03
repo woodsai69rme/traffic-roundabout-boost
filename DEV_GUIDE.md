@@ -1,186 +1,295 @@
 
-# Developer Guide
+# Developer Guide - Roundabout
 
-## Project Overview
+This guide provides essential information for developers working on the Roundabout social media management platform.
 
-Roundabout WebTraffic is a comprehensive social media management platform built with modern web technologies. This guide provides information for developers working on the project.
+## Development Environment Setup
 
-## Getting Started
+### Prerequisites
 
-### Development Environment Setup
+- **Node.js**: Version 16.x or higher
+- **npm**: Version 7.x or higher
+- **Git**: For version control
+- **Editor**: VS Code recommended with extensions:
+  - ESLint
+  - Prettier
+  - Tailwind CSS IntelliSense
+  - TypeScript Vue Plugin
 
-1. Install Node.js (v16+) and npm (v7+)
-2. Clone the repository
-3. Install dependencies:
+### Initial Setup
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd roundabout
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
+
+3. Set up environment variables:
+   Create a `.env` file in the project root with the following:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
 4. Start the development server:
    ```bash
    npm run dev
    ```
 
-### Key Technologies
+## Project Architecture
 
-- **React 18** - UI library
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Build tool and development server
-- **TailwindCSS** - Utility-first CSS framework
-- **Shadcn UI** - Component library
-- **React Router** - Client-side routing
-- **Recharts** - Data visualization
-- **Supabase** - Backend-as-a-Service (Auth, Database, Storage)
-
-## Project Structure
+### Folder Structure
 
 ```
 src/
-├── components/        # Reusable UI components
-│   ├── ui/            # Base UI components from Shadcn
-│   ├── ApiIntegrations/  # API integration components
-│   ├── AudienceInsights/ # Audience analytics components
-│   ├── ContentScheduler/ # Content planning components
-│   └── ...
-├── hooks/             # Custom React hooks
-├── integrations/      # Third-party service integrations
-│   └── supabase/      # Supabase client and types
-├── lib/               # Utility libraries
-├── pages/             # Page components
-├── services/          # API services
-└── utils/             # Helper utilities
+├── components/       # Reusable UI components
+│   ├── ui/           # Base UI components from shadcn/ui
+│   ├── ContentScheduler/ # Content scheduling components
+│   ├── AudienceInsights/ # Audience insights components
+│   └── ApiIntegrations/  # API integration components
+├── hooks/            # Custom React hooks
+├── integrations/     # Third-party service integrations
+├── lib/              # Utility functions
+├── pages/            # Page components
+├── services/         # API service functions
+└── utils/            # Helper utilities
 ```
 
-## Coding Standards
+### Key Technologies
 
-### General Guidelines
+- **React**: UI library
+- **TypeScript**: Type safety
+- **Tailwind CSS**: Styling
+- **shadcn/ui**: UI component library
+- **React Router**: Routing
+- **React Query**: Data fetching
+- **Supabase**: Backend, database, and auth
+- **Vite**: Build tool
 
-- Use TypeScript for all new code
-- Follow the existing project structure
-- Create small, focused components
-- Add proper JSDoc comments for functions and complex logic
-- Use named exports instead of default exports
+## Development Workflow
 
-### Component Guidelines
+### Git Workflow
 
-- One component per file
-- Use functional components with hooks
-- Follow the component naming convention:
-  - PascalCase for component files and functions
-  - kebab-case for CSS files
-- Organize props with TypeScript interfaces
+1. Create a branch for your feature/fix:
+   ```bash
+   git checkout -b feature/feature-name
+   ```
 
-### State Management
+2. Make commits with clear messages:
+   ```bash
+   git commit -m "feat: add social media integration component"
+   ```
 
-- Use React Context for global state
-- Use React Query for server state
-- Use local component state for UI concerns
+3. Push your branch and create a pull request:
+   ```bash
+   git push origin feature/feature-name
+   ```
 
-### Styling
+### Commit Message Convention
 
-- Use Tailwind CSS for styling
-- Follow the color scheme in the design system
-- Use the shadcn/ui component library
-- Ensure all components are responsive
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+- `feat:` - A new feature
+- `fix:` - A bug fix
+- `docs:` - Documentation changes
+- `style:` - Code style changes (formatting, etc.)
+- `refactor:` - Code changes that neither fix bugs nor add features
+- `perf:` - Performance improvements
+- `test:` - Adding or updating tests
+- `build:` - Build system or external dependency changes
+- `ci:` - CI configuration changes
+- `chore:` - Other changes that don't modify src or test files
+
+### Code Style Guidelines
+
+- Use functional components with hooks for React components
+- Use TypeScript interfaces for component props
+- Follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)
+- Use named exports for all components, hooks, and utilities
+- Prefer composition over inheritance
+- Keep components focused and small (< 200 lines)
+
+### Component Structure
+
+```tsx
+// Example component structure
+import React from 'react';
+import { Button } from '@/components/ui/button';
+
+interface ExampleProps {
+  title: string;
+  onAction: () => void;
+}
+
+export const Example: React.FC<ExampleProps> = ({ title, onAction }) => {
+  return (
+    <div className="bg-background p-4 rounded-md">
+      <h2 className="text-xl font-bold">{title}</h2>
+      <Button onClick={onAction}>Click me</Button>
+    </div>
+  );
+};
+
+export default Example;
+```
+
+## State Management
+
+### Component State
+
+Use React's `useState` hook for component-level state:
+
+```tsx
+const [isOpen, setIsOpen] = useState(false);
+```
+
+### Application State
+
+For global application state, use React Context API:
+
+```tsx
+// Example context
+import { createContext, useContext, useState } from 'react';
+
+interface AuthContextType {
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  
+  // Implementation...
+  
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+```
+
+### Data Fetching
+
+Use React Query for data fetching:
+
+```tsx
+const { data, isLoading, error } = useQuery({
+  queryKey: ['posts'],
+  queryFn: fetchPosts
+});
+```
 
 ## Testing
 
 ### Running Tests
 
 ```bash
-npm run test         # Run all tests
-npm run test:watch   # Run tests in watch mode
+npm test          # Run all tests
+npm test:watch    # Run tests in watch mode
+npm test:coverage # Generate test coverage report
 ```
 
 ### Writing Tests
 
-- Create test files next to the component with `.test.tsx` extension
-- Focus on testing behavior, not implementation details
-- Use React Testing Library for component tests
-- Write unit tests for utility functions
+Use React Testing Library and Jest for testing:
 
-## Build and Deployment
+```tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Example from './Example';
 
-### Building for Production
+describe('Example', () => {
+  it('renders the title', () => {
+    render(<Example title="Test Title" onAction={() => {}} />);
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+  });
 
-```bash
-npm run build
+  it('calls onAction when button is clicked', () => {
+    const onAction = jest.fn();
+    render(<Example title="Test Title" onAction={onAction} />);
+    fireEvent.click(screen.getByText('Click me'));
+    expect(onAction).toHaveBeenCalledTimes(1);
+  });
+});
 ```
 
-This will create optimized production build in the `dist` directory.
+## Adding New Features
 
-### Environment Variables
-
-Create a `.env` file in the project root with the following variables:
-
-```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### Deployment
-
-This project is deployed on Vercel. The main branch is automatically deployed to production.
-
-## Git Workflow
-
-### Branching Strategy
-
-- `main` - Production branch
-- `develop` - Development branch
-- `feature/*` - Feature branches
-- `bugfix/*` - Bug fix branches
-- `hotfix/*` - Hot fix branches for production issues
-
-### Commit Message Format
-
-Follow the conventional commits specification:
-
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
-```
-
-Types:
-- feat: A new feature
-- fix: A bug fix
-- docs: Documentation changes
-- style: Code style changes (formatting, etc.)
-- refactor: Code changes that neither fix bugs nor add features
-- perf: Performance improvements
-- test: Adding or fixing tests
-- chore: Changes to the build process or auxiliary tools
-
-### Pull Request Process
-
-1. Create a new branch from `develop`
-2. Make changes and commit following the commit message format
-3. Push the branch and create a pull request
-4. Ensure the CI pipeline passes
-5. Request a review from at least one team member
-6. Merge the pull request once approved
+1. **Plan**: Define the feature scope and design
+2. **Create**: Implement the feature in small, focused PRs
+3. **Test**: Add tests for the new feature
+4. **Document**: Update documentation if necessary
+5. **Review**: Request a code review from team members
+6. **Iterate**: Address feedback and make necessary changes
+7. **Merge**: Once approved, merge your PR
 
 ## Troubleshooting
 
 ### Common Issues
 
-#### Build Errors
+1. **Build Errors**:
+   - Check for TypeScript errors
+   - Verify all imports are correct
+   - Ensure all dependencies are installed
 
-- Check for TypeScript errors
-- Ensure all dependencies are installed
-- Verify environment variables
+2. **Styling Issues**:
+   - Confirm Tailwind classes are correct
+   - Check for CSS conflicts
+   - Verify responsive design works across device sizes
 
-#### Runtime Errors
+3. **State Management**:
+   - Use React DevTools to inspect component state
+   - Check if state updates are triggering re-renders
+   - Verify context values are being properly provided
 
-- Check browser console for errors
-- Verify API endpoints are working
-- Check authentication state
+### Debugging Tips
 
-## Resources
+- Use browser developer tools for frontend issues
+- Use `console.log` strategically (remember to remove before committing)
+- For complex state issues, use the React DevTools profiler
+
+## Performance Optimization
+
+- Memoize expensive calculations with `useMemo` and `useCallback`
+- Use virtualized lists for large data sets
+- Implement code-splitting with React.lazy
+- Optimize images and assets
+- Use proper key props in lists
+
+## Deployment
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Additional Resources
 
 - [React Documentation](https://reactjs.org/docs/getting-started.html)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Supabase Documentation](https://supabase.io/docs)
+- [React Query Documentation](https://tanstack.com/query/latest)

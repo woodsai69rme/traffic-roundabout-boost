@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,35 +9,7 @@ import { cn } from '@/lib/utils';
 import { schedulePost } from '@/services/socialApiIntegrations';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
-import { DayPickerDay } from 'react-day-picker';
-
-// Define a simple component for displaying day cells with scheduled posts
-interface DayWithScheduledPostsProps {
-  day: Date;
-  displayMonth: Date;
-  date: Date;
-  className?: string;
-  children?: React.ReactNode;
-  posts: any[];
-  onPostClick?: (post: any) => void;
-}
-
-const DayWithScheduledPosts: React.FC<DayWithScheduledPostsProps> = ({
-  day,
-  className,
-  children,
-  posts,
-  onPostClick
-}) => {
-  return (
-    <div className={cn(className, "relative")}>
-      {children}
-      {posts.length > 0 && (
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
-      )}
-    </div>
-  );
-};
+import { DayContentProps } from 'react-day-picker';
 
 const ContentCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -143,18 +115,19 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: ({ date: dayDate, ...props }: DayPickerDay) => {
+              Day: (props: DayContentProps) => {
+                const { date: dayDate, ...dayProps } = props;
                 return (
                   <div
                     className={cn(
-                      props.className,
+                      dayProps.className,
                       hasPostsOnDate(dayDate) && 'relative'
                     )}
-                    onClick={props.onClick}
+                    onClick={dayProps.onClick}
                     role="button"
                     tabIndex={0}
                   >
-                    {props.children}
+                    {dayProps.children}
                     {hasPostsOnDate(dayDate) && (
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
                     )}

@@ -1,331 +1,249 @@
 
-# Roundabout WebTraffic User Guide
+# Roundabout - User Guide
 
-Welcome to Roundabout WebTraffic, your all-in-one platform for social media growth and monetization. This guide will help you understand the key features and how to use them effectively.
+Welcome to Roundabout, your all-in-one social media management platform. This guide will help you navigate the features and functionality of Roundabout to maximize your social media strategy.
 
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Dashboard](#dashboard)
-3. [Analytics](#analytics)
-4. [Audience Insights](#audience-insights)
-5. [Content Planner](#content-planner)
-6. [AI Content Creator](#ai-content-creator)
-7. [Platform Integrations](#platform-integrations)
-8. [Communities](#communities)
-9. [Monetization](#monetization)
-10. [User Profile](#user-profile)
-11. [Troubleshooting](#troubleshooting)
+2. [Dashboard Overview](#dashboard-overview)
+3. [Content Scheduler](#content-scheduler)
+4. [AI Content Generator](#ai-content-generator)
+5. [Analytics](#analytics)
+6. [Audience Insights](#audience-insights)
+7. [Platform Connections](#platform-connections)
+8. [Account Settings](#account-settings)
+9. [Troubleshooting](#troubleshooting)
+10. [FAQ](#faq)
 
 ## Getting Started
 
-### Creating an Account
+### Creating Your Account
 
-1. Visit the Roundabout WebTraffic homepage
-2. Click "Sign Up" in the top-right corner
-3. Fill in your email address and create a password
-4. Verify your email address
-5. Complete your profile information
+1. Visit the Roundabout sign-up page
+2. Enter your email and create a password
+3. Verify your email address through the confirmation link
+4. Complete your profile information
 
-### Logging In
+### Connecting Your First Social Platform
 
-1. Click "Sign In" in the top-right corner of the homepage
-2. Enter your email and password
-3. Click "Sign In"
+1. Navigate to "Platforms" in the main menu
+2. Click "Connect New Platform"
+3. Select the platform you want to connect (Twitter, Facebook, Instagram, LinkedIn)
+4. Follow the authentication steps for your chosen platform
+5. Once connected, your account will appear in your Platforms dashboard
 
-### Dashboard Overview
+## Dashboard Overview
 
-The dashboard is your command center where you can:
-- View your performance metrics across platforms
-- Track follower growth and engagement
-- See recent activity on your content
-- Access quick links to key features
+The Dashboard gives you a quick overview of your social media performance across all connected platforms.
 
-## Dashboard
+### Key Components
 
-### Performance Metrics
+- **Performance Summary**: View engagement, reach, and follower metrics
+- **Recent Activity**: See your recent posts and their performance
+- **Upcoming Content**: Preview scheduled content for the next 24 hours
+- **Platform Health**: Quick status of all connected platforms
+- **Quick Actions**: Shortcuts to common tasks like creating a post or viewing analytics
 
-The dashboard provides a quick overview of your social media performance:
+## Content Scheduler
 
-- **Growth Stats**: Track follower growth over time
-- **Engagement Rate**: Monitor how well your content is performing
-- **Reach**: See how many unique users have viewed your content
-- **Platform Breakdown**: View metrics separated by platform
+The Content Scheduler is your hub for planning and managing all your social media posts.
 
-### Recent Activity
+### Using the Content Calendar
 
-The Recent Activity section shows:
-- New followers and engagements
-- Comments that need responses
-- Content that was recently published
-- Scheduled posts that will go live soon
+1. Navigate to "Content Planner" in the main menu
+2. The calendar view shows all scheduled posts across platforms
+3. Click on any date to see posts scheduled for that day
+4. Toggle between list view and timeline view using the tabs
 
-### Quick Actions
+### Scheduling a Post
 
-From the dashboard, you can quickly:
-- Create new posts
-- Respond to comments
-- View scheduled content
-- Access detailed analytics
+1. From the Content Calendar, click "Schedule Post"
+2. Select the platform for your post
+3. Write your content in the text editor
+4. Add media if desired
+5. Set the date and time for publishing
+6. Click "Schedule Post" to finalize
 
-## Analytics
+### Managing Scheduled Posts
 
-### Overview
+- **Edit**: Click on any scheduled post and select the edit icon
+- **Delete**: Remove posts from your schedule with the trash icon
+- **Publish Now**: Immediately publish a scheduled post using the share icon
 
-The Analytics section provides detailed insights into your performance:
+## AI Content Generator
 
-- **Growth Trends**: Visual charts of follower growth
-- **Engagement Analytics**: Like, comment, and share metrics
-- **Content Performance**: Which posts performed best
-- **Audience Growth**: How your audience is expanding
-
-### Using Analytics for Growth
-
-1. Identify your best-performing content types
-2. Analyze optimal posting times
-3. Track engagement trends
-4. Set growth goals based on historical data
-
-### Custom Reports
-
-Create custom reports focused on:
-- Platform comparisons
-- Time period analysis
-- Content type performance
-- Audience growth
-
-## Audience Insights
-
-### Demographics
-
-Understand who your audience is:
-- Age distribution
-- Gender breakdown
-- Geographic location
-- Language preferences
-
-### Engagement Patterns
-
-Learn when and how your audience engages:
-- Peak activity times
-- Content preferences
-- Engagement rates
-- Response patterns
-
-### Competitor Analysis
-
-Compare your performance with competitors:
-- Growth rate comparison
-- Engagement benchmarking
-- Content strategy insights
-- Audience overlap
-
-### Hashtag Analytics
-
-Optimize your hashtag strategy:
-- Most effective hashtags
-- Trending topics
-- Reach potential
-- Recommended combinations
-
-## Content Planner
-
-### Calendar View
-
-Plan and visualize your content schedule:
-- Month, week, and day views
-- Color-coded by platform
-- Drag and drop scheduling
-- Content preview
-
-### Creating and Scheduling Content
-
-1. Click "New Post" in the Content Planner
-2. Select the platform(s)
-3. Create your content (text, images, videos)
-4. Choose date and time
-5. Schedule or save as draft
-
-### Content Queue
-
-View and manage all scheduled content:
-- Edit scheduled posts
-- Rearrange posting order
-- Duplicate successful content
-- Bulk actions for multiple posts
-
-### Content Templates
-
-Create templates for recurring content:
-- Save common formats
-- Apply consistent branding
-- Quick fill with custom variables
-- Share templates with team members
-
-## AI Content Creator
+The AI Content Generator helps you create engaging content tailored to different platforms and audience preferences.
 
 ### Generating Content
 
-Create engaging content with AI assistance:
-1. Select content type (post, caption, video script)
-2. Enter your topic or keywords
-3. Choose tone and style
-4. Select platform and length
-5. Generate and refine
+1. Navigate to "AI Content Creator" in the main menu
+2. Enter a topic or keywords related to your desired content
+3. Select your target platform
+4. Choose the tone (Professional, Casual, Humorous, etc.)
+5. Select the language for your content
+6. Adjust content length as needed
+7. Click "Generate" to create content options
 
-### Customizing AI Output
+### Using Generated Content
 
-After generating content:
-- Edit the generated text
-- Request variations
-- Adjust tone and length
-- Add your personal touch
+- View multiple generated options and select the one you prefer
+- Edit the content directly in the editor if needed
+- Click "Use Content" to automatically populate the post scheduler
+- Alternatively, copy the content to use elsewhere
 
-### Content History
+## Analytics
 
-Access your previously generated content:
-- Save favorite generations
-- Organize by platform or campaign
-- Track performance of AI content
-- Identify successful patterns
+The Analytics section provides detailed insights into your social media performance.
 
-### Best Practices
+### Viewing Performance Metrics
 
-Tips for effective AI content generation:
-- Provide specific topics
-- Use industry-specific keywords
-- Review and personalize all content
-- Test different tones with your audience
+1. Navigate to "Analytics" in the main menu
+2. Select the platform you want to analyze
+3. Choose the date range for your analysis
+4. View metrics including:
+   - Engagement rate
+   - Impressions and reach
+   - Follower growth
+   - Click-through rates
+   - Content performance by type
 
-## Platform Integrations
+### Creating Reports
 
-### Connecting Your Accounts
+1. From the Analytics dashboard, click "Create Report"
+2. Select the metrics to include
+3. Choose the date range
+4. Select your preferred format (PDF, Excel, etc.)
+5. Click "Generate Report"
+6. Download or share the report directly
 
-1. Go to the "Integrations" page
-2. Select the platform you want to connect
-3. Follow the authentication process
-4. Set permissions for posting and analytics
+## Audience Insights
 
-### Managing Connections
+Audience Insights helps you understand who your followers are and how they interact with your content.
 
-Once connected, you can:
-- Test the connection
-- Update credentials
-- Adjust permissions
-- Disconnect when needed
+### Analyzing Your Audience
 
-### Data Synchronization
+1. Navigate to "Audience Insights" in the main menu
+2. Select the platform to analyze
+3. View demographic data including:
+   - Age distribution
+   - Gender breakdown
+   - Geographic location
+   - Language preferences
 
-Control how your data syncs:
-- Historical data import
-- Sync frequency
-- Real-time updates
-- Data retention settings
+### Competitor Analysis
 
-## Communities
+1. In the Audience Insights section, navigate to the "Competitors" tab
+2. Add competitor accounts to track
+3. Compare metrics including:
+   - Follower count
+   - Engagement rates
+   - Content strategies
+   - Posting frequency
 
-### Finding Communities
+### Hashtag Analytics
 
-Discover relevant groups and communities:
-- Search by topic or niche
-- Filter by size and engagement
-- View growth trends
-- Assess fit for your content
+1. In the Audience Insights section, navigate to the "Hashtags" tab
+2. Search for specific hashtags or view recommended ones
+3. Analyze hashtag performance:
+   - Usage volume
+   - Engagement rates
+   - Growth trends
+   - Related hashtags
 
-### Engagement Strategies
+## Platform Connections
 
-Effectively engage with communities:
-- Schedule regular participation
-- Track engagement metrics
-- Identify key community members
-- Customize content for specific communities
+Manage all your connected social media accounts in one place.
 
-### Building Your Own Community
+### Adding a New Platform
 
-Create and grow your community:
-1. Define your community purpose
-2. Set up community guidelines
-3. Invite initial members
-4. Create engaging discussion topics
-5. Monitor and moderate activity
+1. Navigate to "Platforms" in the main menu
+2. Click "Connect New Platform"
+3. Select the platform to connect
+4. Follow the authentication process
+5. Set default preferences for the platform
 
-## Monetization
+### Managing Platform Connections
 
-### Monetization Options
+- **Refresh Connection**: Update your platform authentication
+- **Set Posting Defaults**: Configure default settings for each platform
+- **View Platform Health**: Check API limits and connection status
+- **Disconnect**: Remove a platform from your Roundabout account
 
-Track and optimize revenue streams:
-- Brand partnerships and sponsorships
-- Affiliate marketing
-- Digital products
-- Subscription offerings
+## Account Settings
 
-### Performance Tracking
+Customize your Roundabout experience and manage your subscription.
 
-Monitor the financial performance of your content:
-- Revenue by platform
-- Campaign ROI
-- Growth trends
-- Payment history
+### Profile Management
 
-### Brand Collaborations
+1. Click on your profile icon in the top-right corner
+2. Select "Profile" from the dropdown menu
+3. Update your personal information, profile picture, and notification preferences
 
-Manage brand partnerships:
-- Track outreach and negotiations
-- Store contract details
-- Schedule deliverables
-- Report on campaign performance
+### Subscription Management
 
-## User Profile
+1. Navigate to "Settings" > "Subscription"
+2. View your current plan and usage
+3. Upgrade or change your subscription as needed
+4. Update billing information
 
-### Updating Your Profile
+### Team Management
 
-1. Click your profile picture in the top-right corner
-2. Select "Profile Settings"
-3. Update your information
-4. Save changes
-
-### Notification Preferences
-
-Customize what notifications you receive:
-- Email notifications
-- In-app alerts
-- Mobile push notifications
-- Frequency settings
-
-### Account Security
-
-Protect your account:
-- Change password regularly
-- Enable two-factor authentication
-- Review connected apps
-- Check login history
+1. Navigate to "Settings" > "Team Members"
+2. Invite new team members
+3. Assign roles and permissions
+4. Manage access to specific platforms and features
 
 ## Troubleshooting
 
-### Common Issues
+### Common Issues and Solutions
 
-Solutions to frequently encountered problems:
-- Connection errors with platforms
-- Content scheduling issues
-- Data synchronization problems
-- Performance concerns
+#### Platform Connection Errors
+- **Issue**: Unable to connect to a social platform
+- **Solution**: Check that your social media account has proper permissions for third-party posting. Try disconnecting and reconnecting the platform.
+
+#### Scheduled Posts Not Publishing
+- **Issue**: Scheduled content isn't posting automatically
+- **Solution**: Verify that your platform connection is active and that you haven't exceeded API limits. Check the platform's status in your Platforms dashboard.
+
+#### Analytics Data Not Loading
+- **Issue**: Analytics reports show no data
+- **Solution**: Ensure your date range includes days with active posts. Some metrics may take 24-48 hours to populate after posting.
 
 ### Getting Support
 
-If you need assistance:
-1. Check the FAQ section
-2. Review the knowledge base
-3. Contact support via email or chat
-4. Join our community forum for peer assistance
+If you encounter issues not covered in this guide:
 
-### Feedback and Feature Requests
+1. Check our knowledge base at support.roundabout.com
+2. Contact support through the "Help" button in the bottom-right corner of any page
+3. Email support@roundabout.com with details of your issue
 
-We value your input:
-- Submit feedback through the "Feedback" button
-- Vote on feature requests
-- Participate in beta testing
-- Join our user research panels
+## FAQ
+
+**Q: How many social media accounts can I connect?**
+A: The number of accounts depends on your subscription tier. Basic plans allow up to 5 connections, while Premium and Business plans offer more.
+
+**Q: Can I schedule the same post across multiple platforms?**
+A: Yes, when creating a post, you can select multiple platforms and customize the content for each if needed.
+
+**Q: How far in advance can I schedule posts?**
+A: You can schedule posts up to 12 months in advance.
+
+**Q: Are there limits to how many posts I can schedule?**
+A: Limits vary by subscription tier. Check your plan details in Account Settings.
+
+**Q: Can I collaborate with team members?**
+A: Yes, on Business and Enterprise plans you can add team members with customized permissions.
+
+**Q: Is there a mobile app available?**
+A: Our mobile app is currently in development and will be available in Q3 2025.
+
+**Q: How secure is my social media data?**
+A: Roundabout uses industry-standard encryption and security practices. We never store your social media passwords, only secure OAuth tokens.
+
+**Q: Can I import content from other tools?**
+A: Yes, you can import content calendars and schedules from CSV files.
 
 ---
 
-For more detailed information about specific features, refer to our detailed feature documentation or reach out to our support team.
+Thank you for choosing Roundabout for your social media management needs. If you have any questions not covered in this guide, please contact our support team.

@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
 
-## Project info
+# Roundabout - Social Media Management Platform
 
-**URL**: https://lovable.dev/projects/7324ce5e-61f5-49c6-b00e-a367aff4c1fd
+## Project Overview
 
-## How can I edit this code?
+Roundabout is a comprehensive social media management platform designed to help content creators, marketers, and businesses streamline their social media presence across multiple platforms. The application offers tools for content scheduling, audience insights, campaign analytics, and AI-powered content creation.
 
-There are several ways of editing your application.
+![Roundabout Dashboard](https://placehold.co/600x400?text=Roundabout+Dashboard)
 
-**Use Lovable**
+## Key Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7324ce5e-61f5-49c6-b00e-a367aff4c1fd) and start prompting.
+- **Content Calendar & Scheduling**: Plan and schedule content across multiple social media platforms
+- **AI Content Generator**: Create engaging content with AI assistance based on your brand's tone and style
+- **Analytics Dashboard**: Track performance metrics across all your social platforms
+- **Audience Insights**: Gain deep understanding of your audience demographics and behaviors
+- **Platform Integrations**: Connect with major social networks including Twitter, Instagram, Facebook, LinkedIn, and more
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technology Stack
 
-**Use your preferred IDE**
+- **Frontend**: React, TypeScript, Tailwind CSS, Shadcn UI
+- **State Management**: React Context API, React Query
+- **Authentication**: Supabase Auth
+- **Database**: Supabase PostgreSQL
+- **Deployment**: Vite build system
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js 16.x or later
+- npm 7.x or later
+- Supabase account (for database and authentication)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```bash
+# Clone the repository
+git clone <repository-url>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Navigate to the project directory
+cd roundabout
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment Configuration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Create a `.env` file in the root directory with the following variables:
 
-**Use GitHub Codespaces**
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+roundabout/
+├── docs/                  # Documentation files
+├── public/                # Public assets
+├── src/
+│   ├── components/        # Reusable UI components
+│   │   ├── ui/            # Base UI components (shadcn/ui)
+│   │   ├── ContentScheduler/ # Content scheduling components
+│   │   └── AudienceInsights/ # Audience analytics components
+│   ├── hooks/             # Custom React hooks
+│   ├── integrations/      # Third-party service integrations
+│   ├── lib/               # Utility functions
+│   ├── pages/             # Page components
+│   ├── services/          # API service functions
+│   └── utils/             # Helper utilities
+└── supabase/              # Supabase configuration
+```
 
-This project is built with:
+## Available Scripts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `npm run dev` - Start the development server
+- `npm run build` - Build the production-ready application
+- `npm run lint` - Run ESLint to check for code issues
+- `npm run preview` - Preview the production build locally
 
-## How can I deploy this project?
+## Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/7324ce5e-61f5-49c6-b00e-a367aff4c1fd) and click on Share -> Publish.
+### Standard Deployment
 
-## Can I connect a custom domain to my Lovable project?
+Build the application for production:
 
-Yes, you can!
+```bash
+npm run build
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The built files will be in the `dist` directory, ready to be deployed to any static hosting service.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Supabase Edge Functions
+
+For serverless functions, deploy using the Supabase CLI:
+
+```bash
+supabase functions deploy function-name
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature-name`
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+For questions or feedback, please reach out to [support@roundabout.com](mailto:support@roundabout.com)
+
+---
+
+Built with [Lovable](https://lovable.dev/)

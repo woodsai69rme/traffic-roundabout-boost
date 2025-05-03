@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,10 +8,10 @@ import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileTex
 import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 import { useAuth } from '@/hooks/use-auth';
-import UserProfileCard from './UserProfileCard';
+import UserProfileMenu from './UserProfileMenu';
 
 const NavbarWithAuth = () => {
-  const { user, isLoading, signOut } = useAuth();
+  const { user, isLoading } = useAuth();
 
   const mainNavItems = [
     {
@@ -138,15 +139,7 @@ const NavbarWithAuth = () => {
           <ThemeToggle />
           
           {!isLoading && user ? (
-            <UserProfileCard 
-              name={user.name || "User"}
-              username={user.email || "user"}
-              avatarUrl={user.avatar_url || "/placeholder.svg"}
-              platform="Roundabout"
-              platformLogo="/placeholder.svg"
-              followers={0}
-              content={0}
-            />
+            <UserProfileMenu />
           ) : (
             !isLoading && (
               <Button asChild>
