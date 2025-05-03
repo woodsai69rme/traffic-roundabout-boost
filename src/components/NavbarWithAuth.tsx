@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileText } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 import { useAuth } from '@/hooks/use-auth';
 import UserProfileCard from './UserProfileCard';
@@ -138,7 +138,15 @@ const NavbarWithAuth = () => {
           <ThemeToggle />
           
           {!isLoading && user ? (
-            <UserProfileCard />
+            <UserProfileCard 
+              name={user.name || "User"}
+              username={user.email || "user"}
+              avatarUrl={user.avatar_url || "/placeholder.svg"}
+              platform="Roundabout"
+              platformLogo="/placeholder.svg"
+              followers={0}
+              content={0}
+            />
           ) : (
             !isLoading && (
               <Button asChild>

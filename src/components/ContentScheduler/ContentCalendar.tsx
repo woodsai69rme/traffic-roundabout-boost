@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { schedulePost } from '@/services/socialApiIntegrations';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
+import { DayPickerDay } from 'react-day-picker';
 
 // Define a simple component for displaying day cells with scheduled posts
 interface DayWithScheduledPostsProps {
@@ -142,20 +143,19 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: (props) => {
-                const day = props.date;
+              Day: ({ date: dayDate, ...props }: DayPickerDay) => {
                 return (
                   <div
                     className={cn(
                       props.className,
-                      hasPostsOnDate(day) && 'relative'
+                      hasPostsOnDate(dayDate) && 'relative'
                     )}
                     onClick={props.onClick}
                     role="button"
                     tabIndex={0}
                   >
                     {props.children}
-                    {hasPostsOnDate(day) && (
+                    {hasPostsOnDate(dayDate) && (
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
                     )}
                   </div>

@@ -2,8 +2,9 @@
 import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-interface UserProfileCardProps {
+export interface UserProfileCardProps {
   name: string;
   username: string;
   avatarUrl: string;
@@ -23,15 +24,16 @@ const UserProfileCard = ({
   content 
 }: UserProfileCardProps) => {
   return (
-    <Card className="card-hover overflow-hidden">
+    <Card className="card-hover overflow-hidden w-[280px]">
       <CardHeader className="p-0">
-        <div className="h-24 bg-gradient-to-r from-roundabout-purple to-roundabout-blue"></div>
+        <div className="h-24 bg-gradient-to-r from-blue-500 to-purple-500"></div>
       </CardHeader>
       <CardContent className="pt-0 -mt-12">
         <div className="flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full border-4 border-background overflow-hidden">
-            <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
-          </div>
+          <Avatar className="w-24 h-24 border-4 border-background">
+            <AvatarImage src={avatarUrl} alt={name} />
+            <AvatarFallback>{name.substring(0, 2).toUpperCase()}</AvatarFallback>
+          </Avatar>
           <h3 className="mt-3 font-semibold text-lg">{name}</h3>
           <p className="text-muted-foreground text-sm">@{username}</p>
           
