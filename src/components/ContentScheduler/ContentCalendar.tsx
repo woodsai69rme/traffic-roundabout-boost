@@ -115,21 +115,21 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: ({ date: dayDate, ...props }) => {
-                if (!dayDate) return null;
+              Day: ({ day, ...props }: DayProps) => {
+                if (!day) return null;
                 
                 return (
                   <div
                     className={cn(
                       props.className,
-                      hasPostsOnDate(dayDate) && 'relative'
+                      hasPostsOnDate(day) && 'relative'
                     )}
                     role="button"
                     tabIndex={0}
                     onClick={props.onClick}
                   >
                     {props.children}
-                    {hasPostsOnDate(dayDate) && (
+                    {hasPostsOnDate(day) && (
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
                     )}
                   </div>
