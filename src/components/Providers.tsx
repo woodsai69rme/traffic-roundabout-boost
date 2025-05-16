@@ -2,7 +2,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ThemeProvider } from "./ThemeProvider";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -19,16 +19,16 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <BrowserRouter>
-      <ThemeProvider defaultTheme="dark" enableSystem>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
             <TooltipProvider>
               <Sonner />
               {children}
             </TooltipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+          </NextThemesProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 }

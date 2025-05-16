@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -9,10 +10,18 @@ import { Plus } from 'lucide-react';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
 
-// Define the DayComponentProps type properly
+// Define post interface
+interface Post {
+  id: string;
+  date: Date;
+  platform: string;
+  content: string;
+}
+
+// Define the Day component props
 type DayComponentProps = {
   date: Date;
-  displayMonth: Date;
+  displayMonth?: Date;
   onClick?: () => void;
   className?: string;
   children?: React.ReactNode;
@@ -22,10 +31,10 @@ const ContentCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState('');
-  const [scheduledPosts, setScheduledPosts] = useState([
-    { date: new Date('2024-07-15'), platform: 'Twitter', content: 'Exciting news! Check out our latest blog post.' },
-    { date: new Date('2024-07-18'), platform: 'Instagram', content: 'Sneak peek behind the scenes. #behindthescenes' },
-    { date: new Date('2024-07-15'), platform: 'LinkedIn', content: 'New insights on industry trends. #leadership' },
+  const [scheduledPosts, setScheduledPosts] = useState<Post[]>([
+    { id: '1', date: new Date('2024-07-15'), platform: 'Twitter', content: 'Exciting news! Check out our latest blog post.' },
+    { id: '2', date: new Date('2024-07-18'), platform: 'Instagram', content: 'Sneak peek behind the scenes. #behindthescenes' },
+    { id: '3', date: new Date('2024-07-15'), platform: 'LinkedIn', content: 'New insights on industry trends. #leadership' },
   ]);
 
   const handleDateSelect = (newDate: Date | undefined) => {
@@ -36,19 +45,25 @@ const ContentCalendar = () => {
     setSelectedPlatform(platform);
   };
 
-  const addScheduledPost = (newPost: { date: Date; platform: string; content: string }) => {
-    setScheduledPosts([...scheduledPosts, newPost]);
+  const addScheduledPost = (newPost: { platform: string; content: string; scheduledDate: Date; media: string[] }) => {
+    const post: Post = {
+      id: Math.random().toString(36).substring(2, 9), // Generate a simple ID
+      date: newPost.scheduledDate,
+      platform: newPost.platform,
+      content: newPost.content
+    };
+    
+    setScheduledPosts([...scheduledPosts, post]);
+    setOpen(false);
   };
   
   const getPostsForDate = (date: Date) => {
     return scheduledPosts.filter(post => format(post.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
   };
 
-  // Custom Day component to highlight days with scheduled posts
-  const Day = (props: DayComponentProps) => {
+  // Custom day renderer to highlight days with scheduled posts
+  const renderDay = (props: DayComponentProps) => {
     const { date, displayMonth, onClick, className, children } = props;
-    const formattedDate = format(date, 'yyyy-MM-dd');
-    const isCurrentMonth = format(date, 'MM') === format(displayMonth, 'MM');
     const hasPosts = getPostsForDate(date).length > 0;
     
     const handleClick = () => {
@@ -83,7 +98,9 @@ const ContentCalendar = () => {
           selected={date}
           onSelect={handleDateSelect}
           className="rounded-md border"
-          Day={Day as any}
+          components={{
+            Day: renderDay
+          }}
         />
         {date ? (
           <p>
@@ -107,7 +124,7 @@ const ContentCalendar = () => {
                 Choose a platform and create your content.
               </DialogDescription>
             </DialogHeader>
-            <SchedulePostForm selectedDate={date} addScheduledPost={addScheduledPost} onPlatformSelect={handlePlatformSelect} />
+            <SchedulePostForm onSubmit={addScheduledPost} />
             <DialogFooter>
               <Button type="submit">Schedule</Button>
             </DialogFooter>
