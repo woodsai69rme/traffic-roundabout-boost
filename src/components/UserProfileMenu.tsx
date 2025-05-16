@@ -15,6 +15,14 @@ import { useAuth } from '@/hooks/use-auth';
 import { Link } from 'react-router-dom';
 import { LogOut, Settings, User as UserIcon } from 'lucide-react';
 
+interface ExtendedUser extends User {
+  user_metadata?: {
+    name?: string;
+    avatar_url?: string;
+    [key: string]: any;
+  };
+}
+
 const UserProfileMenu = () => {
   const { user, signOut } = useAuth();
   
@@ -28,9 +36,12 @@ const UserProfileMenu = () => {
 
   if (!user) return null;
   
+  // Cast to ExtendedUser type since Supabase User might have user_metadata
+  const extendedUser = user as ExtendedUser;
+  
   // Extract display name from user metadata or email
-  const displayName = user.user_metadata?.name || user.email?.split('@')[0] || 'User';
-  const avatarUrl = user.user_metadata?.avatar_url;
+  const displayName = extendedUser.user_metadata?.name || user.email?.split('@')[0] || 'User';
+  const avatarUrl = extendedUser.user_metadata?.avatar_url;
   
   return (
     <DropdownMenu>

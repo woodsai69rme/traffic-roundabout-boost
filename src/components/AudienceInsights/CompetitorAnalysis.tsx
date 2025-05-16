@@ -132,7 +132,14 @@ const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
+                <Tooltip 
+                  formatter={(value: number | string) => {
+                    if (typeof value === 'number') {
+                      return `${value.toFixed(2)}%`;
+                    }
+                    return `${value}%`;
+                  }}
+                />
                 <Bar dataKey="engagement" fill="#82ca9d" name="Engagement Rate" />
               </BarChart>
             </ResponsiveContainer>

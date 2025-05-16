@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { schedulePost } from '@/services/socialApiIntegrations';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
-import { DayContentProps } from 'react-day-picker';
+import type { DayProps } from 'react-day-picker';
 
 const ContentCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -115,17 +115,19 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: (props: DayContentProps) => {
+              Day: (props: DayProps) => {
                 const { date: dayDate, ...dayProps } = props;
+                if (!dayDate) return null;
+                
                 return (
                   <div
                     className={cn(
                       dayProps.className,
                       hasPostsOnDate(dayDate) && 'relative'
                     )}
-                    onClick={dayProps.onClick}
                     role="button"
                     tabIndex={0}
+                    onClick={dayProps.onClick}
                   >
                     {dayProps.children}
                     {hasPostsOnDate(dayDate) && (
