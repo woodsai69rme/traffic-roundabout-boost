@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -115,21 +114,20 @@ const ContentCalendar = () => {
             onSelect={handleDateSelect}
             className="rounded-md border"
             components={{
-              Day: (props: DayProps) => {
-                const { date: dayDate, ...dayProps } = props;
+              Day: ({ date: dayDate, ...rest }: DayProps) => {
                 if (!dayDate) return null;
                 
                 return (
                   <div
                     className={cn(
-                      dayProps.className,
+                      rest.className,
                       hasPostsOnDate(dayDate) && 'relative'
                     )}
                     role="button"
                     tabIndex={0}
-                    onClick={dayProps.onClick}
+                    onClick={rest.onClick}
                   >
-                    {dayProps.children}
+                    {rest.children}
                     {hasPostsOnDate(dayDate) && (
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
                     )}

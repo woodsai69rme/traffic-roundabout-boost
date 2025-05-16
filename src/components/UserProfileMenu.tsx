@@ -15,13 +15,14 @@ import { useAuth } from '@/hooks/use-auth';
 import { Link } from 'react-router-dom';
 import { LogOut, Settings, User as UserIcon } from 'lucide-react';
 
-interface ExtendedUser extends User {
+// Define an interface that extends User but adds optional user_metadata
+type ExtendedUser = User & {
   user_metadata?: {
     name?: string;
     avatar_url?: string;
     [key: string]: any;
   };
-}
+};
 
 const UserProfileMenu = () => {
   const { user, signOut } = useAuth();
