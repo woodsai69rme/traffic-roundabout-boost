@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface EngagementInsightsProps {
   platform: string;
@@ -51,6 +52,14 @@ const EngagementInsights: React.FC<EngagementInsightsProps> = ({ platform }) => 
     { time: '9 PM', engagement: 4.9 },
   ];
 
+  // Custom tooltip formatter to safely format values
+  const formatTooltipValue = (value: ValueType, name?: NameType) => {
+    if (typeof value === 'number') {
+      return `${value.toFixed(2)}%`;
+    }
+    return `${value}%`;
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -84,14 +93,7 @@ const EngagementInsights: React.FC<EngagementInsightsProps> = ({ platform }) => 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip 
-                  formatter={(value: number | string) => {
-                    if (typeof value === 'number') {
-                      return `${value.toFixed(2)}%`;
-                    }
-                    return `${value}%`;
-                  }}
-                />
+                <Tooltip formatter={formatTooltipValue} />
                 <Legend />
                 <Line type="monotone" dataKey="engagement" stroke="#8884d8" activeDot={{ r: 8 }} name="Engagement Rate" />
               </LineChart>
@@ -127,14 +129,7 @@ const EngagementInsights: React.FC<EngagementInsightsProps> = ({ platform }) => 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
                 <YAxis />
-                <Tooltip 
-                  formatter={(value: number | string) => {
-                    if (typeof value === 'number') {
-                      return `${value.toFixed(2)}%`;
-                    }
-                    return `${value}%`;
-                  }}
-                />
+                <Tooltip formatter={formatTooltipValue} />
                 <Legend />
                 <Bar dataKey="engagement" fill="#8884d8" name="Engagement Rate (%)" />
               </BarChart>

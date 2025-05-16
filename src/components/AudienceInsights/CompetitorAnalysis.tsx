@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, X } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface CompetitorAnalysisProps {
   platform: string;
@@ -62,6 +63,14 @@ const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => 
       other: 5 + Math.floor(Math.random() * 10)
     }))
   ];
+
+  // Custom tooltip formatter to safely format values
+  const formatTooltipValue = (value: ValueType, name?: NameType) => {
+    if (typeof value === 'number') {
+      return `${value.toFixed(2)}%`;
+    }
+    return `${value}%`;
+  };
 
   return (
     <Card className="w-full">
@@ -132,14 +141,7 @@ const CompetitorAnalysis: React.FC<CompetitorAnalysisProps> = ({ platform }) => 
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip 
-                  formatter={(value: number | string) => {
-                    if (typeof value === 'number') {
-                      return `${value.toFixed(2)}%`;
-                    }
-                    return `${value}%`;
-                  }}
-                />
+                <Tooltip formatter={formatTooltipValue} />
                 <Bar dataKey="engagement" fill="#82ca9d" name="Engagement Rate" />
               </BarChart>
             </ResponsiveContainer>
