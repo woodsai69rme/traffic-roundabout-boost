@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -10,11 +9,13 @@ import { schedulePost } from '@/services/socialApiIntegrations';
 import SchedulePostForm from './SchedulePostForm';
 import PostsList from './PostsList';
 
-// Add explicit import for DayPickerDay type
-import { DayPicker } from 'react-day-picker';
-type DayComponentProps = React.ComponentProps<typeof DayPicker.Day> & {
+// Correctly define the DayComponentProps type
+type DayComponentProps = {
   date: Date;
   displayMonth: Date;
+  onClick?: () => void;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 const ContentCalendar = () => {
