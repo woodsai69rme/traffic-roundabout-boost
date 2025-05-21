@@ -6,6 +6,7 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+// Configuration constants
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 5000 // 5 seconds is a reasonable timeout
 
@@ -23,6 +24,7 @@ const actionTypes = {
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const
 
+// Counter for generating unique IDs
 let count = 0
 
 function genId() {
@@ -54,8 +56,10 @@ interface State {
   toasts: ToasterToast[]
 }
 
+// Map to store timeout references
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
+// Function to queue toast for removal after delay
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
     return
@@ -72,6 +76,7 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout)
 }
 
+// Reducer for managing toast state
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
@@ -91,8 +96,7 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
+      // Side effects - Add toast to remove queue
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -127,10 +131,13 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
+// State listeners array
 const listeners: Array<(state: State) => void> = []
 
+// In-memory state
 let memoryState: State = { toasts: [] }
 
+// Dispatch function to update state and notify listeners
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
   listeners.forEach((listener) => {
@@ -138,8 +145,10 @@ function dispatch(action: Action) {
   })
 }
 
+// Toast type definition
 type Toast = Omit<ToasterToast, "id">
 
+// Toast function to create and manage toasts
 function toast({ ...props }: Toast) {
   const id = genId()
 
@@ -169,6 +178,7 @@ function toast({ ...props }: Toast) {
   }
 }
 
+// Hook for accessing toast state and functions
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
