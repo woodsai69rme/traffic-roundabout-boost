@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
-import NavbarWithAuth from '@/components/NavbarWithAuth';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { StatCard } from '@/components/StatCard';
+import StatCard from '@/components/StatCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -68,7 +69,7 @@ const Analytics = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <NavbarWithAuth />
+      <Navbar />
       <main className="flex-grow bg-muted/20 py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
@@ -111,26 +112,30 @@ const Analytics = () => {
             <StatCard 
               title="Total Subscribers" 
               value="24.8K" 
+              change={12} 
               icon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>} 
-              trend="+12%"
+              color="bg-roundabout-light-purple text-roundabout-purple" 
             />
             <StatCard 
               title="Total Views" 
               value="1.2M" 
+              change={24} 
               icon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>} 
-              trend="+24%"
+              color="bg-roundabout-light-blue text-roundabout-blue" 
             />
             <StatCard 
               title="Engagement Rate" 
               value="8.6%" 
+              change={5} 
               icon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>} 
-              trend="+5%"
+              color="bg-roundabout-green text-green-600" 
             />
             <StatCard 
               title="Est. Revenue" 
               value="$2,450" 
+              change={18} 
               icon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>} 
-              trend="+18%"
+              color="bg-roundabout-yellow text-amber-600" 
             />
           </div>
           
