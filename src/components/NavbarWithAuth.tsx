@@ -1,155 +1,139 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileText } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
-import NotificationCenter from './NotificationCenter';
-import { useAuth } from '@/hooks/use-auth';
-import UserProfileMenu from './UserProfileMenu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
+import { User, Settings, LogOut, Menu } from 'lucide-react';
+import { useState } from 'react';
 
 const NavbarWithAuth = () => {
-  const { user, isLoading } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const mainNavItems = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <Gauge className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Analytics',
-      href: '/analytics',
-      icon: <PieChart className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Audience',
-      href: '/audience-insights',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Content',
-      href: '#',
-      icon: <Layout className="h-4 w-4 mr-2" />,
-      subItems: [
-        {
-          title: 'Content Planner',
-          href: '/content-planner',
-          description: 'Schedule and manage your content calendar'
-        },
-        {
-          title: 'AI Content Creator',
-          href: '/ai-content-creator',
-          description: 'Generate engaging content with AI'
-        }
-      ]
-    },
-    {
-      title: 'Communities',
-      href: '/communities',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Monetization',
-      href: '/monetization',
-      icon: <DollarSign className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Docs',
-      href: '/docs',
-      icon: <FileText className="h-4 w-4 mr-2" />
-    }
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const navigationItems = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Content Planner', href: '/content-planner' },
+    { name: 'Analytics', href: '/analytics' },
+    { name: 'Platforms', href: '/platforms' },
+    { name: 'AI Creator', href: '/ai-content-creator' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            <Sparkles className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">
-              Roundabout
-            </span>
-          </Link>
-          
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              {mainNavItems.map((item) => 
-                item.subItems ? (
-                  <NavigationMenuItem key={item.title}>
-                    <NavigationMenuTrigger className="h-auto">
-                      <span className="flex items-center">
-                        {item.icon}
-                        {item.title}
-                      </span>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                        {item.subItems.map((subItem) => (
-                          <li key={subItem.title} className="row-span-3">
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={subItem.href}
-                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                              >
-                                <div className="mb-2 mt-4 text-lg font-medium">
-                                  {subItem.title}
-                                </div>
-                                <p className="text-sm leading-tight text-muted-foreground">
-                                  {subItem.description}
-                                </p>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                ) : (
-                  <NavigationMenuItem key={item.title}>
-                    <Link to={item.href}>
-                      <NavigationMenuLink 
-                        className={cn(
-                          "flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary"
-                        )}
-                      >
-                        {item.icon}
-                        {item.title}
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                )
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="md:hidden" asChild>
-            <Link to="/notifications">
-              <NotificationCenter />
+    <nav className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/dashboard" className="flex-shrink-0 flex items-center">
+              <span className="text-2xl font-bold text-primary">Roundabout</span>
             </Link>
-          </Button>
-          <div className="hidden md:flex">
-            <NotificationCenter />
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:ml-6 md:flex md:space-x-8">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
           </div>
-          
-          <ThemeToggle />
-          
-          {!isLoading && user ? (
-            <UserProfileMenu />
-          ) : (
-            !isLoading && (
-              <Button asChild>
-                <Link to="/login">Sign In</Link>
+
+          {/* User Menu */}
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+                      <AvatarFallback>
+                        {user.email?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="flex items-center">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link to="/login">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link to="/register">
+                  <Button>Sign Up</Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                <Menu className="h-4 w-4" />
               </Button>
-            )
-          )}
+            </div>
+          </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-gray-500 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </header>
+    </nav>
   );
 };
 

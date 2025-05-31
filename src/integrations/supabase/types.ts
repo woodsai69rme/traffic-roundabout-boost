@@ -9,6 +9,89 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          project_id: string | null
+          resource_id: string
+          resource_type: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          project_id?: string | null
+          resource_id: string
+          resource_type: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          project_id?: string | null
+          resource_id?: string
+          resource_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_models: {
+        Row: {
+          api_endpoint: string | null
+          api_key_encrypted: string | null
+          config: Json | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          model_id: string
+          name: string
+          provider: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_endpoint?: string | null
+          api_key_encrypted?: string | null
+          config?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          model_id: string
+          name: string
+          provider: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_endpoint?: string | null
+          api_key_encrypted?: string | null
+          config?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          model_id?: string
+          name?: string
+          provider?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       alerts: {
         Row: {
           asset_id: string | null
@@ -56,6 +139,137 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      api_keys: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          key_hash: string
+          last_used: string | null
+          name: string
+          permissions: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash: string
+          last_used?: string | null
+          name: string
+          permissions?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash?: string
+          last_used?: string | null
+          name?: string
+          permissions?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      automations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          last_run: string | null
+          name: string
+          project_id: string | null
+          run_count: number | null
+          trigger_config: Json | null
+          trigger_type: string
+          updated_at: string
+          user_id: string
+          webhook_url: string | null
+          workflow_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run?: string | null
+          name: string
+          project_id?: string | null
+          run_count?: number | null
+          trigger_config?: Json | null
+          trigger_type: string
+          updated_at?: string
+          user_id: string
+          webhook_url?: string | null
+          workflow_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run?: string | null
+          name?: string
+          project_id?: string | null
+          run_count?: number | null
+          trigger_config?: Json | null
+          trigger_type?: string
+          updated_at?: string
+          user_id?: string
+          webhook_url?: string | null
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_messages: {
         Row: {
@@ -134,6 +348,57 @@ export type Database = {
         }
         Relationships: []
       }
+      contents: {
+        Row: {
+          content: Json
+          created_at: string
+          file_path: string | null
+          file_type: string | null
+          id: string
+          metadata: Json | null
+          project_id: string | null
+          size: number | null
+          source: string
+          tags: string[] | null
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+          size?: number | null
+          source: string
+          tags?: string[] | null
+          title: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+          size?: number | null
+          source?: string
+          tags?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           created_at: string
@@ -175,6 +440,51 @@ export type Database = {
           tags?: string[] | null
           title?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exchange_connections: {
+        Row: {
+          api_key_encrypted: string | null
+          api_secret_encrypted: string | null
+          created_at: string | null
+          exchange_name: string
+          id: string
+          is_active: boolean | null
+          last_sync: string | null
+          passphrase_encrypted: string | null
+          permissions: Json | null
+          sandbox_mode: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key_encrypted?: string | null
+          api_secret_encrypted?: string | null
+          created_at?: string | null
+          exchange_name: string
+          id?: string
+          is_active?: boolean | null
+          last_sync?: string | null
+          passphrase_encrypted?: string | null
+          permissions?: Json | null
+          sandbox_mode?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key_encrypted?: string | null
+          api_secret_encrypted?: string | null
+          created_at?: string | null
+          exchange_name?: string
+          id?: string
+          is_active?: boolean | null
+          last_sync?: string | null
+          passphrase_encrypted?: string | null
+          permissions?: Json | null
+          sandbox_mode?: boolean | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -296,6 +606,42 @@ export type Database = {
         }
         Relationships: []
       }
+      market_data_cache: {
+        Row: {
+          ask: number | null
+          bid: number | null
+          change_24h: number | null
+          exchange: string
+          id: string
+          price: number
+          symbol: string
+          timestamp: string | null
+          volume_24h: number | null
+        }
+        Insert: {
+          ask?: number | null
+          bid?: number | null
+          change_24h?: number | null
+          exchange: string
+          id?: string
+          price: number
+          symbol: string
+          timestamp?: string | null
+          volume_24h?: number | null
+        }
+        Update: {
+          ask?: number | null
+          bid?: number | null
+          change_24h?: number | null
+          exchange?: string
+          id?: string
+          price?: number
+          symbol?: string
+          timestamp?: string | null
+          volume_24h?: number | null
+        }
+        Relationships: []
+      }
       news_analysis: {
         Row: {
           created_at: string
@@ -335,6 +681,114 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount: number
+          average_price: number | null
+          bot_id: string | null
+          created_at: string | null
+          exchange: string
+          exchange_order_id: string | null
+          execution_strategy: Json | null
+          fees: number | null
+          filled_amount: number | null
+          id: string
+          order_type: string
+          price: number | null
+          side: string
+          status: string | null
+          stop_price: number | null
+          symbol: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          average_price?: number | null
+          bot_id?: string | null
+          created_at?: string | null
+          exchange: string
+          exchange_order_id?: string | null
+          execution_strategy?: Json | null
+          fees?: number | null
+          filled_amount?: number | null
+          id?: string
+          order_type: string
+          price?: number | null
+          side: string
+          status?: string | null
+          stop_price?: number | null
+          symbol: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          average_price?: number | null
+          bot_id?: string | null
+          created_at?: string | null
+          exchange?: string
+          exchange_order_id?: string | null
+          execution_strategy?: Json | null
+          fees?: number | null
+          filled_amount?: number | null
+          id?: string
+          order_type?: string
+          price?: number | null
+          side?: string
+          status?: string | null
+          stop_price?: number | null
+          symbol?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      performance_metrics: {
+        Row: {
+          created_at: string | null
+          daily_return: number | null
+          entity_id: string
+          entity_type: string
+          id: string
+          max_drawdown: number | null
+          metric_date: string
+          profit_factor: number | null
+          sharpe_ratio: number | null
+          total_return: number | null
+          volatility: number | null
+          win_rate: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          daily_return?: number | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          max_drawdown?: number | null
+          metric_date: string
+          profit_factor?: number | null
+          sharpe_ratio?: number | null
+          total_return?: number | null
+          volatility?: number | null
+          win_rate?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          daily_return?: number | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          max_drawdown?: number | null
+          metric_date?: string
+          profit_factor?: number | null
+          sharpe_ratio?: number | null
+          total_return?: number | null
+          volatility?: number | null
+          win_rate?: number | null
+        }
+        Relationships: []
+      }
       platform_connections: {
         Row: {
           access_token: string | null
@@ -371,6 +825,42 @@ export type Database = {
         }
         Relationships: []
       }
+      portfolios: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          positions: Json | null
+          profit_percentage: number | null
+          total_profit: number | null
+          total_value: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          positions?: Json | null
+          profit_percentage?: number | null
+          total_profit?: number | null
+          total_value?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          positions?: Json | null
+          profit_percentage?: number | null
+          total_profit?: number | null
+          total_value?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -395,6 +885,86 @@ export type Database = {
           id?: string
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      project_shares: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_public: boolean | null
+          permission_level: string
+          project_id: string
+          share_token: string | null
+          shared_by: string
+          shared_with: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          permission_level?: string
+          project_id: string
+          share_token?: string | null
+          shared_by: string
+          shared_with?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          permission_level?: string
+          project_id?: string
+          share_token?: string | null
+          shared_by?: string
+          shared_with?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_shares_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -446,45 +1016,211 @@ export type Database = {
         }
         Relationships: []
       }
-      trading_bots: {
+      scraping_jobs: {
         Row: {
-          active_since: string
-          alerts: Json | null
+          completed_at: string | null
+          config: Json | null
           created_at: string
+          error_message: string | null
           id: string
-          last_trade: Json | null
           name: string
-          performance: Json
+          project_id: string | null
+          results: Json | null
+          scraping_type: string
+          started_at: string | null
           status: string
-          strategy: string
-          underperforming: boolean | null
+          urls: string[]
           user_id: string
         }
         Insert: {
-          active_since?: string
-          alerts?: Json | null
+          completed_at?: string | null
+          config?: Json | null
           created_at?: string
+          error_message?: string | null
           id?: string
-          last_trade?: Json | null
           name: string
-          performance?: Json
+          project_id?: string | null
+          results?: Json | null
+          scraping_type: string
+          started_at?: string | null
           status?: string
-          strategy: string
-          underperforming?: boolean | null
+          urls: string[]
           user_id: string
         }
         Update: {
-          active_since?: string
-          alerts?: Json | null
+          completed_at?: string | null
+          config?: Json | null
           created_at?: string
+          error_message?: string | null
           id?: string
+          name?: string
+          project_id?: string | null
+          results?: Json | null
+          scraping_type?: string
+          started_at?: string | null
+          status?: string
+          urls?: string[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scraping_jobs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      strategy_follows: {
+        Row: {
+          allocation_percentage: number | null
+          created_at: string | null
+          follower_id: string
+          id: string
+          is_active: boolean | null
+          max_allocation: number | null
+          strategy_id: string
+        }
+        Insert: {
+          allocation_percentage?: number | null
+          created_at?: string | null
+          follower_id: string
+          id?: string
+          is_active?: boolean | null
+          max_allocation?: number | null
+          strategy_id: string
+        }
+        Update: {
+          allocation_percentage?: number | null
+          created_at?: string | null
+          follower_id?: string
+          id?: string
+          is_active?: boolean | null
+          max_allocation?: number | null
+          strategy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "strategy_follows_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "strategy_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      strategy_shares: {
+        Row: {
+          config: Json
+          created_at: string | null
+          creator_id: string
+          description: string | null
+          followers_count: number | null
+          id: string
+          is_public: boolean | null
+          name: string
+          performance_metrics: Json | null
+          price: number | null
+          rating: number | null
+          strategy_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          config: Json
+          created_at?: string | null
+          creator_id: string
+          description?: string | null
+          followers_count?: number | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          performance_metrics?: Json | null
+          price?: number | null
+          rating?: number | null
+          strategy_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string | null
+          creator_id?: string
+          description?: string | null
+          followers_count?: number | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          performance_metrics?: Json | null
+          price?: number | null
+          rating?: number | null
+          strategy_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      trading_bots: {
+        Row: {
+          active_since: string
+          ai_model: string | null
+          alerts: Json | null
+          config: Json | null
+          created_at: string
+          current_value: number | null
+          id: string
+          initial_investment: number | null
+          last_trade: Json | null
+          name: string
+          performance: Json
+          risk_level: string | null
+          status: string
+          strategy: string
+          target_asset: string | null
+          total_trades: number | null
+          underperforming: boolean | null
+          user_id: string
+          win_rate: number | null
+        }
+        Insert: {
+          active_since?: string
+          ai_model?: string | null
+          alerts?: Json | null
+          config?: Json | null
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          initial_investment?: number | null
+          last_trade?: Json | null
+          name: string
+          performance?: Json
+          risk_level?: string | null
+          status?: string
+          strategy: string
+          target_asset?: string | null
+          total_trades?: number | null
+          underperforming?: boolean | null
+          user_id: string
+          win_rate?: number | null
+        }
+        Update: {
+          active_since?: string
+          ai_model?: string | null
+          alerts?: Json | null
+          config?: Json | null
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          initial_investment?: number | null
           last_trade?: Json | null
           name?: string
           performance?: Json
+          risk_level?: string | null
           status?: string
           strategy?: string
+          target_asset?: string | null
+          total_trades?: number | null
           underperforming?: boolean | null
           user_id?: string
+          win_rate?: number | null
         }
         Relationships: []
       }
@@ -520,6 +1256,30 @@ export type Database = {
           price?: number
           symbol?: string
           type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          permissions: Json | null
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          permissions?: Json | null
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          permissions?: Json | null
+          role?: Database["public"]["Enums"]["user_role"]
           user_id?: string
         }
         Relationships: []
@@ -619,7 +1379,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "admin" | "trader" | "viewer" | "api_only"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -734,6 +1494,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["admin", "trader", "viewer", "api_only"],
+    },
   },
 } as const
