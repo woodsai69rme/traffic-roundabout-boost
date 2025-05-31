@@ -1,564 +1,609 @@
 
 # Troubleshooting Guide
 
-## Common Issues and Solutions
+## Overview
 
-### Document Information
-- **Version**: 1.0
-- **Last Updated**: 2025-01-31
-- **Support Contact**: support@resumebuilder.pro
+This troubleshooting guide provides solutions to common issues users may encounter while using Roundabout. The guide is organized by feature area and includes step-by-step solutions for typical problems.
 
-## Login and Account Issues
+## General Issues
 
-### Cannot Log In to Account
+### Login and Authentication Problems
 
-**Symptoms:**
-- Login page shows "Invalid credentials" error
-- Account appears to be locked
-- Password reset emails not arriving
-
-**Solutions:**
-
-**1. Verify Credentials**
-```
-✓ Check email address spelling
-✓ Ensure caps lock is off
-✓ Try typing password manually instead of pasting
-✓ Clear browser autocomplete and retype
-```
-
-**2. Password Reset**
-```
-Step 1: Click "Forgot Password" on login page
-Step 2: Enter your email address
-Step 3: Check email inbox (including spam folder)
-Step 4: Follow reset link within 15 minutes
-Step 5: Create new password (8+ characters)
-```
-
-**3. Clear Browser Data**
-```
-Chrome:
-1. Press Ctrl+Shift+Delete (Cmd+Shift+Delete on Mac)
-2. Select "Cookies and other site data"
-3. Select "Cached images and files"
-4. Click "Clear data"
-5. Restart browser and try again
-
-Firefox:
-1. Press Ctrl+Shift+Delete
-2. Select "Cookies" and "Cache"
-3. Click "Clear Now"
-4. Restart browser
-```
-
-**4. Account Locked**
-If your account is locked due to multiple failed login attempts:
-- Wait 15 minutes before trying again
-- Contact support if issue persists
-- Provide your registered email address
-
-### Email Verification Issues
-
-**Problem:** Verification email not received
-**Solutions:**
-1. Check spam/junk folder
-2. Add noreply@resumebuilder.pro to contacts
-3. Try a different email address
-4. Contact support for manual verification
-
-**Problem:** Verification link expired
-**Solutions:**
-1. Request a new verification email
-2. Verification links expire after 24 hours
-3. Complete verification immediately after receiving
-
-### Two-Factor Authentication Problems
-
-**Lost Access to Authentication App:**
-1. Use backup codes provided during setup
-2. Contact support with account verification details
-3. We'll temporarily disable 2FA for recovery
-
-**Authentication Code Not Working:**
-1. Ensure device time is synchronized
-2. Try the next code generated
-3. Check for typos in the code
-4. Restart authentication app
-
-## Resume Creation and Editing Issues
-
-### Resume Not Saving
+#### Cannot Log In to Account
 
 **Symptoms:**
-- Changes disappear after refreshing
-- "Failed to save" error messages
-- Work lost unexpectedly
+- Login page shows error message
+- Account appears locked or suspended
+- Two-factor authentication not working
 
-**Immediate Solutions:**
+**Solutions:**
+
+1. **Verify Credentials**
+   - Ensure email address is spelled correctly
+   - Check that Caps Lock is not enabled
+   - Try typing password in a text editor first to verify accuracy
+
+2. **Reset Password**
+   - Click "Forgot Password" on the login page
+   - Check email inbox and spam folder for reset link
+   - Follow the reset link and create a new password
+   - Ensure new password meets requirements (8+ characters, mix of letters, numbers, symbols)
+
+3. **Clear Browser Cache**
+   - Clear browser cache and cookies
+   - Disable browser extensions temporarily
+   - Try logging in using an incognito/private browser window
+
+4. **Check Account Status**
+   - Verify account hasn't been suspended
+   - Contact support if you believe account was incorrectly suspended
+   - Check if email address is verified (check for verification email)
+
+#### Two-Factor Authentication Issues
+
+**Symptoms:**
+- 2FA codes not working
+- Lost access to authentication device
+- Authentication app not generating codes
+
+**Solutions:**
+
+1. **Code Timing Issues**
+   - Ensure device clock is synchronized
+   - Wait for next code if current one was just generated
+   - Try the previous code if current one doesn't work
+
+2. **Lost Authentication Device**
+   - Use backup codes provided during 2FA setup
+   - Contact support with account verification information
+   - Disable 2FA temporarily from account settings (if accessible)
+
+3. **Authentication App Problems**
+   - Re-sync the authentication app
+   - Remove and re-add the account in the app
+   - Try using backup authentication method
+
+### Page Loading and Performance Issues
+
+#### Slow Loading Times
+
+**Symptoms:**
+- Pages take more than 5 seconds to load
+- Content appears to be stuck loading
+- Intermittent timeouts
+
+**Solutions:**
+
 1. **Check Internet Connection**
-   ```
-   - Try loading another website
-   - Check Wi-Fi/ethernet connection
-   - Switch to mobile data if available
-   ```
+   - Test connection speed using speed test tool
+   - Try accessing other websites to confirm connectivity
+   - Restart router/modem if connection is slow
 
-2. **Force Save**
-   ```
-   - Press Ctrl+S (Cmd+S on Mac)
-   - Click save button multiple times
-   - Try saving individual sections
-   ```
+2. **Browser Optimization**
+   - Close unnecessary browser tabs
+   - Disable resource-heavy browser extensions
+   - Clear browser cache and temporary files
+   - Update browser to latest version
 
-3. **Browser Troubleshooting**
-   ```
-   - Refresh page (Ctrl+F5)
-   - Try incognito/private mode
-   - Disable browser extensions
-   - Clear cache and cookies
-   ```
+3. **Device Performance**
+   - Close other applications using significant memory
+   - Restart the device if it's been running for extended periods
+   - Check available disk space (ensure at least 10% free)
 
-**Prevention:**
-- Save frequently (every few minutes)
-- Use browsers with autosave support
-- Keep internet connection stable
-- Don't work in multiple tabs simultaneously
-
-### Content Formatting Issues
-
-**Text Appears Incorrectly:**
-
-**Problem:** Bullet points not displaying
-**Solution:**
-```
-1. Ensure text starts with "•" or "-"
-2. Use our bullet point tool
-3. Copy/paste from plain text editor
-4. Avoid rich text formatting from other documents
-```
-
-**Problem:** Font changes unexpectedly
-**Solution:**
-```
-1. Clear existing formatting
-2. Retype content directly in editor
-3. Use "Paste as Plain Text" option
-4. Check template font settings
-```
-
-**Problem:** Spacing issues
-**Solution:**
-```
-1. Use single line breaks between items
-2. Avoid extra spaces or tabs
-3. Use our spacing controls
-4. Preview before downloading
-```
-
-### Template Loading Problems
-
-**Template Won't Load:**
-1. Refresh the page
-2. Clear browser cache
-3. Try a different template first
-4. Check internet connection speed
-
-**Template Appears Broken:**
-1. Switch to different template temporarily
-2. Refresh and try again
-3. Report specific template issues to support
-4. Use similar template as alternative
-
-## AI Features Troubleshooting
-
-### ATS Score Not Updating
-
-**Problem:** Score remains at 0 or doesn't change
-**Solutions:**
-1. **Complete Required Sections**
-   ```
-   ✓ Personal Information (name, email, phone)
-   ✓ Professional Summary (at least 50 characters)
-   ✓ At least one work experience entry
-   ✓ At least 3 skills listed
-   ```
-
-2. **Trigger Recalculation**
-   ```
-   - Make a small edit to any section
-   - Click "Recalculate Score" button
-   - Save and refresh the page
-   ```
-
-3. **Check Content Quality**
-   ```
-   - Ensure experience descriptions are detailed
-   - Include quantified achievements
-   - Add relevant keywords for your industry
-   - Complete all sections with meaningful content
-   ```
-
-### Job Description Matching Not Working
+#### White Screen or Blank Page
 
 **Symptoms:**
-- No suggestions generated
-- "Analysis failed" error
-- Suggestions seem irrelevant
+- Page loads but shows only white/blank screen
+- No content visible after login
+- Console shows JavaScript errors
 
 **Solutions:**
 
-**1. Job Description Issues**
-```
-✓ Paste complete job description (not just requirements)
-✓ Ensure text is at least 100 words
-✓ Remove special characters or formatting
-✓ Try a different job description
-```
+1. **JavaScript and Browser Issues**
+   - Enable JavaScript in browser settings
+   - Disable ad blockers temporarily
+   - Try different browser (Chrome, Firefox, Safari, Edge)
+   - Clear browser cache completely
 
-**2. Resume Content Issues**
-```
-✓ Ensure resume has substantive content
-✓ Include skills and experience sections
-✓ Use complete sentences in descriptions
-✓ Save resume before running analysis
-```
+2. **Extension Conflicts**
+   - Disable all browser extensions
+   - Re-enable extensions one by one to identify conflicts
+   - Use incognito/private mode to test without extensions
 
-**3. Technical Issues**
-```
-- Wait 30 seconds and try again
-- Refresh page and retry
-- Try with shorter job description
-- Contact support if issue persists
-```
+3. **Network and Firewall Issues**
+   - Check if corporate firewall is blocking content
+   - Try using mobile data instead of WiFi
+   - Disable VPN temporarily to test connection
 
-### AI Suggestions Not Appearing
+## Platform Connection Issues
 
-**Problem:** No suggestions shown despite low ATS score
-**Troubleshooting:**
-1. Ensure JavaScript is enabled
-2. Disable ad blockers
-3. Try different browser
-4. Check if premium features require upgrade
+### Social Media Platform Authentication
 
-## Export and Download Issues
+#### Failed to Connect Platform
 
-### PDF Download Problems
-
-**Download Fails or Doesn't Start:**
-
-**1. Browser Issues**
-```
-Chrome:
-- Check if downloads are blocked
-- Go to Settings > Privacy > Site Settings > Downloads
-- Allow downloads for resumebuilder.pro
-
-Firefox:
-- Go to Preferences > General > Downloads
-- Choose "Always ask where to save files"
-- Try download again
-
-Safari:
-- Go to Preferences > Websites > Downloads
-- Allow downloads for our site
-```
-
-**2. File System Issues**
-```
-- Check available disk space (need at least 10MB)
-- Try downloading to different folder
-- Close other applications to free memory
-- Restart browser and try again
-```
-
-**3. Network Issues**
-```
-- Ensure stable internet connection
-- Try downloading smaller file format first
-- Use wired connection if possible
-- Avoid peak internet usage times
-```
-
-### PDF Formatting Issues
-
-**Content Appears Cut Off:**
-1. Try different template
-2. Reduce content length
-3. Adjust margins in template settings
-4. Use "Fit to Page" option
-
-**Fonts Look Different:**
-1. Allow additional download time for font loading
-2. Try downloading again after 30 seconds
-3. Use system fonts in template settings
-4. Contact support for font-specific issues
-
-**Images or Logos Missing:**
-1. Ensure images are properly uploaded
-2. Try re-uploading with smaller file size
-3. Use supported formats (JPG, PNG)
-4. Check internet connection during download
-
-### Word Document Export Issues
-
-**Formatting Appears Wrong:**
-```
-Cause: Word versions handle formatting differently
-Solutions:
-1. Download as PDF instead (recommended)
-2. Use plain template for Word export
-3. Adjust formatting in Word after download
-4. Save as .docx for better compatibility
-```
-
-**File Won't Open:**
-```
-1. Ensure you have Microsoft Word or compatible software
-2. Try opening with Google Docs or LibreOffice
-3. Download file again
-4. Check file isn't corrupted (file size should be >10KB)
-```
-
-## Sharing and Collaboration Issues
-
-### Shared Link Not Working
-
-**Recipients Can't Access Shared Resume:**
-
-**1. Link Issues**
-```
-✓ Check if link copied completely
-✓ Remove extra characters at beginning/end
-✓ Ensure link hasn't expired
-✓ Verify sharing settings are "Public" or "Anyone with link"
-```
-
-**2. Privacy Settings**
-```
-- Check if password protection is enabled
-- Verify expiration date hasn't passed
-- Ensure sharing permissions are correct
-- Try generating new link
-```
-
-**3. Technical Issues**
-```
-- Test link in incognito/private browser window
-- Try different browser or device
-- Check if corporate firewall is blocking access
-- Ensure recipient's internet connection is stable
-```
-
-### Password-Protected Sharing Issues
-
-**Password Not Working:**
-1. Ensure correct case (passwords are case-sensitive)
-2. Check for extra spaces when typing
-3. Copy/paste password to avoid typos
-4. Try generating new password
-
-**Password Not Being Accepted:**
-1. Wait 5 minutes between attempts if locked out
-2. Contact link creator to verify password
-3. Try accessing from different device
-4. Check if password has special characters
-
-## Performance Issues
-
-### Slow Loading Times
-
-**Application Loads Slowly:**
-
-**1. Internet Connection**
-```
-- Test connection speed (should be >5 Mbps)
-- Close bandwidth-heavy applications
-- Try different network if available
-- Use wired connection instead of Wi-Fi
-```
-
-**2. Browser Optimization**
-```
-- Close unnecessary tabs
-- Clear browser cache and cookies
-- Disable unused extensions
-- Restart browser
-- Update to latest browser version
-```
-
-**3. Device Performance**
-```
-- Close other applications
-- Restart device if running slowly
-- Check available RAM (4GB+ recommended)
-- Ensure adequate storage space
-```
-
-### High Memory Usage
-
-**Browser Becomes Unresponsive:**
+**Symptoms:**
+- Error message during platform connection process
+- Redirect fails after authorizing on social platform
+- Platform shows as "disconnected" after successful authorization
 
 **Solutions:**
-1. **Reduce Browser Load**
-   ```
-   - Work with one resume at a time
-   - Close other websites/tabs
-   - Restart browser every few hours
-   - Use task manager to monitor memory
-   ```
 
-2. **Optimize Workflow**
-   ```
-   - Save work frequently
-   - Take breaks to let browser rest
-   - Use incognito mode for testing
-   - Switch to different browser if needed
-   ```
+1. **Authorization Process**
+   - Ensure you're logged into the correct social media account
+   - Check that you have admin permissions for business accounts
+   - Clear cookies for the social media platform
+   - Disable browser extensions during connection process
 
-## Mobile Device Issues
+2. **Permission Issues**
+   - Verify you're granting all requested permissions
+   - Check if account has restrictions on third-party app access
+   - For business accounts, ensure you have appropriate roles
+   - Review platform's third-party app settings
 
-### Mobile Browser Problems
+3. **Technical Issues**
+   - Try connecting from different browser
+   - Disable popup blockers temporarily
+   - Check if corporate firewall blocks OAuth redirects
+   - Wait 15 minutes and try again (rate limiting)
 
-**Touch Interface Issues:**
-1. Use supported mobile browsers (Safari iOS, Chrome Android)
-2. Enable JavaScript
-3. Allow cookies and local storage
-4. Update browser to latest version
+#### Platform Connection Keeps Disconnecting
 
-**Display Problems:**
-1. Rotate device to landscape mode for better editing
-2. Zoom in on specific sections
-3. Use mobile-optimized templates
-4. Consider using desktop for complex editing
+**Symptoms:**
+- Platform shows connected but fails when posting
+- Frequent "reconnect platform" notifications
+- Posts fail with authentication errors
 
-**Typing and Input Issues:**
-1. Disable autocorrect for professional terms
-2. Use external keyboard for extensive editing
-3. Take advantage of copy/paste functionality
-4. Save frequently due to mobile app switching
+**Solutions:**
 
-## Data and Backup Issues
+1. **Token Refresh Issues**
+   - Manually reconnect the platform
+   - Check platform's app permissions settings
+   - Revoke and re-grant app permissions
+   - Update account password if recently changed
 
-### Lost Resume Data
+2. **Platform Changes**
+   - Check if platform updated their API or policies
+   - Review Roundabout's status page for known issues
+   - Verify account hasn't been restricted by platform
+   - Check for platform-specific maintenance windows
 
-**Resume Disappeared:**
+### API Rate Limits and Restrictions
 
-**Immediate Steps:**
-1. Check trash/recently deleted section
-2. Look in different account if you have multiple
-3. Check if you're logged into correct account
-4. Try refreshing page or logging out/in
+#### Hit Rate Limit Error
 
-**Recovery Options:**
-1. Contact support with account details
-2. Provide approximate date of last edit
-3. Share any downloaded copies you may have
-4. We maintain backups for data recovery
+**Symptoms:**
+- "Rate limit exceeded" error messages
+- Delayed posting or failed scheduled posts
+- Analytics data not updating
 
-**Prevention:**
-- Download resumes regularly as backup
-- Export to multiple formats
-- Keep local copies of important versions
-- Note when you last accessed your resume
+**Solutions:**
 
-### Data Synchronization Issues
+1. **Immediate Actions**
+   - Wait for rate limit window to reset (usually 15 minutes to 1 hour)
+   - Reduce frequency of manual actions (posting, checking analytics)
+   - Spread out bulk operations over longer time periods
 
-**Changes Not Syncing Across Devices:**
-1. Ensure you're logged into same account
-2. Force refresh on all devices
-3. Check internet connection on all devices
-4. Log out and back in on affected devices
+2. **Long-term Solutions**
+   - Review posting schedule to ensure sustainable frequency
+   - Upgrade subscription plan if higher limits are needed
+   - Stagger analytics refreshes across different times
+   - Use scheduling instead of manual posting
 
-## Browser-Specific Issues
+## Content Creation and Scheduling
 
-### Chrome Issues
+### Post Creation Issues
 
-**Common Problems:**
-1. **Extensions Interfering**
-   ```
-   - Disable ad blockers
-   - Turn off password managers temporarily
-   - Use incognito mode to test
-   ```
+#### Content Not Saving as Draft
 
-2. **Memory Issues**
-   ```
-   - Type chrome://settings/system in address bar
-   - Disable "Continue running background apps"
-   - Clear browsing data regularly
-   ```
+**Symptoms:**
+- Draft disappears when navigating away
+- Changes to content not being saved
+- "Save failed" error messages
 
-### Firefox Issues
+**Solutions:**
 
-**Common Problems:**
-1. **Tracking Protection**
-   ```
-   - Click shield icon in address bar
-   - Select "Turn off Blocking for This Site"
-   - Refresh page
-   ```
+1. **Browser and Connectivity**
+   - Check internet connection stability
+   - Disable browser extensions that might interfere
+   - Try copying content to clipboard before saving
+   - Use a different browser to test
 
-2. **Add-on Conflicts**
-   ```
-   - Start in Safe Mode (Help > Restart with Add-ons Disabled)
-   - Test if issue persists
-   - Disable problematic add-ons
-   ```
+2. **Content Issues**
+   - Check if content exceeds platform character limits
+   - Ensure media files are in supported formats
+   - Verify all required fields are completed
+   - Remove special characters that might cause issues
 
-### Safari Issues
+#### Media Upload Failures
 
-**Common Problems:**
-1. **Cookies and Privacy**
-   ```
-   - Go to Preferences > Privacy
-   - Uncheck "Prevent cross-site tracking" temporarily
-   - Allow cookies from resumebuilder.pro
-   ```
+**Symptoms:**
+- Images or videos fail to upload
+- "File too large" or "Format not supported" errors
+- Upload progress sticks at certain percentage
 
-2. **Cache Issues**
-   ```
-   - Hold Shift and click Refresh button
-   - Go to Develop > Empty Caches
-   - Try private browsing window
-   ```
+**Solutions:**
+
+1. **File Requirements**
+   - Check file size limits (varies by platform and subscription)
+   - Verify file format is supported (JPEG, PNG, MP4, etc.)
+   - Compress large files using image/video editing software
+   - Ensure filename doesn't contain special characters
+
+2. **Technical Issues**
+   - Try uploading smaller files first to test
+   - Clear browser cache and cookies
+   - Disable antivirus software temporarily
+   - Use different network connection if available
+
+### Scheduling Problems
+
+#### Posts Not Publishing at Scheduled Time
+
+**Symptoms:**
+- Scheduled posts remain in "scheduled" status
+- Posts publish at wrong time
+- Missing posts from scheduled queue
+
+**Solutions:**
+
+1. **Time Zone Issues**
+   - Verify timezone setting in account preferences
+   - Check if daylight saving time affects scheduling
+   - Confirm scheduled time is in the future
+   - Review platform's local time vs. account timezone
+
+2. **Platform Issues**
+   - Check if connected platform has restrictions
+   - Verify platform account is still active
+   - Reconnect platform if authentication expired
+   - Check platform's publishing policies for content type
+
+#### Recurring Posts Not Working
+
+**Symptoms:**
+- Only first instance of recurring post publishes
+- Recurring schedule creates duplicate posts
+- Recurring posts stop after few instances
+
+**Solutions:**
+
+1. **Schedule Configuration**
+   - Review recurring post settings and frequency
+   - Ensure end date is properly set (or set to "never")
+   - Check if content meets platform guidelines for repeated posts
+   - Verify sufficient posting slots available in schedule
+
+2. **Content Restrictions**
+   - Platforms may limit identical content posting
+   - Add variation to recurring posts (date, small text changes)
+   - Use content templates instead of exact duplicates
+   - Monitor platform policies on repeated content
+
+## Analytics and Reporting
+
+### Data Not Loading or Updating
+
+#### Analytics Dashboard Shows No Data
+
+**Symptoms:**
+- Dashboard displays "No data available"
+- Analytics appear outdated
+- Metrics show zero for all values
+
+**Solutions:**
+
+1. **Data Refresh Issues**
+   - Manually refresh page or browser
+   - Click refresh button in analytics dashboard
+   - Wait 24-48 hours for new platform connections to populate data
+   - Check if analytics are enabled for connected platforms
+
+2. **Platform Permission Issues**
+   - Verify analytics permissions granted during platform connection
+   - Reconnect platform with full permissions
+   - Check if platform has analytics data available (new accounts may have limited data)
+   - Review platform's privacy settings that might block data access
+
+#### Incorrect or Missing Metrics
+
+**Symptoms:**
+- Metrics don't match platform's native analytics
+- Some metrics missing while others display correctly
+- Historical data suddenly disappears
+
+**Solutions:**
+
+1. **Data Synchronization**
+   - Allow 24-48 hours for data synchronization
+   - Check platform's API status (some platforms have delays)
+   - Verify date range selected matches expectations
+   - Compare with platform's native analytics for accuracy
+
+2. **Platform Limitations**
+   - Some platforms limit historical data access
+   - Business vs. personal accounts may have different data availability
+   - Check if platform changed API access or policies
+   - Review data retention policies for different subscription levels
+
+### Report Generation Issues
+
+#### Cannot Export Reports
+
+**Symptoms:**
+- Export button doesn't work
+- Download never starts or fails
+- Empty or corrupted report files
+
+**Solutions:**
+
+1. **Browser and Download Issues**
+   - Check browser's download settings and permissions
+   - Disable popup blockers temporarily
+   - Try exporting smaller date ranges
+   - Use different browser or clear cache
+
+2. **Data and Format Issues**
+   - Ensure data exists for selected date range
+   - Try different export format (PDF vs. CSV)
+   - Check if subscription plan includes export features
+   - Verify sufficient data available to generate meaningful reports
+
+## AI Content Generator
+
+### AI Not Generating Content
+
+#### No Content Suggestions Appearing
+
+**Symptoms:**
+- AI generator shows loading but no results
+- "Failed to generate content" error messages
+- Generated content appears blank or incomplete
+
+**Solutions:**
+
+1. **Input and Configuration**
+   - Provide more specific topic or keywords
+   - Check if content parameters are properly selected
+   - Try simpler prompts first
+   - Ensure target platform is selected
+
+2. **Technical Issues**
+   - Check internet connection stability
+   - Try different content types or lengths
+   - Clear browser cache and retry
+   - Wait a few minutes and try again (rate limiting)
+
+#### Poor Quality AI Suggestions
+
+**Symptoms:**
+- Generated content doesn't match brand voice
+- Suggestions are irrelevant to topic
+- Content doesn't fit platform requirements
+
+**Solutions:**
+
+1. **Improve Input Quality**
+   - Provide more detailed topic descriptions
+   - Include specific keywords or themes
+   - Set appropriate tone and style preferences
+   - Add context about target audience
+
+2. **Train the AI**
+   - Rate generated content to improve future suggestions
+   - Save successful content as examples
+   - Update brand voice settings with better descriptions
+   - Use feedback options to guide AI learning
+
+## Team Collaboration Issues
+
+### Team Member Access Problems
+
+#### Cannot Add Team Members
+
+**Symptoms:**
+- Invitation emails not being sent
+- New members can't access shared content
+- Team member limits exceeded unexpectedly
+
+**Solutions:**
+
+1. **Subscription and Limits**
+   - Check current subscription plan limits
+   - Verify available team member slots
+   - Upgrade plan if more members needed
+   - Remove inactive members to free up slots
+
+2. **Invitation Process**
+   - Verify email addresses are correct
+   - Check spam folders for invitation emails
+   - Try sending invitations again after 15 minutes
+   - Use admin account to send invitations
+
+#### Permission and Access Issues
+
+**Symptoms:**
+- Team members can't edit content they should access
+- Wrong permission levels despite correct role assignment
+- Content appears as "read-only" when it shouldn't
+
+**Solutions:**
+
+1. **Role Configuration**
+   - Review team member roles and permissions
+   - Update permissions through team management interface
+   - Check if custom permissions override role defaults
+   - Verify account has admin rights to change permissions
+
+2. **Content Ownership**
+   - Check if content was created by user vs. team
+   - Transfer content ownership if needed
+   - Review company vs. individual account settings
+   - Ensure team workspace is properly configured
+
+## Mobile and Browser Compatibility
+
+### Mobile Device Issues
+
+#### App Not Working on Mobile
+
+**Symptoms:**
+- Interface elements too small or not responsive
+- Touch interactions don't work properly
+- Content overflows screen boundaries
+
+**Solutions:**
+
+1. **Browser and Device**
+   - Use updated mobile browser (Chrome, Safari, Firefox)
+   - Clear mobile browser cache and data
+   - Try rotating device orientation
+   - Increase browser zoom if text too small
+
+2. **Network and Performance**
+   - Switch between WiFi and mobile data
+   - Close other apps to free up memory
+   - Restart device if performance is slow
+   - Check if device meets minimum requirements
+
+### Browser Compatibility
+
+#### Features Not Working in Specific Browser
+
+**Symptoms:**
+- Some buttons or features don't respond
+- Layout appears broken or misaligned
+- JavaScript errors in browser console
+
+**Solutions:**
+
+1. **Browser Support**
+   - Use supported browsers (Chrome, Firefox, Safari, Edge)
+   - Update browser to latest version
+   - Enable JavaScript and disable strict privacy settings
+   - Try browser's compatibility mode if available
+
+2. **Extension and Settings**
+   - Disable browser extensions temporarily
+   - Allow cookies and local storage for Roundabout
+   - Add Roundabout to browser's trusted sites
+   - Reset browser settings if necessary
+
+## Account and Subscription Issues
+
+### Billing and Payment Problems
+
+#### Payment Failed or Subscription Cancelled
+
+**Symptoms:**
+- Features suddenly limited or unavailable
+- Payment declined notifications
+- Subscription shows as "expired" or "cancelled"
+
+**Solutions:**
+
+1. **Payment Method Issues**
+   - Update credit card information if expired
+   - Check if card was blocked or has insufficient funds
+   - Try different payment method
+   - Contact bank if payments are being declined
+
+2. **Subscription Management**
+   - Review subscription status in account settings
+   - Reactivate subscription if accidentally cancelled
+   - Contact billing support for payment processing issues
+   - Check email for billing notifications or action required
+
+### Data Export and Account Closure
+
+#### Cannot Export Account Data
+
+**Symptoms:**
+- Export feature not available
+- Download fails or produces empty files
+- Some data missing from export
+
+**Solutions:**
+
+1. **Export Process**
+   - Check if subscription plan includes data export
+   - Try exporting smaller data sets
+   - Allow sufficient time for large exports to process
+   - Use different browser or clear cache
+
+2. **Data Availability**
+   - Some data may have retention limits
+   - Verify all platforms are still connected
+   - Check if specific data types have export restrictions
+   - Contact support for assistance with large data exports
+
+## Emergency Procedures
+
+### Account Compromised
+
+If you suspect your account has been compromised:
+
+1. **Immediate Actions**
+   - Change password immediately
+   - Enable two-factor authentication
+   - Check recent activity log for unauthorized access
+   - Revoke access to all connected platforms
+
+2. **Security Review**
+   - Review all team members and remove unauthorized users
+   - Check scheduled content for anything suspicious
+   - Update security settings and notifications
+   - Contact support to report security incident
+
+### Critical System Issues
+
+For system-wide outages or critical issues:
+
+1. **Check System Status**
+   - Visit Roundabout status page
+   - Check social media for service announcements
+   - Monitor email for system notifications
+
+2. **Immediate Workarounds**
+   - Use platforms' native posting temporarily
+   - Save draft content locally
+   - Document issues for later reporting
+   - Contact support with detailed information
 
 ## Getting Additional Help
 
 ### When to Contact Support
 
-Contact our support team if:
-- Issue persists after trying troubleshooting steps
-- You're experiencing data loss
-- Payment or billing issues occur
-- You need account recovery assistance
-- Technical problems affect your work significantly
+Contact Roundabout support when:
+- Multiple troubleshooting steps haven't resolved the issue
+- You encounter error messages not covered in this guide
+- Account or billing issues need manual intervention
+- Security concerns require immediate attention
 
 ### How to Contact Support
 
-**Email Support:**
-- Address: support@resumebuilder.pro
-- Response time: 24-48 hours
-- Include account email and detailed description
+1. **In-App Support**
+   - Use chat widget in bottom-right corner
+   - Submit support ticket through Help menu
+   - Include relevant error messages and screenshots
 
-**Live Chat:**
-- Available for Pro and Premium users
-- Located in bottom-right corner
-- Real-time assistance during business hours
+2. **Email Support**
+   - Send detailed description to support@roundabout.com
+   - Include account email and subscription level
+   - Attach screenshots or screen recordings when possible
 
-**Information to Include:**
-- Your account email address
-- Browser and version
-- Operating system
-- Detailed description of issue
-- Steps you've already tried
-- Screenshots if applicable
+3. **Phone Support** (Business/Enterprise plans)
+   - Call support number provided in account dashboard
+   - Have account information ready
+   - Available during business hours
 
-### Emergency Support
+### Information to Include in Support Requests
 
-For critical issues affecting deadlines:
-- Mark email as "URGENT" in subject line
-- Include deadline information
-- Explain business impact
-- We'll prioritize urgent requests
+- Account email address
+- Subscription plan level
+- Browser and operating system versions
+- Detailed description of issue and steps taken
+- Screenshots or screen recordings of problems
+- Error messages (exact text)
+- When the issue first occurred
 
-Remember: Most issues can be resolved quickly with the right troubleshooting steps. Don't hesitate to contact our support team if you need additional assistance!
+Remember: The support team is here to help, and providing detailed information helps resolve issues faster.

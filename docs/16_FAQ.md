@@ -3,330 +3,422 @@
 
 ## General Questions
 
-### What is ResumeBuilder Pro?
-ResumeBuilder Pro is an AI-powered resume building platform that helps job seekers create professional, ATS-optimized resumes. Our platform combines beautiful templates with intelligent optimization to maximize your chances of landing interviews.
+### What is Roundabout?
 
-### How is ResumeBuilder Pro different from other resume builders?
-- **AI-Powered Optimization**: Real-time ATS scoring and content suggestions
-- **Job Description Matching**: Tailored recommendations based on specific job postings
-- **Professional Templates**: Designed by career experts for maximum impact
-- **Advanced Analytics**: Track resume performance and engagement
-- **Expert Support**: Career coaching and professional guidance available
+Roundabout is a comprehensive social media management platform designed to help content creators, marketers, businesses, and agencies effectively manage their social media presence across multiple platforms. It combines content scheduling, AI-powered content creation, detailed analytics, and audience insights in one unified dashboard.
 
-### Do I need to download any software?
-No, ResumeBuilder Pro is a web-based platform that works in any modern browser. You can access your resumes from anywhere with an internet connection.
+### Which social media platforms does Roundabout support?
 
-### Is my data secure?
-Yes, we take data security seriously:
-- All data is encrypted in transit and at rest
-- We comply with GDPR and CCPA privacy regulations
-- Your personal information is never shared with third parties
-- You have full control over your data and can delete it at any time
+Roundabout currently supports the following platforms:
 
-## Account and Billing
+- Twitter/X
+- Facebook
+- Instagram
+- LinkedIn
+- TikTok
+- Pinterest
+- YouTube
+- Twitch
+- Snapchat
+- Reddit
 
-### What's included in the free plan?
-The free plan includes:
-- 3 resume downloads per month
-- Access to basic templates
-- Basic ATS optimization
-- Public resume sharing
-- Email support
+We regularly add support for new platforms based on user demand and platform API availability.
 
-### How do I upgrade my plan?
-1. Go to your account settings
-2. Click "Upgrade Plan"
-3. Choose your preferred plan
-4. Enter payment information
-5. Your upgrade is active immediately
+### What subscription plans are available?
 
-### Can I cancel my subscription anytime?
-Yes, you can cancel your subscription at any time:
-- Your plan remains active until the end of your billing period
-- You keep access to all downloaded resumes
-- No cancellation fees or penalties
-- You can reactivate anytime
+Roundabout offers several subscription tiers:
+
+- **Basic**: For individuals and creators (up to 5 social accounts)
+- **Professional**: For small businesses and growing brands (up to 15 social accounts)
+- **Business**: For marketing teams and small agencies (up to 30 social accounts)
+- **Enterprise**: For large organizations and agencies (unlimited accounts with custom pricing)
+
+Each tier includes different feature sets and usage limits. Visit our [Pricing Page](https://roundabout.app/pricing) for detailed information.
+
+### Is there a free trial?
+
+Yes, we offer a 14-day free trial for all subscription plans. No credit card is required to start your trial, and you'll have access to all features in your selected plan during the trial period.
+
+### Can I change my subscription plan?
+
+Yes, you can upgrade or downgrade your subscription at any time. Upgrades take effect immediately, while downgrades will take effect at the end of your current billing cycle.
+
+## Account Management
+
+### How do I create a team account?
+
+To create a team account:
+1. Sign up for a Professional plan or higher
+2. Navigate to Settings > Team Management
+3. Click "Invite Team Members"
+4. Enter email addresses and assign roles
+5. Team members will receive invitation emails with setup instructions
+
+### How do I reset my password?
+
+To reset your password:
+1. Go to the login page
+2. Click "Forgot Password"
+3. Enter your email address
+4. Check your email for a password reset link
+5. Follow the instructions to create a new password
+
+### How can I change my email address?
+
+To change your email address:
+1. Log in to your account
+2. Go to Settings > Profile
+3. Under "Account Information," click "Change Email"
+4. Enter your new email address
+5. Verify the new email by clicking the link sent to that address
+
+### How do I delete my account?
+
+To delete your account:
+1. Log in to your account
+2. Go to Settings > Account
+3. Scroll to the bottom and click "Delete Account"
+4. Follow the confirmation steps
+
+Please note that account deletion is permanent and cannot be undone. All your data will be permanently removed from our systems.
+
+## Platform Connections
+
+### Why am I having trouble connecting my social media accounts?
+
+Connection issues can occur for several reasons:
+
+1. **Permission Issues**: You may not have sufficient permissions on the social media account
+2. **Authentication Errors**: Your social login credentials may be incorrect
+3. **API Limitations**: The platform's API may have temporary restrictions
+4. **Token Expiration**: Your previous authentication may have expired
+
+Try disconnecting and reconnecting the account, or check our platform-specific troubleshooting guides.
+
+### Why do I need to reconnect my accounts periodically?
+
+Social media platforms have security measures that require periodic re-authentication. This is for your protection and is standard practice for all social media management tools. Roundabout will notify you when reconnection is needed.
+
+### What permissions does Roundabout request from my social accounts?
+
+Roundabout requests only the minimum necessary permissions to perform the functions you use:
+
+- Read access to view your profile and content
+- Publish access to post content on your behalf
+- Analytics access to retrieve performance metrics
+- Comment/reply access to engage with your audience
+
+We never request permissions to access your private messages or to delete your content unless specifically required for a feature you use.
+
+### Can I connect multiple accounts from the same platform?
+
+Yes, you can connect multiple accounts from the same platform (e.g., several Facebook pages or multiple Twitter accounts). The number of accounts you can connect depends on your subscription plan.
+
+## Content Management
+
+### What's the difference between scheduling and queuing posts?
+
+- **Scheduling**: Setting a specific date and time for a post to be published
+- **Queuing**: Adding posts to predefined time slots (e.g., "post daily at 9am") without specifying the exact publication date for each post
+
+Both methods help maintain a consistent posting schedule, but queuing is more flexible for batch content creation.
+
+### Can I edit a post after it's been scheduled?
+
+Yes, you can edit any scheduled post before its publication time. Simply:
+1. Go to Content Planner
+2. Find the scheduled post
+3. Click "Edit"
+4. Make your changes
+5. Click "Update Schedule"
+
+Once a post has been published, editing options depend on the social media platform's native capabilities.
+
+### How far in advance can I schedule posts?
+
+There's no strict limit on how far in advance you can schedule posts with Roundabout. However, some platforms have their own limitations:
+
+- Facebook: Up to 6 months in advance
+- Twitter: Up to 18 months in advance
+- Instagram: Up to 75 days in advance
+
+Our system will notify you if you attempt to schedule beyond a platform's supported timeframe.
+
+### Does Roundabout support posting videos?
+
+Yes, Roundabout supports video uploads for platforms that allow video content. Maximum file sizes vary by platform, but our system supports videos up to 1GB. We also provide video trimming, thumbnail selection, and caption tools for video content.
+
+## AI Content Generator
+
+### How does the AI Content Generator work?
+
+The AI Content Generator uses advanced language models trained on successful social media content. It considers:
+
+1. Your input topic or keywords
+2. Your specified tone and style
+3. Best practices for each platform
+4. Your brand voice (if you've trained it)
+
+The AI then generates platform-optimized content suggestions that you can use as-is or customize further.
+
+### Will AI-generated content sound like me/my brand?
+
+The AI Content Generator has two modes:
+
+1. **Standard Mode**: Creates content in a generic professional style
+2. **Brand Voice Mode**: Creates content that matches your brand's unique style
+
+To use Brand Voice Mode effectively, you should:
+- Provide examples of your existing content
+- Rate generated content to give feedback
+- Update your brand guidelines in the AI settings
+
+The more you use and provide feedback to the system, the better it will align with your brand voice.
+
+### Is there a limit to how many AI generations I can request?
+
+Yes, there are monthly generation limits based on your subscription plan:
+
+- Basic: 50 generations per month
+- Professional: 200 generations per month
+- Business: 500 generations per month
+- Enterprise: Custom limits
+
+One "generation" typically produces 3-5 content variations for you to choose from.
+
+### Can the AI create images as well as text?
+
+Currently, the AI Content Generator focuses on text content. However, our roadmap includes AI image generation capabilities scheduled for release later this year. In the meantime, we offer integration with popular AI image generation tools.
+
+## Analytics and Reporting
+
+### What metrics does Roundabout track?
+
+Roundabout tracks a comprehensive set of metrics, including:
+
+- Engagement (likes, comments, shares, saves)
+- Reach and impressions
+- Follower growth and demographics
+- Click-through rates
+- Content performance by type
+- Posting time effectiveness
+- Hashtag performance
+- Conversion tracking (with website integration)
+
+The specific metrics available depend on what each social platform's API provides.
+
+### Can I export analytics reports?
+
+Yes, you can export analytics reports in several formats:
+
+- PDF (visual reports with charts and analysis)
+- CSV (raw data for further processing)
+- Excel (formatted data with calculations)
+- PNG/JPG (individual charts and graphs)
+
+Business and Enterprise plans also support automated report delivery via email and custom branded reporting.
+
+### How far back does historical data go?
+
+Roundabout begins collecting data from the moment you connect your social accounts. For historical data:
+
+- Basic plan: 30 days of history
+- Professional plan: 90 days of history
+- Business plan: 12 months of history
+- Enterprise plan: Custom data retention
+
+Some platforms have their own limitations on historical data availability through their APIs.
+
+### How accurate are the analytics?
+
+Our analytics are sourced directly from each platform's official API, ensuring accuracy equivalent to the platform's native analytics. There might be slight discrepancies due to:
+
+- Time zone differences
+- Caching and data refresh rates
+- API limitations from certain platforms
+
+We update analytics data at least once every 24 hours, with more frequent updates available on higher-tier plans.
+
+## Team Collaboration
+
+### How many team members can I add?
+
+The number of team members you can add depends on your subscription plan:
+
+- Basic: 1 user (account owner only)
+- Professional: Up to 3 team members
+- Business: Up to 10 team members
+- Enterprise: Unlimited team members
+
+Additional team member seats can be purchased for Professional and Business plans.
+
+### What different team roles are available?
+
+Roundabout offers the following team roles:
+
+- **Admin**: Full access to all features and settings
+- **Manager**: Can create, schedule, and publish content; access analytics
+- **Creator**: Can create content and submit for approval
+- **Analyst**: Read-only access to analytics and reporting
+- **Client**: Limited access to specific accounts and reports (Business/Enterprise only)
+
+Custom roles with granular permissions are available on Enterprise plans.
+
+### How does the approval workflow function?
+
+The approval workflow allows content to be reviewed before publication:
+
+1. Creators draft and submit content
+2. Managers or Admins receive notification of pending content
+3. Reviewers can approve, reject, or request changes
+4. Approved content is scheduled or published
+5. Creators receive notifications about content status
+
+You can configure multi-level approval workflows on Business and Enterprise plans.
+
+### Can team members access all connected platforms?
+
+By default, team members can access all connected platforms. However, admins can restrict access by:
+
+- Platform (e.g., only Twitter and Instagram)
+- Account (e.g., only specific Facebook pages)
+- Function (e.g., can view but not publish)
+
+This granular control helps maintain security while enabling effective collaboration.
+
+## Technical Questions
+
+### Is Roundabout GDPR compliant?
+
+Yes, Roundabout is fully GDPR compliant. We implement:
+
+- Data processing agreements (DPAs)
+- User data access and deletion capabilities
+- Data minimization practices
+- Secure data storage and transfer
+- Regular compliance audits
+
+For detailed information, please review our [Privacy Policy](https://roundabout.app/privacy).
+
+### How secure is my data with Roundabout?
+
+We implement enterprise-grade security measures including:
+
+- Encryption of all data at rest and in transit
+- Multi-factor authentication options
+- Regular security audits and penetration testing
+- SOC 2 Type II compliance
+- Secure handling of API credentials
+- Regular security updates
+
+For more information, see our [Security Documentation](https://roundabout.app/security).
+
+### Does Roundabout have an API?
+
+Yes, Roundabout offers a comprehensive API for Enterprise customers. The API allows you to:
+
+- Create and schedule content
+- Retrieve analytics data
+- Manage platform connections
+- Integrate with other business systems
+
+API documentation is available to Enterprise customers upon request.
+
+### Can I integrate Roundabout with other tools?
+
+Yes, Roundabout offers integrations with various tools, including:
+
+- Content management systems (WordPress, Contentful, etc.)
+- CRM platforms (Salesforce, HubSpot, etc.)
+- Analytics tools (Google Analytics, Tableau, etc.)
+- Marketing automation platforms (Marketo, Mailchimp, etc.)
+- E-commerce platforms (Shopify, WooCommerce, etc.)
+
+We also support custom integrations through our API and Zapier/Make connections.
+
+## Billing and Payments
+
+### What payment methods do you accept?
+
+We accept the following payment methods:
+- Credit/debit cards (Visa, Mastercard, American Express, Discover)
+- PayPal
+- ACH direct debit (US customers)
+- Wire transfer (annual enterprise plans only)
+
+All payments are processed securely through our payment processor, Stripe.
+
+### How does billing work?
+
+Subscriptions are billed either monthly or annually, depending on your selected billing cycle:
+- Monthly plans are charged at the beginning of each month
+- Annual plans are charged once per year and include a discount
+
+You can change your billing cycle in Settings > Billing.
+
+### What happens if I need to cancel my subscription?
+
+You can cancel your subscription at any time:
+1. Go to Settings > Billing
+2. Click "Cancel Subscription"
+3. Follow the prompts to confirm cancellation
+
+When you cancel:
+- Your account remains active until the end of your current billing period
+- You won't be charged again after cancellation
+- You can continue using all features until the end of your paid period
+- You can reactivate your subscription at any time
 
 ### Do you offer refunds?
-We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied within the first 30 days, contact our support team for a full refund.
 
-### Can I change my billing cycle?
-Yes, you can switch between monthly and annual billing in your account settings. Annual billing offers a 20% discount.
+We offer refunds under the following circumstances:
+- Within 14 days of initial purchase
+- Account billing errors
+- Extended service outages
 
-## Resume Creation
+Refund requests must be submitted through our support team. Please note that partial refunds may be issued for subscription downgrades or other special circumstances at our discretion.
 
-### How long does it take to create a resume?
-Most users complete their first resume in 15-30 minutes. The time depends on:
-- How much information you need to input
-- The complexity of your work history
-- How much you customize the template
+## Support and Resources
 
-### Can I create multiple resumes?
-Yes! We encourage creating different versions for different roles:
-- **Free plan**: Up to 3 resumes
-- **Pro plan**: Up to 10 resumes  
-- **Premium plan**: Unlimited resumes
+### How can I get help with using Roundabout?
 
-### Can I import my LinkedIn profile?
-Yes, Premium users can import their LinkedIn profile data to quickly populate their resume. This saves time and ensures consistency across platforms.
+We offer multiple support channels:
 
-### What if I don't have much work experience?
-Our platform is designed for all experience levels:
-- Templates specifically for entry-level candidates
-- Guidance on highlighting education, projects, and volunteer work
-- AI suggestions for strengthening your content
-- Tips for emphasizing transferable skills
+- **Help Center**: Comprehensive guides and tutorials
+- **Email Support**: Available to all customers
+- **Live Chat**: Available on Professional plans and higher
+- **Phone Support**: Available on Business and Enterprise plans
+- **Dedicated Account Manager**: Available on Enterprise plans
 
-### Can I include a photo on my resume?
-We generally recommend against including photos on resumes for most U.S. positions due to potential bias concerns. However, some international markets and creative fields may expect photos. Our templates support photo inclusion when appropriate.
+Our support hours are Monday-Friday, 9am-8pm Eastern Time, with limited weekend coverage.
 
-## Templates and Design
+### Do you offer onboarding assistance?
 
-### How many templates are available?
-We offer 50+ professional templates across different categories:
-- **Basic plan**: 15 templates
-- **Pro plan**: 35 templates
-- **Premium plan**: All 50+ templates plus exclusive designs
+Yes, we offer onboarding assistance tailored to your subscription level:
 
-### Can I customize the templates?
-Yes, all templates are customizable:
-- Colors and fonts
-- Section ordering
-- Spacing and layout
-- Content sections (add/remove)
+- Basic: Self-service onboarding guides and webinars
+- Professional: Group onboarding sessions (twice monthly)
+- Business: One personalized onboarding session
+- Enterprise: Comprehensive onboarding program with dedicated specialist
 
-### What if I want to switch templates after starting?
-You can switch templates at any time. Your content will automatically adapt to the new design. We recommend previewing the change before saving.
+### Is there a community of Roundabout users?
 
-### Are the templates ATS-friendly?
-All our templates are designed to be ATS-compatible:
-- Clean, parseable formatting
-- Standard section headers
-- No complex graphics or tables
-- Tested with major ATS systems
+Yes, we have an active user community where you can:
+- Connect with other social media professionals
+- Share best practices and strategies
+- Get advice on specific challenges
+- Learn about new features and updates
 
-## AI Features
+Join our [Roundabout Community](https://community.roundabout.app) or follow us on social media for updates.
 
-### How does the ATS scoring work?
-Our AI analyzes your resume against multiple factors:
-- Content completeness
-- Keyword optimization
-- Formatting compatibility
-- Industry standards
-- Length and structure
+### Do you provide training resources?
 
-Scores range from 0-100, with recommendations for improvement.
+Yes, we offer various training resources:
 
-### What is job description matching?
-This feature compares your resume to a specific job posting:
-1. Paste the job description
-2. Our AI identifies key requirements
-3. Get specific suggestions for keywords and content
-4. See your compatibility score with the role
+- Interactive tutorials within the platform
+- Video guides on our YouTube channel
+- Monthly webinars on platform features and social media best practices
+- Downloadable resources and templates
+- Certification program (Business/Enterprise plans)
 
-### How accurate are the AI suggestions?
-Our AI is trained on thousands of successful resumes and hiring patterns. While suggestions are highly relevant, you should always review and customize them to match your authentic experience.
-
-### Can the AI write my resume for me?
-Our AI provides suggestions and optimizations, but you maintain full control. We help enhance your existing content rather than creating generic text.
-
-## Exporting and Sharing
-
-### What file formats can I download?
-- **PDF**: Best for job applications (recommended)
-- **Word (.docx)**: For easy editing
-- **Plain text**: For online forms and ATS systems
-
-### How do I share my resume online?
-Create a shareable link:
-1. Click "Share" on your resume
-2. Choose public or private sharing
-3. Set expiration date (optional)
-4. Copy the link to share
-
-### Can I password-protect my shared resume?
-Yes, Pro and Premium users can add password protection to shared resumes for enhanced security.
-
-### How do I embed my resume on my website?
-Premium users can generate embed codes to display their resume on personal websites or portfolios.
-
-## Technical Support
-
-### What browsers are supported?
-ResumeBuilder Pro works on all modern browsers:
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-### Why isn't my resume saving?
-Common solutions:
-1. Check your internet connection
-2. Try refreshing the page
-3. Clear your browser cache
-4. Disable ad blockers temporarily
-5. Contact support if issues persist
-
-### I can't download my resume. What should I do?
-Try these steps:
-1. Use a different browser
-2. Disable browser extensions
-3. Check your download folder
-4. Try downloading as a different format
-5. Contact support with your browser details
-
-### Can I use ResumeBuilder Pro on my phone?
-Yes! Our platform is fully responsive and works great on mobile devices. You can create, edit, and share resumes from your smartphone or tablet.
-
-## Career Advice
-
-### How often should I update my resume?
-We recommend updating your resume:
-- Every 6 months with new achievements
-- Before starting a job search
-- After completing major projects
-- When gaining new skills or certifications
-- Before performance reviews
-
-### Should I include references on my resume?
-Generally, no. References take up valuable space and are typically requested separately. Instead, use the space for more achievements and skills.
-
-### How long should my resume be?
-- **Entry-level**: 1 page
-- **Mid-level (3-10 years)**: 1-2 pages
-- **Senior-level (10+ years)**: 2 pages maximum
-- **Executive/Academic**: 2-3 pages may be acceptable
-
-### What's the difference between a resume and a CV?
-- **Resume**: 1-2 pages, focused on relevant experience, used in most industries
-- **CV**: Longer, comprehensive academic and professional history, used in academia and research
-
-### Should I include my GPA?
-Include your GPA if:
-- You're a recent graduate (within 2-3 years)
-- Your GPA is 3.5 or higher
-- You're applying to competitive graduate programs
-- The employer specifically requests it
-
-## Industry-Specific Questions
-
-### I work in a creative field. Can I use more design elements?
-Yes! Our Creative templates include more visual elements appropriate for design, media, and arts roles. However, ensure the design doesn't compromise ATS compatibility if applying through online systems.
-
-### I'm in tech. Should I include a skills section?
-Absolutely. Tech resumes should prominently feature:
-- Programming languages
-- Frameworks and tools
-- Cloud platforms
-- Certifications
-- GitHub profile or portfolio links
-
-### I'm changing careers. How do I handle this on my resume?
-- Focus on transferable skills
-- Use a functional or hybrid resume format
-- Include relevant volunteer work or projects
-- Consider additional training or certifications
-- Write a strong professional summary explaining your transition
-
-### I work in sales. What metrics should I include?
-Sales professionals should highlight:
-- Revenue generated
-- Quota achievement percentages
-- Client acquisition numbers
-- Territory growth
-- Awards and recognition
-
-## Troubleshooting
-
-### My formatting looks different after downloading
-This can happen due to:
-- Font availability on your system
-- PDF reader differences
-- Browser rendering variations
-
-Solution: Try downloading in a different format or browser.
-
-### The AI suggestions seem incorrect
-AI suggestions are based on general best practices. Consider:
-- Your specific industry requirements
-- Company culture
-- Role level and expectations
-- Personal preferences and authentic voice
-
-### I lost my work. Can you recover it?
-We automatically save your work every few seconds. If you experience data loss:
-1. Check if you were logged in
-2. Refresh the page
-3. Check your resume library
-4. Contact support immediately for recovery assistance
-
-### I'm having trouble with payment
-For billing issues:
-1. Check your payment method is valid
-2. Ensure sufficient funds
-3. Try a different payment method
-4. Contact support with your account email
-
-## Getting Help
-
-### How can I contact support?
-- **Email**: support@resume builder.pro
-- **Live Chat**: Available for Pro and Premium users
-- **Help Center**: Searchable knowledge base
-- **Video Tutorials**: Step-by-step guides
-
-### What's your response time?
-- **Email Support**: 24-48 hours
-- **Live Chat**: Real-time for Pro/Premium users
-- **Critical Issues**: Within 4 hours
-
-### Do you offer resume review services?
-Premium users receive:
-- Professional resume reviews
-- Career coaching sessions
-- Interview preparation
-- Salary negotiation guidance
-
-### Can I schedule a demo?
-Yes! We offer personalized demos for:
-- Team/enterprise accounts
-- Career coaches and educators
-- HR professionals
-- Anyone considering our Premium plan
-
-## Best Practices
-
-### What are the most common resume mistakes?
-1. **Typos and grammatical errors**
-2. **Using an unprofessional email address**
-3. **Including irrelevant information**
-4. **Poor formatting and inconsistency**
-5. **Lack of quantified achievements**
-6. **Generic, non-tailored content**
-7. **Outdated or missing contact information**
-
-### How do I make my resume stand out?
-- **Quantify achievements** with numbers and percentages
-- **Use strong action verbs** to start bullet points
-- **Tailor content** for each application
-- **Include relevant keywords** from job descriptions
-- **Show progression** and career growth
-- **Highlight unique skills** and certifications
-
-### Should I include social media profiles?
-Include professional profiles only:
-- ✅ LinkedIn (always recommended)
-- ✅ GitHub (for tech roles)
-- ✅ Professional portfolio websites
-- ✅ Industry-specific platforms (Behance for designers)
-- ❌ Personal Facebook, Instagram, Twitter
-
-### How do I handle employment gaps?
-- **Be honest** but strategic
-- **Use years instead of months** for short gaps
-- **Highlight productive activities** during gaps
-- **Focus on skills gained** rather than time lost
-- **Keep explanations brief** and positive
-
-Still have questions? Contact our support team at support@resumebuilder.pro or use the chat widget in the bottom-right corner for immediate assistance.
+All training materials are accessible from the Help menu in your dashboard.

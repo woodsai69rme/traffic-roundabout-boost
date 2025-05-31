@@ -1,39 +1,43 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
-interface StatCardProps {
+export interface StatCardProps {
   title: string;
-  value: string | number;
-  change?: number;
-  icon: React.ReactNode;
-  color: string;
+  value: string;
+  icon: React.ReactElement;
+  trend?: string;
 }
 
-const StatCard = ({ title, value, change, icon, color }: StatCardProps) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, trend }) => {
+  const getTrendIcon = () => {
+    if (!trend) return null;
+    
+    if (trend.startsWith('+')) {
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    } else if (trend.startsWith('-')) {
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
+    } else {
+      return <Minus className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
   return (
-    <Card className="card-hover overflow-hidden">
-      <CardHeader className={`pb-2 ${color.includes('bg-') ? '' : color}`}>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        {icon}
       </CardHeader>
       <CardContent>
-        <div className="flex justify-between items-center">
-          <div>
-            <div className="text-2xl font-bold">{value}</div>
-            {change !== undefined && (
-              <p className={`text-xs ${change >= 0 ? 'text-green-500' : 'text-red-500'} flex items-center`}>
-                {change >= 0 ? '↑' : '↓'} {Math.abs(change)}%
-                <span className="text-muted-foreground ml-1">from last month</span>
-              </p>
-            )}
+        <div className="text-2xl font-bold">{value}</div>
+        {trend && (
+          <div className="flex items-center pt-1">
+            {getTrendIcon()}
+            <span className="text-xs text-muted-foreground ml-1">{trend}</span>
           </div>
-          <div className={`p-2 rounded-lg ${color}`}>
-            {icon}
-          </div>
-        </div>
+        )}
       </CardContent>
     </Card>
   );
 };
-
-export default StatCard;
