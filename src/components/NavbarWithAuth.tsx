@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
@@ -11,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { FileText, User, LogOut, Settings, BookOpen, Template, Wand2 } from 'lucide-react';
+import { FileText, User, LogOut, Settings, BookOpen, FileTemplate, Wand2 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 const NavbarWithAuth = () => {
@@ -93,7 +92,7 @@ const NavbarWithAuth = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/resume-builder" className="w-full">
-                      <Template className="mr-2 h-4 w-4" />
+                      <FileTemplate className="mr-2 h-4 w-4" />
                       Resume Builder
                     </Link>
                   </DropdownMenuItem>

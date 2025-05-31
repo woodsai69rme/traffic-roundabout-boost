@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Template, Wand2, FileText } from 'lucide-react';
+import { Plus, FileTemplate, Wand2, FileText } from 'lucide-react';
 
 const QuickActions = () => {
   return (
@@ -18,7 +17,7 @@ const QuickActions = () => {
         </Button>
         
         <Button variant="outline" className="w-full justify-start" size="lg">
-          <Template className="h-4 w-4 mr-2" />
+          <FileTemplate className="h-4 w-4 mr-2" />
           Browse Templates
         </Button>
         
