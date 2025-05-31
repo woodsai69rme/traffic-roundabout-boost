@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { FileText, User, LogOut, Settings, BookOpen, FileTemplate, Wand2 } from 'lucide-react';
+import { FileText, User, LogOut, Settings, BookOpen, File, Wand2 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 const NavbarWithAuth = () => {
@@ -92,7 +92,7 @@ const NavbarWithAuth = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/resume-builder" className="w-full">
-                      <FileTemplate className="mr-2 h-4 w-4" />
+                      <File className="mr-2 h-4 w-4" />
                       Resume Builder
                     </Link>
                   </DropdownMenuItem>
