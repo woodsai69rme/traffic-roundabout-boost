@@ -1,195 +1,82 @@
 
-import { Hero } from "@/components/Hero";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { FileText, Zap, Download, Share2, BarChart3, Sparkles, Shield, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import NavbarWithAuth from '@/components/NavbarWithAuth';
+import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { BookOpen, ArrowRight } from 'lucide-react';
 
 const Index = () => {
-  const features = [
-    {
-      icon: <FileText className="h-8 w-8 text-blue-600" />,
-      title: "Professional Templates",
-      description: "Choose from dozens of ATS-friendly templates designed by career experts"
-    },
-    {
-      icon: <Zap className="h-8 w-8 text-yellow-600" />,
-      title: "AI-Powered Optimization",
-      description: "Get intelligent suggestions to improve your resume content and ATS compatibility"
-    },
-    {
-      icon: <Download className="h-8 w-8 text-green-600" />,
-      title: "Multiple Export Formats",
-      description: "Download your resume as PDF, Word document, or share online with a custom link"
-    },
-    {
-      icon: <BarChart3 className="h-8 w-8 text-purple-600" />,
-      title: "ATS Score Analysis",
-      description: "Real-time feedback on how well your resume will perform with applicant tracking systems"
-    },
-    {
-      icon: <Sparkles className="h-8 w-8 text-pink-600" />,
-      title: "Smart Content Suggestions",
-      description: "AI-generated bullet points and content recommendations based on your industry"
-    },
-    {
-      icon: <Share2 className="h-8 w-8 text-indigo-600" />,
-      title: "Easy Sharing",
-      description: "Share your resume with potential employers via secure, customizable links"
-    }
-  ];
-
-  const templates = [
-    { name: "Modern Professional", category: "Tech & Business" },
-    { name: "Creative Designer", category: "Design & Media" },
-    { name: "Executive Classic", category: "Leadership" },
-    { name: "Minimalist Clean", category: "Any Industry" }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <section className="pt-20 pb-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-800">
-              ✨ AI-Powered Resume Builder
-            </Badge>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Build Your Perfect Resume in
-              <span className="text-blue-600"> Minutes</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Create professional, ATS-optimized resumes with our AI-powered builder. 
-              Choose from expert-designed templates and get personalized suggestions to land your dream job.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link to="/register">Start Building For Free</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
-                <Link to="/login">Sign In</Link>
-              </Button>
+    <div className="min-h-screen flex flex-col">
+      <NavbarWithAuth />
+      <main className="flex-grow">
+        <Hero />
+        
+        {/* Feature Sections */}
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Powerful features for creators</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Cross-Platform Management</h3>
+                <p className="text-muted-foreground mb-4">Connect and manage all your social media accounts from one dashboard.</p>
+              </div>
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Advanced Analytics</h3>
+                <p className="text-muted-foreground mb-4">Track performance metrics and gain insights across all your platforms.</p>
+              </div>
+              <div className="bg-card p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-3">Community Building</h3>
+                <p className="text-muted-foreground mb-4">Grow your audience and manage engagement in one place.</p>
+              </div>
             </div>
-            <p className="text-sm text-gray-500 mt-4">
-              No credit card required • Free forever plan available
-            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to Land Your Dream Job
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our comprehensive suite of tools helps you create, optimize, and share professional resumes 
-              that get noticed by employers and pass through ATS systems.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    {feature.icon}
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
+        </section>
+        
+        {/* Documentation Section */}
+        <section className="py-16">
+          <div className="container mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="md:w-1/2">
+                <h2 className="text-3xl font-bold mb-4">Comprehensive Documentation</h2>
+                <p className="text-muted-foreground mb-6">
+                  Explore our detailed guides for integrating Roundabout with your favorite tools and platforms. 
+                  From no-code solutions like Webflow and Bubble to development environments like VS Code.
+                </p>
+                <Link to="/docs">
+                  <Button className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Browse Documentation
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="md:w-1/2 bg-muted p-6 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">No-Code Platforms</h4>
+                    <p className="text-sm text-muted-foreground">Integrate with Webflow, Bubble, Zapier, and more</p>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Templates Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Professional Templates for Every Industry
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose from our collection of professionally designed, ATS-optimized templates 
-              that help you stand out while ensuring compatibility with applicant tracking systems.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {templates.map((template, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="h-40 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg mb-4 flex items-center justify-center">
-                    <FileText className="h-16 w-16 text-blue-600" />
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">Developer Tools</h4>
+                    <p className="text-sm text-muted-foreground">VS Code setup, snippets, and debugging guides</p>
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{template.name}</h3>
-                  <Badge variant="outline">{template.category}</Badge>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button asChild size="lg">
-              <Link to="/register">Browse All Templates</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
-            <div>
-              <div className="text-4xl font-bold mb-2">50,000+</div>
-              <div className="text-blue-100">Resumes Created</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">95%</div>
-              <div className="text-blue-100">ATS Compatibility Rate</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">4.9★</div>
-              <div className="text-blue-100">User Rating</div>
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">API Reference</h4>
+                    <p className="text-sm text-muted-foreground">Comprehensive API documentation</p>
+                  </div>
+                  <div className="p-4 bg-card rounded">
+                    <h4 className="font-bold mb-2">Architecture</h4>
+                    <p className="text-sm text-muted-foreground">Technical architecture and design patterns</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Ready to Build Your Perfect Resume?
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Join thousands of job seekers who have successfully landed their dream jobs 
-            using our AI-powered resume builder.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-lg px-8 py-6">
-              <Link to="/register">Get Started Free</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
-              <Link to="/documentation">View Documentation</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
+        </section>
+      </main>
       <Footer />
     </div>
   );
