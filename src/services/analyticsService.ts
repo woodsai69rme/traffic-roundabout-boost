@@ -77,8 +77,10 @@ export const analyticsService = {
       return acc;
     }, {} as Record<string, number>);
     
-    const topPlatform = Object.entries(platformEngagement)
-      .sort(([,a], [,b]) => b - a)[0]?.[0] || 'twitter';
+    const platformEntries = Object.entries(platformEngagement);
+    const topPlatform = platformEntries.length > 0 
+      ? platformEntries.sort(([,a], [,b]) => Number(b) - Number(a))[0]?.[0] || 'twitter'
+      : 'twitter';
 
     return {
       totalPosts,

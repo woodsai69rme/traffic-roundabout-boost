@@ -1,12 +1,32 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlatformOverview } from '@/components/PlatformOverview';
 import PlatformConnect from '@/components/PlatformConnect';
+import { socialAccountService } from '@/services/socialAccountService';
+import { useAuth } from '@/hooks/useAuth';
 
 const Platforms = () => {
+  const { user } = useAuth();
+  const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      loadSocialAccounts();
+    }
+  }, [user]);
+
+  const loadSocialAccounts = async () => {
+    try {
+      const accounts = await socialAccountService.getSocialAccounts(user!.id);
+      setSocialAccounts(accounts);
+    } catch (error) {
+      console.error('Error loading social accounts:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWithAuth />
@@ -25,7 +45,7 @@ const Platforms = () => {
             </TabsList>
             
             <TabsContent value="overview">
-              <PlatformOverview />
+              <PlatformOverview accounts={socialAccounts} />
             </TabsContent>
             
             <TabsContent value="connect">
