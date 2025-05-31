@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { NavbarWithAuth } from '@/components/NavbarWithAuth';
+import NavbarWithAuth from '@/components/NavbarWithAuth';
 import { StatCard } from '@/components/StatCard';
 import { PlatformOverview } from '@/components/PlatformOverview';
 import { RecentActivity } from '@/components/RecentActivity';

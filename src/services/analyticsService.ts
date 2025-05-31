@@ -60,14 +60,19 @@ export const analyticsService = {
     
     const totalPosts = analytics.length;
     const totalEngagement = analytics.reduce((sum, item) => {
-      const engagement = (item.metrics?.likes || 0) + (item.metrics?.comments || 0) + (item.metrics?.shares || 0);
-      return sum + engagement;
+      const likes = Number(item.metrics?.likes || 0);
+      const comments = Number(item.metrics?.comments || 0);
+      const shares = Number(item.metrics?.shares || 0);
+      return sum + likes + comments + shares;
     }, 0);
     
     const avgEngagementRate = totalPosts > 0 ? totalEngagement / totalPosts : 0;
     
     const platformEngagement = analytics.reduce((acc, item) => {
-      const engagement = (item.metrics?.likes || 0) + (item.metrics?.comments || 0) + (item.metrics?.shares || 0);
+      const likes = Number(item.metrics?.likes || 0);
+      const comments = Number(item.metrics?.comments || 0);
+      const shares = Number(item.metrics?.shares || 0);
+      const engagement = likes + comments + shares;
       acc[item.platform] = (acc[item.platform] || 0) + engagement;
       return acc;
     }, {} as Record<string, number>);

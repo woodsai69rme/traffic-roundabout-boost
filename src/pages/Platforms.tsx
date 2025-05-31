@@ -3,7 +3,7 @@ import React from 'react';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PlatformOverview from '@/components/PlatformOverview';
+import { PlatformOverview } from '@/components/PlatformOverview';
 import PlatformConnect from '@/components/PlatformConnect';
 
 const Platforms = () => {
