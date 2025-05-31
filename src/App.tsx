@@ -20,6 +20,8 @@ import Communities from "./pages/Communities";
 import Monetization from "./pages/Monetization";
 import Documentation from "./pages/Documentation";
 import NotFound from "./pages/NotFound";
+import ResumeDashboard from "./pages/ResumeDashboard";
+import ResumeBuilder from "./pages/ResumeBuilder";
 import SocialApiIntegrationPage from "./components/ApiIntegrations/SocialApiIntegrationPage";
 
 const queryClient = new QueryClient();
@@ -38,7 +40,19 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/documentation/*" element={<Documentation />} />
             
-            {/* Protected routes */}
+            {/* Protected routes - Resume Builder */}
+            <Route path="/resumes" element={
+              <ProtectedRoute>
+                <ResumeDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/resume-builder/:id" element={
+              <ProtectedRoute>
+                <ResumeBuilder />
+              </ProtectedRoute>
+            } />
+            
+            {/* Protected routes - Original features */}
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />

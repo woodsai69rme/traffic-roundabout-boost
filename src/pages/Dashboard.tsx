@@ -1,103 +1,81 @@
-
-import React, { useEffect, useState } from 'react';
-import NavbarWithAuth from '@/components/NavbarWithAuth';
-import { StatCard } from '@/components/StatCard';
-import { PlatformOverview } from '@/components/PlatformOverview';
-import { RecentActivity } from '@/components/RecentActivity';
-import { useAuth } from '@/hooks/useAuth';
-import { analyticsService } from '@/services/analyticsService';
-import { socialAccountService } from '@/services/socialAccountService';
-import { contentService } from '@/services/contentService';
-import { Users, MessageSquare, TrendingUp, Calendar } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Plus, BarChart3, Users, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const [metrics, setMetrics] = useState({
-    totalPosts: 0,
-    totalEngagement: 0,
-    avgEngagementRate: 0,
-    topPlatform: 'twitter'
-  });
-  const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
-  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      loadDashboardData();
-    }
-  }, [user]);
+    // Redirect to the Resume Dashboard as the main dashboard
+    navigate('/resumes', { replace: true });
+  }, [navigate]);
 
-  const loadDashboardData = async () => {
-    try {
-      // Load analytics metrics
-      const metricsData = await analyticsService.getOverviewMetrics(user!.id);
-      setMetrics(metricsData);
-
-      // Load social accounts
-      const accounts = await socialAccountService.getSocialAccounts(user!.id);
-      setSocialAccounts(accounts);
-
-      // Load recent content for activities
-      const content = await contentService.getContent(user!.id);
-      const activities = content.map(item => ({
-        id: item.id,
-        action: 'Published',
-        target: item.title,
-        platform: item.platforms[0] || 'unknown',
-        timestamp: item.published_at || item.created_at
-      }));
-      setRecentActivities(activities);
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    }
-  };
-
+  // This component will not be rendered due to the redirect,
+  // but we'll keep it as a fallback
   return (
-    <div className="min-h-screen bg-background">
-      <NavbarWithAuth />
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}! Here's your social media overview.
-          </p>
-        </div>
+    <div className="max-w-7xl mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Welcome to Resume Builder</h1>
+        <p className="text-gray-600 mt-2">Create professional resumes that get you hired</p>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Total Posts"
-            value={metrics.totalPosts.toString()}
-            icon={<Calendar className="h-4 w-4 text-muted-foreground" />}
-            trend="+12%"
-          />
-          <StatCard
-            title="Total Engagement"
-            value={metrics.totalEngagement.toString()}
-            icon={<MessageSquare className="h-4 w-4 text-muted-foreground" />}
-            trend="+8%"
-          />
-          <StatCard
-            title="Avg. Engagement Rate"
-            value={`${metrics.avgEngagementRate.toFixed(1)}%`}
-            icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
-            trend="+5%"
-          />
-          <StatCard
-            title="Followers"
-            value="1,234"
-            icon={<Users className="h-4 w-4 text-muted-foreground" />}
-            trend="+3%"
-          />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Resumes</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">Start creating your first resume</p>
+          </CardContent>
+        </Card>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <PlatformOverview accounts={socialAccounts} />
-          <RecentActivity activities={recentActivities} />
-        </div>
-      </main>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Average ATS Score</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">-</div>
+            <p className="text-xs text-muted-foreground">Build resumes to see your score</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Templates Used</CardTitle>
+            <Sparkles className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">Explore our template library</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Downloads</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">Export when ready</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="text-center py-12">
+        <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+        <h3 className="text-xl font-semibold text-gray-600 mb-2">Welcome to Resume Builder</h3>
+        <p className="text-gray-500 mb-6">Create your first professional resume to get started</p>
+        <Button onClick={() => navigate('/resume-builder/new')} size="lg">
+          <Plus className="h-5 w-5 mr-2" />
+          Create Your First Resume
+        </Button>
+      </div>
     </div>
   );
 };
