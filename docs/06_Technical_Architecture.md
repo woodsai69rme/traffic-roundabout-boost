@@ -1,441 +1,809 @@
 
 # Technical Architecture
+## ResumeBuilder Pro
 
-## Overview
+### Document Information
+- **Version**: 1.0
+- **Last Updated**: 2025-01-31
+- **Owner**: Engineering Team
 
-This document outlines the technical architecture of the Roundabout social media management platform. It provides a comprehensive view of the system design, technology stack, component interactions, and architectural decisions that shape the platform.
+## Architecture Overview
 
-## High-Level Architecture
+ResumeBuilder Pro is built as a modern, cloud-native single-page application (SPA) using React and TypeScript, with a robust backend infrastructure supporting real-time collaboration, AI-powered features, and scalable document generation.
 
 ### System Architecture Diagram
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Web Browser   │    │  Mobile App     │    │  Third-party    │
-│   (React SPA)   │    │  (Future)       │    │  Integrations   │
-└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
-          │                      │                      │
-          └──────────────────────┼──────────────────────┘
-                                 │
-                    ┌─────────────┴───────────┐
-                    │     Load Balancer       │
-                    │      (CloudFlare)       │
-                    └─────────────┬───────────┘
-                                  │
-                    ┌─────────────┴───────────┐
-                    │    Frontend Hosting     │
-                    │      (Lovable/CDN)      │
-                    └─────────────┬───────────┘
-                                  │
-                    ┌─────────────┴───────────┐
-                    │    Supabase Backend     │
-                    │                         │
-                    │  ┌─────────────────┐   │
-                    │  │  Authentication │   │
-                    │  │    (Auth)       │   │
-                    │  └─────────────────┘   │
-                    │                         │
-                    │  ┌─────────────────┐   │
-                    │  │   PostgreSQL    │   │
-                    │  │   Database      │   │
-                    │  └─────────────────┘   │
-                    │                         │
-                    │  ┌─────────────────┐   │
-                    │  │ Edge Functions  │   │
-                    │  │  (Serverless)   │   │
-                    │  └─────────────────┘   │
-                    │                         │
-                    │  ┌─────────────────┐   │
-                    │  │  File Storage   │   │
-                    │  │   (Storage)     │   │
-                    │  └─────────────────┘   │
-                    └─────────────┬───────────┘
-                                  │
-                    ┌─────────────┴───────────┐
-                    │  External APIs          │
-                    │                         │
-                    │  • Twitter API          │
-                    │  • Facebook Graph API   │
-                    │  • Instagram Basic API  │
-                    │  • LinkedIn API         │
-                    │  • OpenAI API           │
-                    │  • Analytics APIs       │
-                    └─────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     Client Layer                            │
+├─────────────────────────────────────────────────────────────┤
+│  React SPA (TypeScript)                                     │
+│  ├── UI Components (Shadcn/UI + Tailwind CSS)             │
+│  ├── State Management (React Query + Zustand)              │
+│  ├── Routing (React Router)                                │
+│  └── Real-time Updates (WebSocket)                         │
+└─────────────────────────────────────────────────────────────┘
+                               │
+                               │ HTTPS/WSS
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   API Gateway Layer                         │
+├─────────────────────────────────────────────────────────────┤
+│  Supabase Edge Functions / Vercel Functions                │
+│  ├── Authentication & Authorization                        │
+│  ├── Rate Limiting & Request Validation                    │
+│  ├── API Versioning & Documentation                        │
+│  └── Load Balancing & Health Checks                        │
+└─────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  Application Layer                          │
+├─────────────────────────────────────────────────────────────┤
+│  Microservices Architecture                                 │
+│  ├── Resume Service (CRUD, Templates, Export)              │
+│  ├── AI Service (Content Optimization, ATS Scoring)        │
+│  ├── User Service (Profiles, Preferences, Analytics)       │
+│  ├── Notification Service (Email, Real-time Alerts)        │
+│  └── Integration Service (Job Boards, LinkedIn, etc.)      │
+└─────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Data Layer                               │
+├─────────────────────────────────────────────────────────────┤
+│  Supabase PostgreSQL Database                              │
+│  ├── User Data & Profiles                                  │
+│  ├── Resume Content & Versions                             │
+│  ├── Templates & Themes                                    │
+│  ├── Analytics & Usage Metrics                             │
+│  └── AI Training Data & Models                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## Frontend Architecture
 
-### React Application Structure
-
-The frontend is built as a Single Page Application (SPA) using React with TypeScript:
-
-```
-src/
-├── components/          # Reusable UI components
-│   ├── ui/             # Base UI components (shadcn/ui)
-│   ├── layout/         # Layout components
-│   ├── forms/          # Form components
-│   └── features/       # Feature-specific components
-├── pages/              # Page components for routing
-├── hooks/              # Custom React hooks
-├── services/           # API service functions
-├── utils/              # Utility functions
-├── types/              # TypeScript type definitions
-├── lib/                # Library configurations
-└── assets/             # Static assets
-```
-
-### State Management Architecture
-
-1. **Component State**: Local state with `useState` and `useReducer`
-2. **Server State**: Managed with TanStack Query for caching and synchronization
-3. **Global State**: React Context for authentication and theme
-4. **Form State**: React Hook Form for complex forms
+### Technology Stack
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized builds
+- **UI Framework**: Shadcn/UI components with Radix UI primitives
+- **Styling**: Tailwind CSS with CSS-in-JS for dynamic theming
+- **State Management**: React Query for server state, Zustand for client state
+- **Routing**: React Router v6 with protected routes
+- **Forms**: React Hook Form with Zod validation
+- **Testing**: Vitest for unit tests, Playwright for E2E
 
 ### Component Architecture
 
-```typescript
-// Component hierarchy example
-App
-├── AuthProvider (Context)
-├── QueryClientProvider (TanStack Query)
-├── ThemeProvider (Context)
-├── Router
-    ├── PublicLayout
-    │   ├── LoginPage
-    │   └── RegisterPage
-    └── PrivateLayout
-        ├── Dashboard
-        ├── ContentPlanner
-        ├── Analytics
-        └── Settings
+```
+src/
+├── components/
+│   ├── ui/                    # Base UI components (Shadcn/UI)
+│   ├── layout/                # Layout components (Header, Footer, Sidebar)
+│   ├── forms/                 # Form components and field types
+│   ├── resume/                # Resume-specific components
+│   │   ├── builder/           # Resume builder interface
+│   │   ├── templates/         # Template components
+│   │   ├── preview/           # Resume preview components
+│   │   └── export/            # Export functionality
+│   └── shared/                # Reusable components
+├── hooks/                     # Custom React hooks
+├── services/                  # API service layers
+├── stores/                    # Zustand stores for global state
+├── utils/                     # Utility functions and helpers
+├── types/                     # TypeScript type definitions
+└── pages/                     # Page-level components
 ```
 
-### Routing Strategy
+### State Management Strategy
 
-- **React Router v6** for client-side routing
-- **Protected routes** for authenticated content
-- **Lazy loading** for code splitting
-- **Nested routing** for complex page structures
+#### Server State (React Query)
+- API data caching and synchronization
+- Background refetching and updates
+- Optimistic updates for user interactions
+- Error handling and retry logic
+
+#### Client State (Zustand)
+- UI state (modals, loading states, selections)
+- User preferences and settings
+- Temporary form data and drafts
+- Theme and personalization
+
+#### Local State (React useState/useReducer)
+- Component-specific state
+- Form inputs and validation
+- Temporary UI interactions
+
+### Performance Optimizations
+
+#### Code Splitting
+```typescript
+// Route-based code splitting
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const ResumeBuilder = lazy(() => import('./pages/ResumeBuilder'));
+
+// Component-based splitting for heavy features
+const AIOptimization = lazy(() => import('./components/AIOptimization'));
+```
+
+#### Virtual Scrolling
+- Large template galleries
+- Resume version history
+- User analytics data
+
+#### Image Optimization
+- WebP format with fallbacks
+- Responsive image sizing
+- Lazy loading for below-fold content
+- CDN delivery for templates and assets
 
 ## Backend Architecture
 
-### Supabase Infrastructure
+### Database Design (Supabase PostgreSQL)
 
-The backend leverages Supabase as a Backend-as-a-Service (BaaS) platform:
-
-1. **Authentication Service**
-   - JWT-based authentication
-   - Social login providers (Google, Facebook, etc.)
-   - Row Level Security (RLS) enforcement
-
-2. **PostgreSQL Database**
-   - Managed PostgreSQL instance
-   - Real-time subscriptions
-   - Custom functions and triggers
-
-3. **Edge Functions**
-   - Serverless functions for complex logic
-   - API integrations and data processing
-   - Background job processing
-
-4. **Storage Service**
-   - File upload and management
-   - Image optimization and resizing
-   - CDN distribution
-
-### Database Architecture
-
-#### Schema Design Principles
-
-1. **Normalization**: Proper normalization to reduce redundancy
-2. **Performance**: Optimized indexes for common queries
-3. **Security**: Row-level security for data isolation
-4. **Scalability**: Partitioning for large tables
-
-#### Key Tables Structure
+#### Core Tables
 
 ```sql
--- Core user and authentication
-users (id, email, created_at, metadata)
-profiles (id, username, display_name, avatar_url)
+-- Users and Authentication
+users (
+  id uuid PRIMARY KEY,
+  email text UNIQUE NOT NULL,
+  created_at timestamp DEFAULT now(),
+  updated_at timestamp DEFAULT now(),
+  subscription_tier text DEFAULT 'free',
+  preferences jsonb DEFAULT '{}'
+);
 
--- Platform connections
-platform_connections (id, user_id, platform, tokens, status)
+-- User Profiles
+profiles (
+  id uuid PRIMARY KEY REFERENCES users(id),
+  first_name text,
+  last_name text,
+  phone text,
+  location text,
+  linkedin_url text,
+  website_url text,
+  bio text,
+  industry text,
+  experience_level text,
+  created_at timestamp DEFAULT now(),
+  updated_at timestamp DEFAULT now()
+);
 
--- Content management
-content (id, user_id, text, status, scheduled_for)
-content_platforms (content_id, platform_id, platform_specific_data)
+-- Resume Data
+resumes (
+  id uuid PRIMARY KEY,
+  user_id uuid REFERENCES users(id),
+  title text NOT NULL,
+  template_id text NOT NULL,
+  content jsonb NOT NULL,
+  settings jsonb DEFAULT '{}',
+  status text DEFAULT 'draft',
+  ats_score integer,
+  created_at timestamp DEFAULT now(),
+  updated_at timestamp DEFAULT now(),
+  is_deleted boolean DEFAULT false
+);
 
--- Analytics and insights
-analytics (id, platform_id, date, metrics)
-audience_insights (id, platform_id, demographic_data)
+-- Resume Versions (for history/backup)
+resume_versions (
+  id uuid PRIMARY KEY,
+  resume_id uuid REFERENCES resumes(id),
+  version_number integer NOT NULL,
+  content jsonb NOT NULL,
+  changes_summary text,
+  created_at timestamp DEFAULT now(),
+  created_by uuid REFERENCES users(id)
+);
 
--- Team collaboration
-companies (id, name, subscription_details)
-team_members (user_id, company_id, role, permissions)
+-- Templates
+templates (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  category text NOT NULL,
+  description text,
+  preview_image_url text,
+  ats_compatibility_score integer,
+  is_premium boolean DEFAULT false,
+  settings jsonb DEFAULT '{}',
+  created_at timestamp DEFAULT now()
+);
+
+-- AI Interactions and Analytics
+ai_interactions (
+  id uuid PRIMARY KEY,
+  user_id uuid REFERENCES users(id),
+  resume_id uuid REFERENCES resumes(id),
+  interaction_type text NOT NULL, -- 'suggestion', 'optimization', 'scoring'
+  input_data jsonb,
+  output_data jsonb,
+  processing_time_ms integer,
+  created_at timestamp DEFAULT now()
+);
+
+-- User Analytics
+user_analytics (
+  id uuid PRIMARY KEY,
+  user_id uuid REFERENCES users(id),
+  event_type text NOT NULL,
+  event_data jsonb,
+  session_id text,
+  created_at timestamp DEFAULT now()
+);
 ```
 
-#### Data Flow Patterns
+#### Indexing Strategy
+```sql
+-- Performance indexes
+CREATE INDEX idx_resumes_user_id ON resumes(user_id);
+CREATE INDEX idx_resumes_updated_at ON resumes(updated_at DESC);
+CREATE INDEX idx_resume_versions_resume_id ON resume_versions(resume_id);
+CREATE INDEX idx_ai_interactions_user_id ON ai_interactions(user_id);
+CREATE INDEX idx_user_analytics_user_id ON user_analytics(user_id);
+CREATE INDEX idx_user_analytics_created_at ON user_analytics(created_at DESC);
 
-1. **Write Path**: Client → API → Database → Real-time updates
-2. **Read Path**: Client → Query cache → API → Database
-3. **Analytics Path**: External APIs → Edge Functions → Database → Client
-
-## API Architecture
-
-### RESTful API Design
-
-The API follows REST principles with resource-based URLs:
-
-```
-GET    /api/content              # List content
-POST   /api/content              # Create content
-GET    /api/content/{id}         # Get specific content
-PUT    /api/content/{id}         # Update content
-DELETE /api/content/{id}         # Delete content
-
-GET    /api/analytics/overview   # Get analytics overview
-GET    /api/platforms            # List connected platforms
-POST   /api/platforms/connect    # Connect new platform
+-- Search indexes
+CREATE INDEX idx_resumes_content_gin ON resumes USING gin(content);
+CREATE INDEX idx_templates_category ON templates(category);
 ```
 
-### API Security
+### API Design
 
-1. **Authentication**: JWT tokens in Authorization header
-2. **Authorization**: Role-based access control (RBAC)
-3. **Rate Limiting**: IP and user-based rate limiting
-4. **Input Validation**: Schema validation for all inputs
-5. **CORS**: Configured for frontend domains only
-
-### Error Handling
-
-Standardized error responses:
+#### RESTful Endpoints
 
 ```typescript
-interface APIError {
-  status: 'error';
-  error: {
-    code: string;
-    message: string;
-    details?: any;
-  };
+// Authentication
+POST   /auth/register
+POST   /auth/login
+POST   /auth/logout
+POST   /auth/refresh
+POST   /auth/forgot-password
+POST   /auth/reset-password
+
+// User Management
+GET    /api/users/profile
+PUT    /api/users/profile
+DELETE /api/users/account
+GET    /api/users/preferences
+PUT    /api/users/preferences
+
+// Resume Management
+GET    /api/resumes                    # List user's resumes
+POST   /api/resumes                    # Create new resume
+GET    /api/resumes/:id                # Get specific resume
+PUT    /api/resumes/:id                # Update resume
+DELETE /api/resumes/:id                # Delete resume
+POST   /api/resumes/:id/duplicate      # Duplicate resume
+
+// Resume Versions
+GET    /api/resumes/:id/versions       # Get version history
+POST   /api/resumes/:id/versions       # Create version snapshot
+GET    /api/resumes/:id/versions/:v    # Get specific version
+POST   /api/resumes/:id/restore/:v     # Restore from version
+
+// Templates
+GET    /api/templates                  # List available templates
+GET    /api/templates/:id              # Get template details
+GET    /api/templates/categories       # Get template categories
+
+// AI Services
+POST   /api/ai/optimize               # Content optimization
+POST   /api/ai/score                  # ATS scoring
+POST   /api/ai/suggestions            # Content suggestions
+POST   /api/ai/keywords               # Keyword analysis
+
+// Export Services
+POST   /api/export/pdf                # Generate PDF
+POST   /api/export/docx               # Generate Word document
+POST   /api/export/html               # Generate HTML
+GET    /api/export/:id/status         # Check export status
+GET    /api/export/:id/download       # Download generated file
+
+// Sharing
+POST   /api/share/create              # Create shareable link
+GET    /api/share/:token              # Access shared resume
+PUT    /api/share/:token/settings     # Update sharing settings
+DELETE /api/share/:token              # Revoke sharing access
+
+// Analytics
+GET    /api/analytics/dashboard       # User dashboard data
+GET    /api/analytics/resume/:id      # Resume-specific analytics
+POST   /api/analytics/events          # Track user events
+```
+
+#### GraphQL Schema (Future Enhancement)
+
+```graphql
+type User {
+  id: ID!
+  email: String!
+  profile: Profile
+  resumes: [Resume!]!
+  subscription: Subscription!
+  createdAt: DateTime!
+}
+
+type Resume {
+  id: ID!
+  title: String!
+  template: Template!
+  content: JSON!
+  atsScore: Int
+  status: ResumeStatus!
+  versions: [ResumeVersion!]!
+  analytics: ResumeAnalytics
+  shareLinks: [ShareLink!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Template {
+  id: ID!
+  name: String!
+  category: TemplateCategory!
+  description: String
+  previewUrl: String
+  atsCompatibility: Int!
+  isPremium: Boolean!
+  settings: JSON
+}
+
+type AIOptimization {
+  suggestions: [ContentSuggestion!]!
+  atsScore: Int!
+  keywords: [String!]!
+  improvements: [Improvement!]!
+}
+
+# Mutations
+type Mutation {
+  createResume(input: CreateResumeInput!): Resume!
+  updateResume(id: ID!, input: UpdateResumeInput!): Resume!
+  optimizeContent(resumeId: ID!, content: String!): AIOptimization!
+  generateExport(resumeId: ID!, format: ExportFormat!): ExportJob!
 }
 ```
 
-## External Integrations
+## AI/ML Architecture
 
-### Social Media Platform APIs
+### Content Optimization Pipeline
 
-Each platform integration follows a common pattern:
+```typescript
+// AI Service Architecture
+interface AIService {
+  // Content analysis and improvement
+  analyzeContent(content: string, context: JobContext): Promise<ContentAnalysis>;
+  generateSuggestions(content: string, role: string): Promise<Suggestion[]>;
+  optimizeForATS(resume: Resume, jobDescription?: string): Promise<ATSOptimization>;
+  
+  // Scoring and feedback
+  calculateATSScore(resume: Resume): Promise<ATSScore>;
+  analyzeProfessionalLanguage(content: string): Promise<LanguageAnalysis>;
+  checkIndustryAlignment(resume: Resume, industry: string): Promise<AlignmentScore>;
+}
 
-1. **OAuth Authentication**: Standard OAuth 2.0 flow
-2. **Token Management**: Secure storage and refresh handling
-3. **API Abstraction**: Common interface for all platforms
-4. **Rate Limit Handling**: Respect platform-specific limits
-5. **Error Recovery**: Retry logic and graceful degradation
+// AI Model Integration
+class ContentOptimizer {
+  private openAIClient: OpenAI;
+  private vectorStore: VectorStore;
+  private industryModels: Map<string, LanguageModel>;
 
-#### Platform-Specific Considerations
-
-**Twitter API v2**
-- Tweet creation and scheduling
-- Media upload and attachment
-- User timeline and mentions
-- Rate limits: 300 requests/15 minutes
-
-**Facebook Graph API**
-- Page post creation
-- Instagram Business API integration
-- Audience insights data
-- Rate limits: 200 calls/hour/user
-
-**LinkedIn API**
-- Professional content sharing
-- Company page management
-- Analytics data retrieval
-- Rate limits: 100 requests/day/member
-
-### AI Services Integration
-
-**OpenAI API Integration**
-- Content generation using GPT models
-- Prompt engineering for social media content
-- Response parsing and formatting
-- Cost optimization through caching
-
-**Content Processing Pipeline**
+  async optimizeContent(input: OptimizationInput): Promise<OptimizationResult> {
+    // 1. Analyze current content
+    const analysis = await this.analyzeContent(input.content);
+    
+    // 2. Generate improvements
+    const suggestions = await this.generateSuggestions(analysis, input.context);
+    
+    // 3. Calculate ATS compatibility
+    const atsScore = await this.calculateATSScore(input.resume);
+    
+    // 4. Return comprehensive optimization
+    return {
+      suggestions,
+      atsScore,
+      improvements: this.prioritizeImprovements(suggestions),
+      estimatedImpact: this.calculateImpact(analysis, suggestions)
+    };
+  }
+}
 ```
-User Input → Prompt Engineering → OpenAI API → Response Processing → Platform Optimization → User Review
+
+### Machine Learning Models
+
+#### Content Enhancement Model
+- **Model Type**: Fine-tuned GPT-4 for professional content
+- **Training Data**: 50K+ successful resumes and job descriptions
+- **Use Cases**: Bullet point improvement, action verb suggestions, quantification recommendations
+
+#### ATS Scoring Model
+- **Model Type**: Custom classification model
+- **Features**: Text parsing compatibility, keyword density, format structure
+- **Training Data**: ATS parsing results from major systems (Workday, Greenhouse, Lever)
+
+#### Industry Alignment Model
+- **Model Type**: Similarity matching with vector embeddings
+- **Embedding Model**: OpenAI text-embedding-ada-002
+- **Use Cases**: Industry-specific language suggestions, role alignment scoring
+
+### Real-time Processing
+
+```typescript
+// WebSocket handlers for real-time AI features
+class RealtimeAIHandler {
+  async handleContentChange(event: ContentChangeEvent) {
+    // Debounced real-time analysis
+    const debouncedAnalysis = debounce(async (content) => {
+      const quickAnalysis = await this.aiService.quickAnalyze(content);
+      this.broadcast(event.userId, {
+        type: 'content_analysis',
+        data: quickAnalysis
+      });
+    }, 500);
+    
+    await debouncedAnalysis(event.content);
+  }
+
+  async handleATSScoring(event: ScoreRequestEvent) {
+    // Real-time ATS scoring
+    const score = await this.aiService.calculateATSScore(event.resume);
+    this.broadcast(event.userId, {
+      type: 'ats_score_update',
+      data: { score, breakdown: score.details }
+    });
+  }
+}
 ```
-
-## Performance Architecture
-
-### Caching Strategy
-
-1. **Browser Caching**: Static assets cached with long TTL
-2. **API Response Caching**: TanStack Query with intelligent invalidation
-3. **Database Query Caching**: PostgreSQL query optimization
-4. **CDN Caching**: Global content distribution
-
-### Performance Optimization
-
-1. **Code Splitting**: Route-based and component-based splitting
-2. **Lazy Loading**: Images and non-critical components
-3. **Bundle Optimization**: Tree shaking and minification
-4. **Database Optimization**: Proper indexing and query optimization
-
-### Monitoring and Observability
-
-1. **Error Tracking**: Comprehensive error logging and alerting
-2. **Performance Monitoring**: Real-time performance metrics
-3. **User Analytics**: Usage patterns and feature adoption
-4. **Infrastructure Monitoring**: Server and database health
 
 ## Security Architecture
 
-### Authentication Flow
+### Authentication & Authorization
 
+#### Multi-Factor Authentication
+```typescript
+// Supabase Auth with MFA
+const authConfig = {
+  providers: ['email', 'google', 'linkedin'],
+  mfa: {
+    enabled: true,
+    factors: ['totp', 'sms'],
+    challengeTimeout: 300 // 5 minutes
+  },
+  passwordPolicy: {
+    minLength: 8,
+    requireUppercase: true,
+    requireNumbers: true,
+    requireSpecialChars: true
+  }
+};
 ```
-1. User submits credentials
-2. Supabase Auth validates credentials
-3. JWT token generated and returned
-4. Client stores token securely
-5. Token included in API requests
-6. Server validates token for each request
+
+#### Role-Based Access Control (RBAC)
+```sql
+-- User roles and permissions
+CREATE TYPE user_role AS ENUM ('user', 'premium', 'admin', 'moderator');
+
+-- Row Level Security policies
+CREATE POLICY "Users can only access their own resumes" 
+ON resumes FOR ALL 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Premium templates require subscription" 
+ON templates FOR SELECT 
+USING (
+  NOT is_premium OR 
+  EXISTS (
+    SELECT 1 FROM users 
+    WHERE id = auth.uid() 
+    AND subscription_tier IN ('premium', 'enterprise')
+  )
+);
 ```
 
 ### Data Protection
 
-1. **Encryption at Rest**: Database encryption
-2. **Encryption in Transit**: TLS 1.3 for all connections
-3. **Sensitive Data Handling**: API tokens encrypted in database
-4. **PII Protection**: Minimal collection and secure handling
+#### Encryption Strategy
+- **Data at Rest**: AES-256 encryption for all sensitive data
+- **Data in Transit**: TLS 1.3 for all communications
+- **Application-Level Encryption**: Additional encryption for PII fields
 
-### Security Measures
+#### Privacy Compliance
+```typescript
+// GDPR compliance utilities
+class DataPrivacyManager {
+  async anonymizeUserData(userId: string): Promise<void> {
+    // Remove or hash personally identifiable information
+    await this.database.transaction(async (trx) => {
+      await trx('users').where('id', userId).update({
+        email: `deleted_${uuid()}@example.com`,
+        first_name: null,
+        last_name: null,
+        phone: null,
+        location: null
+      });
+      
+      await trx('resumes').where('user_id', userId).update({
+        content: this.scrubPII(resume.content)
+      });
+    });
+  }
 
-1. **Input Sanitization**: XSS prevention
-2. **SQL Injection Prevention**: Parameterized queries
-3. **CSRF Protection**: Token-based CSRF protection
-4. **Rate Limiting**: DDoS and brute force protection
-5. **Content Security Policy**: Browser security headers
-
-## Scalability Architecture
-
-### Horizontal Scaling
-
-1. **Stateless Design**: No server-side session storage
-2. **Database Scaling**: Read replicas and connection pooling
-3. **CDN Distribution**: Global content delivery
-4. **Microservices Ready**: Edge functions for service isolation
-
-### Vertical Scaling
-
-1. **Database Optimization**: Query optimization and indexing
-2. **Caching Layers**: Multiple levels of caching
-3. **Resource Optimization**: Efficient memory and CPU usage
-
-### Future Scaling Considerations
-
-1. **Database Sharding**: Partition large tables by user/company
-2. **Service Decomposition**: Split into domain-specific services
-3. **Message Queues**: Asynchronous processing for heavy operations
-4. **Multi-Region Deployment**: Global presence for reduced latency
-
-## Technology Stack
-
-### Frontend Technologies
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| React | 18.x | UI framework |
-| TypeScript | 5.x | Type safety |
-| Vite | 5.x | Build tool |
-| Tailwind CSS | 3.x | Styling |
-| TanStack Query | 5.x | Server state management |
-| React Hook Form | 7.x | Form management |
-| React Router | 6.x | Client-side routing |
-
-### Backend Technologies
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Supabase | Latest | Backend-as-a-Service |
-| PostgreSQL | 15.x | Database |
-| Edge Functions | Latest | Serverless compute |
-| PostgREST | Latest | Auto-generated API |
-
-### Development Tools
-
-| Tool | Purpose |
-|------|---------|
-| ESLint | Code linting |
-| Prettier | Code formatting |
-| Husky | Git hooks |
-| Jest | Unit testing |
-| Cypress | E2E testing |
-| Storybook | Component development |
-
-## Deployment Architecture
-
-### Environment Strategy
-
-1. **Development**: Local development with Supabase local
-2. **Testing**: Automated testing environment
-3. **Staging**: Production-like environment for validation
-4. **Production**: Live environment with monitoring
-
-### CI/CD Pipeline
-
-```
-Code Push → Tests → Build → Deploy to Staging → Manual Approval → Deploy to Production
+  async exportUserData(userId: string): Promise<UserDataExport> {
+    // GDPR Article 20 - Right to data portability
+    return {
+      profile: await this.getUserProfile(userId),
+      resumes: await this.getUserResumes(userId),
+      analytics: await this.getUserAnalytics(userId),
+      exportedAt: new Date()
+    };
+  }
+}
 ```
 
-### Infrastructure Management
+### Infrastructure Security
 
-1. **Infrastructure as Code**: Terraform for reproducible deployments
-2. **Configuration Management**: Environment-specific configurations
-3. **Secret Management**: Secure storage of sensitive data
-4. **Monitoring Setup**: Automated monitoring and alerting
+#### Network Security
+- **WAF**: Web Application Firewall with OWASP rule sets
+- **DDoS Protection**: Rate limiting and traffic analysis
+- **VPN Access**: Secure administrative access
+- **Network Segmentation**: Isolated environments for different services
 
-## Quality Assurance
+#### Monitoring & Logging
+```typescript
+// Security monitoring
+class SecurityMonitor {
+  async detectAnomalousActivity(event: UserEvent): Promise<void> {
+    const patterns = [
+      'rapid_password_attempts',
+      'unusual_login_locations',
+      'bulk_data_access',
+      'suspicious_ai_usage'
+    ];
 
-### Code Quality
+    for (const pattern of patterns) {
+      if (await this.checkPattern(pattern, event)) {
+        await this.triggerSecurityAlert(pattern, event);
+      }
+    }
+  }
 
-1. **TypeScript**: Static type checking
-2. **ESLint**: Code style and best practices
-3. **SonarQube**: Code quality metrics
-4. **Code Reviews**: Mandatory peer reviews
+  async auditDataAccess(userId: string, action: string, resource: string): Promise<void> {
+    await this.logSecurityEvent({
+      userId,
+      action,
+      resource,
+      timestamp: new Date(),
+      ipAddress: this.getClientIP(),
+      userAgent: this.getUserAgent()
+    });
+  }
+}
+```
 
-### Testing Strategy
+## Scalability & Performance
 
-1. **Unit Tests**: Component and function testing
-2. **Integration Tests**: API and service testing
-3. **E2E Tests**: User journey testing
-4. **Performance Tests**: Load and stress testing
+### Horizontal Scaling Strategy
 
-## Documentation Architecture
+#### Microservices Deployment
+```yaml
+# Kubernetes deployment example
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: resume-service
+  template:
+    spec:
+      containers:
+      - name: resume-service
+        image: resumebuilder/resume-service:latest
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: url
+```
 
-### Documentation Strategy
+#### Auto-Scaling Configuration
+```typescript
+// Auto-scaling based on metrics
+const scalingConfig = {
+  metrics: {
+    cpu: { threshold: 70, scaleUp: 2, scaleDown: 1 },
+    memory: { threshold: 80, scaleUp: 2, scaleDown: 1 },
+    requestRate: { threshold: 1000, scaleUp: 3, scaleDown: 2 }
+  },
+  limits: {
+    minReplicas: 2,
+    maxReplicas: 20,
+    cooldownPeriod: '5m'
+  }
+};
+```
 
-1. **Code Documentation**: Inline comments and JSDoc
-2. **API Documentation**: OpenAPI/Swagger specifications
-3. **Architecture Documentation**: Decision records and diagrams
-4. **User Documentation**: Guides and tutorials
+### Caching Strategy
 
-### Documentation Tools
+#### Multi-Level Caching
+```typescript
+// Redis caching implementation
+class CacheManager {
+  private redis: Redis;
+  private localCache: LRUCache;
 
-1. **Markdown**: Standard documentation format
-2. **Mermaid**: Diagrams and flowcharts
-3. **Storybook**: Component documentation
-4. **GitBook**: User-facing documentation
+  async get<T>(key: string): Promise<T | null> {
+    // 1. Check local cache first (fastest)
+    let value = this.localCache.get(key);
+    if (value) return value;
 
-## Conclusion
+    // 2. Check Redis cache (fast)
+    value = await this.redis.get(key);
+    if (value) {
+      this.localCache.set(key, value);
+      return JSON.parse(value);
+    }
 
-The Roundabout architecture is designed for scalability, maintainability, and performance. It leverages modern technologies and best practices to provide a robust foundation for the social media management platform. The architecture supports current requirements while providing flexibility for future growth and feature additions.
+    return null;
+  }
 
-Key architectural principles:
-- **Separation of Concerns**: Clear boundaries between components
-- **Scalability**: Horizontal and vertical scaling capabilities
-- **Security**: Defense-in-depth security approach
-- **Maintainability**: Clean code and comprehensive testing
-- **Performance**: Optimized for speed and efficiency
+  async set(key: string, value: any, ttl: number = 3600): Promise<void> {
+    // Store in both caches
+    this.localCache.set(key, value);
+    await this.redis.setex(key, ttl, JSON.stringify(value));
+  }
+}
+
+// Cache strategies by data type
+const cacheStrategies = {
+  templates: { ttl: 86400, level: 'cdn' },      // 24 hours, CDN
+  userProfiles: { ttl: 3600, level: 'redis' },  // 1 hour, Redis
+  resumeContent: { ttl: 300, level: 'local' },  // 5 minutes, local
+  atsScores: { ttl: 1800, level: 'redis' },     // 30 minutes, Redis
+  aiSuggestions: { ttl: 600, level: 'memory' }  // 10 minutes, memory
+};
+```
+
+### Database Performance
+
+#### Connection Pooling
+```typescript
+// Supabase connection optimization
+const supabaseConfig = {
+  pooling: {
+    enabled: true,
+    minConnections: 5,
+    maxConnections: 50,
+    acquireTimeoutMillis: 30000,
+    idleTimeoutMillis: 600000
+  },
+  logging: {
+    slowQueryThreshold: 1000, // Log queries > 1 second
+    enableQueryLogging: process.env.NODE_ENV === 'development'
+  }
+};
+```
+
+#### Query Optimization
+```sql
+-- Optimized queries with proper indexing
+EXPLAIN ANALYZE 
+SELECT r.*, t.name as template_name, t.category
+FROM resumes r
+JOIN templates t ON r.template_id = t.id
+WHERE r.user_id = $1 
+  AND r.is_deleted = false
+ORDER BY r.updated_at DESC
+LIMIT 20;
+
+-- Materialized views for analytics
+CREATE MATERIALIZED VIEW user_resume_stats AS
+SELECT 
+  user_id,
+  COUNT(*) as total_resumes,
+  AVG(ats_score) as avg_ats_score,
+  MAX(updated_at) as last_activity
+FROM resumes
+WHERE is_deleted = false
+GROUP BY user_id;
+
+-- Refresh strategy
+CREATE OR REPLACE FUNCTION refresh_user_stats()
+RETURNS void AS $$
+BEGIN
+  REFRESH MATERIALIZED VIEW CONCURRENTLY user_resume_stats;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+## Monitoring & Observability
+
+### Application Performance Monitoring (APM)
+
+```typescript
+// Performance monitoring integration
+import { trace, SpanStatusCode } from '@opentelemetry/api';
+
+class PerformanceMonitor {
+  async trackOperation<T>(
+    operationName: string,
+    operation: () => Promise<T>,
+    metadata?: Record<string, any>
+  ): Promise<T> {
+    const span = trace.getActiveTracer().startSpan(operationName);
+    
+    try {
+      const startTime = Date.now();
+      const result = await operation();
+      const duration = Date.now() - startTime;
+      
+      span.setAttributes({
+        'operation.duration': duration,
+        'operation.success': true,
+        ...metadata
+      });
+      
+      // Alert on slow operations
+      if (duration > 5000) {
+        this.alertSlowOperation(operationName, duration, metadata);
+      }
+      
+      return result;
+    } catch (error) {
+      span.recordException(error as Error);
+      span.setStatus({ code: SpanStatusCode.ERROR });
+      throw error;
+    } finally {
+      span.end();
+    }
+  }
+}
+```
+
+### Health Checks & Alerting
+
+```typescript
+// Comprehensive health monitoring
+class HealthMonitor {
+  async performHealthCheck(): Promise<HealthStatus> {
+    const checks = await Promise.allSettled([
+      this.checkDatabase(),
+      this.checkRedis(),
+      this.checkAIServices(),
+      this.checkExternalAPIs(),
+      this.checkFileStorage()
+    ]);
+
+    const results = checks.map((check, index) => ({
+      service: this.serviceNames[index],
+      healthy: check.status === 'fulfilled',
+      latency: check.status === 'fulfilled' ? check.value.latency : null,
+      error: check.status === 'rejected' ? check.reason.message : null
+    }));
+
+    return {
+      overall: results.every(r => r.healthy),
+      services: results,
+      timestamp: new Date()
+    };
+  }
+
+  async checkDatabase(): Promise<{ latency: number }> {
+    const start = Date.now();
+    await this.database.raw('SELECT 1');
+    return { latency: Date.now() - start };
+  }
+}
+```
+
+This technical architecture provides a solid foundation for ResumeBuilder Pro's scalability, security, and performance requirements while maintaining flexibility for future enhancements and integrations.

@@ -1,155 +1,141 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileText } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
-import NotificationCenter from './NotificationCenter';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
-import UserProfileMenu from './UserProfileMenu';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { FileText, User, LogOut, Settings, BookOpen, Template, Wand2 } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 const NavbarWithAuth = () => {
-  const { user, isLoading } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
-  const mainNavItems = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <Gauge className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Analytics',
-      href: '/analytics',
-      icon: <PieChart className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Audience',
-      href: '/audience-insights',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Content',
-      href: '#',
-      icon: <Layout className="h-4 w-4 mr-2" />,
-      subItems: [
-        {
-          title: 'Content Planner',
-          href: '/content-planner',
-          description: 'Schedule and manage your content calendar'
-        },
-        {
-          title: 'AI Content Creator',
-          href: '/ai-content-creator',
-          description: 'Generate engaging content with AI'
-        }
-      ]
-    },
-    {
-      title: 'Communities',
-      href: '/communities',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Monetization',
-      href: '/monetization',
-      icon: <DollarSign className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Docs',
-      href: '/docs',
-      icon: <FileText className="h-4 w-4 mr-2" />
-    }
-  ];
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            <Sparkles className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">
-              Roundabout
-            </span>
-          </Link>
-          
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              {mainNavItems.map((item) => 
-                item.subItems ? (
-                  <NavigationMenuItem key={item.title}>
-                    <NavigationMenuTrigger className="h-auto">
-                      <span className="flex items-center">
-                        {item.icon}
-                        {item.title}
-                      </span>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                        {item.subItems.map((subItem) => (
-                          <li key={subItem.title} className="row-span-3">
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={subItem.href}
-                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                              >
-                                <div className="mb-2 mt-4 text-lg font-medium">
-                                  {subItem.title}
-                                </div>
-                                <p className="text-sm leading-tight text-muted-foreground">
-                                  {subItem.description}
-                                </p>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                ) : (
-                  <NavigationMenuItem key={item.title}>
-                    <Link to={item.href}>
-                      <NavigationMenuLink 
-                        className={cn(
-                          "flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary"
-                        )}
-                      >
-                        {item.icon}
-                        {item.title}
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                )
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="md:hidden" asChild>
-            <Link to="/notifications">
-              <NotificationCenter />
+    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-2">
+              <FileText className="h-8 w-8 text-primary" />
+              <span className="text-xl font-bold">ResumeBuilder Pro</span>
             </Link>
-          </Button>
-          <div className="hidden md:flex">
-            <NotificationCenter />
           </div>
-          
-          <ThemeToggle />
-          
-          {!isLoading && user ? (
-            <UserProfileMenu />
-          ) : (
-            !isLoading && (
-              <Button asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-            )
-          )}
+
+          <div className="hidden md:flex items-center space-x-8">
+            {user ? (
+              <>
+                <Link to="/dashboard" className="text-foreground hover:text-primary transition-colors">
+                  Dashboard
+                </Link>
+                <Link to="/resume-builder" className="text-foreground hover:text-primary transition-colors">
+                  Builder
+                </Link>
+                <Link to="/templates" className="text-foreground hover:text-primary transition-colors">
+                  Templates
+                </Link>
+                <Link to="/ai-review" className="text-foreground hover:text-primary transition-colors">
+                  AI Review
+                </Link>
+                <Link to="/docs" className="text-foreground hover:text-primary transition-colors">
+                  Docs
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/templates" className="text-foreground hover:text-primary transition-colors">
+                  Templates
+                </Link>
+                <Link to="/docs" className="text-foreground hover:text-primary transition-colors">
+                  Documentation
+                </Link>
+              </>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>
+                        {user.email?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{user.email}</p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="w-full">
+                      <FileText className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/resume-builder" className="w-full">
+                      <Template className="mr-2 h-4 w-4" />
+                      Resume Builder
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/ai-review" className="w-full">
+                      <Wand2 className="mr-2 h-4 w-4" />
+                      AI Review
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="w-full">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/docs" className="w-full">
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Documentation
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link to="/login">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link to="/register">
+                  <Button>Get Started</Button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
 

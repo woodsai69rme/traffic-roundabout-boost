@@ -6,19 +6,14 @@ import Index from './pages/Index';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
-import Platforms from './pages/Platforms';
-import Communities from './pages/Communities';
-import Monetization from './pages/Monetization';
+import ResumeBuilder from './pages/ResumeBuilder';
+import Templates from './pages/Templates';
+import AIResumeReview from './pages/AIResumeReview';
 import Profile from './pages/Profile';
 import Documentation from './pages/Documentation';
 import NotFound from './pages/NotFound';
-import SocialApiIntegrationPage from './components/ApiIntegrations/SocialApiIntegrationPage';
 import DocPage from './components/DocPage';
 import DocPageContent from './components/DocPageContent';
-import ContentPlanner from './pages/ContentPlanner';
-import AudienceInsights from './pages/AudienceInsights';
-import AIContentCreator from './pages/AIContentCreator';
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -52,14 +47,9 @@ const App = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/platforms" element={<ProtectedRoute><Platforms /></ProtectedRoute>} />
-      <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-      <Route path="/monetization" element={<ProtectedRoute><Monetization /></ProtectedRoute>} />
-      <Route path="/integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
-      <Route path="/content-planner" element={<ProtectedRoute><ContentPlanner /></ProtectedRoute>} />
-      <Route path="/audience-insights" element={<ProtectedRoute><AudienceInsights /></ProtectedRoute>} />
-      <Route path="/ai-content-creator" element={<ProtectedRoute><AIContentCreator /></ProtectedRoute>} />
+      <Route path="/resume-builder" element={<ProtectedRoute><ResumeBuilder /></ProtectedRoute>} />
+      <Route path="/templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
+      <Route path="/ai-review" element={<ProtectedRoute><AIResumeReview /></ProtectedRoute>} />
       
       {/* Documentation Routes */}
       <Route path="/docs" element={<Documentation />} />
