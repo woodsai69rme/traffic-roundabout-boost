@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { Gauge, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, FileText } from 'lucide-react';
+import { FileText, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, BookOpen } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 import { useAuth } from '@/hooks/use-auth';
@@ -17,7 +17,24 @@ const NavbarWithAuth = () => {
     {
       title: 'Dashboard',
       href: '/dashboard',
-      icon: <Gauge className="h-4 w-4 mr-2" />
+      icon: <Layout className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Resume Builder',
+      href: '#',
+      icon: <FileText className="h-4 w-4 mr-2" />,
+      subItems: [
+        {
+          title: 'Create Resume',
+          href: '/resume-builder',
+          description: 'Build a new professional resume from scratch'
+        },
+        {
+          title: 'Browse Templates',
+          href: '/templates',
+          description: 'Choose from our collection of professional templates'
+        }
+      ]
     },
     {
       title: 'Analytics',
@@ -25,41 +42,26 @@ const NavbarWithAuth = () => {
       icon: <PieChart className="h-4 w-4 mr-2" />
     },
     {
-      title: 'Audience',
-      href: '/audience-insights',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Content',
+      title: 'Tools',
       href: '#',
-      icon: <Layout className="h-4 w-4 mr-2" />,
+      icon: <Sparkles className="h-4 w-4 mr-2" />,
       subItems: [
         {
           title: 'Content Planner',
           href: '/content-planner',
-          description: 'Schedule and manage your content calendar'
+          description: 'Plan and organize your job search content'
         },
         {
           title: 'AI Content Creator',
           href: '/ai-content-creator',
-          description: 'Generate engaging content with AI'
+          description: 'Generate professional content with AI'
         }
       ]
     },
     {
-      title: 'Communities',
-      href: '/communities',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Monetization',
-      href: '/monetization',
-      icon: <DollarSign className="h-4 w-4 mr-2" />
-    },
-    {
       title: 'Docs',
       href: '/docs',
-      icon: <FileText className="h-4 w-4 mr-2" />
+      icon: <BookOpen className="h-4 w-4 mr-2" />
     }
   ];
 
@@ -68,9 +70,9 @@ const NavbarWithAuth = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <Sparkles className="h-6 w-6" />
+            <FileText className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
-              Roundabout
+              Resume Builder
             </span>
           </Link>
           

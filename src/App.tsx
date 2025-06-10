@@ -1,4 +1,3 @@
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./hooks/use-auth";
 import { Toaster } from './components/ui/toaster';
@@ -52,6 +51,13 @@ const App = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      
+      {/* Resume Builder Routes - Core functionality */}
+      <Route path="/resume-builder" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/templates" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/resume-analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+      
+      {/* Legacy Social Media Routes - Keep for now but redirect some */}
       <Route path="/platforms" element={<ProtectedRoute><Platforms /></ProtectedRoute>} />
       <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
       <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
