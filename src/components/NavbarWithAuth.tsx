@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { FileText, Users, Layout, PieChart, Calendar, Sparkles, DollarSign, BookOpen } from 'lucide-react';
+import { TrendingUp, Users, BarChart3, Calendar, Sparkles, DollarSign, BookOpen } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
 import { useAuth } from '@/hooks/use-auth';
@@ -17,46 +17,56 @@ const NavbarWithAuth = () => {
     {
       title: 'Dashboard',
       href: '/dashboard',
-      icon: <Layout className="h-4 w-4 mr-2" />
+      icon: <BarChart3 className="h-4 w-4 mr-2" />
     },
     {
-      title: 'Resume Builder',
+      title: 'Growth Tools',
       href: '#',
-      icon: <FileText className="h-4 w-4 mr-2" />,
+      icon: <TrendingUp className="h-4 w-4 mr-2" />,
       subItems: [
         {
-          title: 'Create Resume',
-          href: '/resume-builder',
-          description: 'Build a new professional resume from scratch'
+          title: 'Platform Connections',
+          href: '/platforms',
+          description: 'Connect and manage your social media accounts'
         },
         {
-          title: 'Browse Templates',
-          href: '/templates',
-          description: 'Choose from our collection of professional templates'
+          title: 'Content Planner',
+          href: '/content-planner',
+          description: 'Schedule and plan your content across platforms'
+        },
+        {
+          title: 'AI Content Creator',
+          href: '/ai-content-creator',
+          description: 'Generate engaging content with AI assistance'
         }
       ]
     },
     {
       title: 'Analytics',
-      href: '/analytics',
-      icon: <PieChart className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Tools',
       href: '#',
-      icon: <Sparkles className="h-4 w-4 mr-2" />,
+      icon: <BarChart3 className="h-4 w-4 mr-2" />,
       subItems: [
         {
-          title: 'Content Planner',
-          href: '/content-planner',
-          description: 'Plan and organize your job search content'
+          title: 'Performance Analytics',
+          href: '/analytics',
+          description: 'Track your growth and engagement metrics'
         },
         {
-          title: 'AI Content Creator',
-          href: '/ai-content-creator',
-          description: 'Generate professional content with AI'
+          title: 'Audience Insights',
+          href: '/audience-insights',
+          description: 'Understand your audience demographics and behavior'
         }
       ]
+    },
+    {
+      title: 'Community',
+      href: '/communities',
+      icon: <Users className="h-4 w-4 mr-2" />
+    },
+    {
+      title: 'Monetization',
+      href: '/monetization',
+      icon: <DollarSign className="h-4 w-4 mr-2" />
     },
     {
       title: 'Docs',
@@ -70,9 +80,11 @@ const NavbarWithAuth = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <FileText className="h-6 w-6" />
+            <div className="rounded-full w-6 h-6 bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
+              <span className="font-bold text-white text-sm">R</span>
+            </div>
             <span className="hidden font-bold sm:inline-block">
-              Resume Builder
+              Roundabout WebTraffic
             </span>
           </Link>
           

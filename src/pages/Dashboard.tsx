@@ -1,185 +1,238 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { TrendingUp, Users, Eye, Heart, MessageCircle, Share, Plus } from 'lucide-react';
+import { socialMediaService } from '@/services/socialMediaService';
+import type { EngagementMetrics, AIContentSuggestion } from '@/types/social';
 import { Link } from 'react-router-dom';
-import { FileText, Plus, Eye, Download, Edit } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  
-  // Mock resume data - will be replaced with real data from ResumeService
-  const recentResumes = [
-    {
-      id: '1',
-      title: 'Software Engineer Resume',
-      updatedAt: '2024-01-15',
-      template: 'Modern Professional'
-    },
-    {
-      id: '2', 
-      title: 'Marketing Manager Resume',
-      updatedAt: '2024-01-10',
-      template: 'Creative Designer'
-    }
-  ];
+  const [metrics, setMetrics] = useState<EngagementMetrics[]>([]);
+  const [suggestions, setSuggestions] = useState<AIContentSuggestion[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      if (!user) return;
+      
+      try {
+        const [metricsData, suggestionsData] = await Promise.all([
+          socialMediaService.getEngagementMetrics(user.id),
+          socialMediaService.getAIContentSuggestions(user.id, 'all')
+        ]);
+        
+        setMetrics(metricsData);
+        setSuggestions(suggestionsData);
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <NavbarWithAuth />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading your dashboard...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const totalFollowers = metrics.reduce((sum, metric) => sum + metric.followers, 0);
+  const avgEngagement = metrics.length > 0 
+    ? metrics.reduce((sum, metric) => sum + metric.engagement_rate, 0) / metrics.length 
+    : 0;
 
   return (
     <div className="min-h-screen flex flex-col">
       <NavbarWithAuth />
       <main className="flex-grow p-4 md:p-8">
         <div className="container mx-auto space-y-8">
-          <header>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              Welcome back, {user?.email?.split('@')[0] || 'there'}!
-            </h1>
-            <p className="text-muted-foreground">
-              Manage your resumes and track your job application success.
-            </p>
-          </header>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <Link to="/resume-builder">
-                <CardHeader className="text-center">
-                  <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <Plus className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle>Create New Resume</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-center">
-                    Start building a new resume from scratch or use a template.
-                  </p>
-                </CardContent>
+          {/* Welcome Header */}
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Welcome back!</h1>
+              <p className="text-muted-foreground">
+                Here's what's happening with your social media growth today.
+              </p>
+            </div>
+            <Button className="bg-gradient-to-r from-purple-600 to-blue-600" asChild>
+              <Link to="/content-planner">
+                <Plus className="mr-2 h-4 w-4" />
+                Create Content
               </Link>
+            </Button>
+          </div>
+
+          {/* Key Metrics */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Followers</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalFollowers.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">
+                  <span className="text-green-600">+12.5%</span> from last month
+                </p>
+              </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <Link to="/templates">
-                <CardHeader className="text-center">
-                  <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <FileText className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle>Browse Templates</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-center">
-                    Explore our collection of professional resume templates.
-                  </p>
-                </CardContent>
-              </Link>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Engagement Rate</CardTitle>
+                <Heart className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{avgEngagement.toFixed(1)}%</div>
+                <p className="text-xs text-muted-foreground">
+                  <span className="text-green-600">+2.3%</span> from last week
+                </p>
+              </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <Link to="/resume-analytics">
-                <CardHeader className="text-center">
-                  <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <Eye className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle>View Analytics</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-center">
-                    Track views, downloads, and performance metrics.
-                  </p>
-                </CardContent>
-              </Link>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Reach</CardTitle>
+                <Eye className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">24.5K</div>
+                <p className="text-xs text-muted-foreground">
+                  <span className="text-green-600">+8.1%</span> from last week
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Growth Score</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">87</div>
+                <Progress value={87} className="mt-2" />
+              </CardContent>
             </Card>
           </div>
 
-          {/* Recent Resumes */}
+          {/* Platform Performance */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Recent Resumes</CardTitle>
-                <Link to="/resume-builder">
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    New Resume
-                  </Button>
-                </Link>
-              </div>
+              <CardTitle>Platform Performance</CardTitle>
+              <CardDescription>Your engagement across connected platforms</CardDescription>
             </CardHeader>
             <CardContent>
-              {recentResumes.length > 0 ? (
-                <div className="space-y-4">
-                  {recentResumes.map((resume) => (
-                    <div key={resume.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                      <div className="flex items-center gap-4">
-                        <div className="bg-primary/10 rounded p-2">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">{resume.title}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {resume.template} • Updated {resume.updatedAt}
-                          </p>
-                        </div>
+              <div className="space-y-4">
+                {metrics.map((metric) => (
+                  <div key={metric.platform} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
+                        {metric.platform[0].toUpperCase()}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4 mr-1" />
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Download className="h-4 w-4 mr-1" />
-                          Download
-                        </Button>
+                      <div>
+                        <p className="font-medium capitalize">{metric.platform}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {metric.followers.toLocaleString()} followers
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">No resumes yet</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Create your first resume to get started on your job search journey.
-                  </p>
-                  <Link to="/resume-builder">
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Create Your First Resume
-                    </Button>
-                  </Link>
-                </div>
-              )}
+                    <div className="text-right">
+                      <p className="font-medium">{metric.engagement_rate}%</p>
+                      <p className="text-sm text-green-600">+{metric.growth_rate}%</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* AI Suggestions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>AI Content Suggestions</CardTitle>
+              <CardDescription>Personalized recommendations to boost your engagement</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {suggestions.map((suggestion) => (
+                  <div key={suggestion.id} className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-medium capitalize">{suggestion.platform}</h4>
+                      <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">
+                        {(suggestion.confidence_score * 100).toFixed(0)}% confidence
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">{suggestion.content}</p>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {suggestion.hashtags.map((tag, index) => (
+                        <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                      <span>Predicted engagement: {suggestion.predicted_engagement}/10</span>
+                      <span>Best time: {suggestion.optimal_time.toLocaleTimeString()}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold">2</div>
-                <p className="text-muted-foreground text-sm">Total Resumes</p>
+              <CardHeader>
+                <CardTitle className="text-lg">Connect Platforms</CardTitle>
+                <CardDescription>Link your social media accounts</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" variant="outline" asChild>
+                  <Link to="/platforms">Manage Connections</Link>
+                </Button>
               </CardContent>
             </Card>
+
             <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold">45</div>
-                <p className="text-muted-foreground text-sm">Total Views</p>
+              <CardHeader>
+                <CardTitle className="text-lg">Schedule Content</CardTitle>
+                <CardDescription>Plan your posts in advance</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" variant="outline" asChild>
+                  <Link to="/content-planner">Open Planner</Link>
+                </Button>
               </CardContent>
             </Card>
+
             <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold">12</div>
-                <p className="text-muted-foreground text-sm">Downloads</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold">85%</div>
-                <p className="text-muted-foreground text-sm">ATS Score</p>
+              <CardHeader>
+                <CardTitle className="text-lg">View Analytics</CardTitle>
+                <CardDescription>Deep dive into your metrics</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" variant="outline" asChild>
+                  <Link to="/analytics">View Reports</Link>
+                </Button>
               </CardContent>
             </Card>
           </div>

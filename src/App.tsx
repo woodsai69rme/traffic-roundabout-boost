@@ -1,3 +1,4 @@
+
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./hooks/use-auth";
 import { Toaster } from './components/ui/toaster';
@@ -12,7 +13,6 @@ import Monetization from './pages/Monetization';
 import Profile from './pages/Profile';
 import Documentation from './pages/Documentation';
 import NotFound from './pages/NotFound';
-import ResumeBuilder from './pages/ResumeBuilder';
 import SocialApiIntegrationPage from './components/ApiIntegrations/SocialApiIntegrationPage';
 import DocPage from './components/DocPage';
 import DocPageContent from './components/DocPageContent';
@@ -53,13 +53,7 @@ const App = () => (
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       
-      {/* Resume Builder Routes - Core functionality */}
-      <Route path="/resume-builder" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/resume-builder/:id" element={<ProtectedRoute><ResumeBuilder /></ProtectedRoute>} />
-      <Route path="/templates" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/resume-analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-      
-      {/* Legacy Social Media Routes - Keep for now but redirect some */}
+      {/* Social Media Growth Routes */}
       <Route path="/platforms" element={<ProtectedRoute><Platforms /></ProtectedRoute>} />
       <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
       <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
