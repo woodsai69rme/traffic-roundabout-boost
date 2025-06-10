@@ -93,7 +93,6 @@ const AudienceInsights = () => {
               
               <TabsContent value="demographics">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {/* Age Demographics */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -119,7 +118,6 @@ const AudienceInsights = () => {
                     </CardContent>
                   </Card>
                   
-                  {/* Gender Demographics */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -145,7 +143,6 @@ const AudienceInsights = () => {
                     </CardContent>
                   </Card>
                   
-                  {/* Location Demographics */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -175,7 +172,6 @@ const AudienceInsights = () => {
               
               <TabsContent value="engagement">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Best Posting Times */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -197,7 +193,6 @@ const AudienceInsights = () => {
                     </CardContent>
                   </Card>
                   
-                  {/* Weekly Engagement Pattern */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -419,7 +414,7 @@ const AudienceInsights = () => {
                             </div>
                             <div>
                               <div className="flex justify-between text-sm mb-1">
-                                <span>Micro Volume (<10K)</span>
+                                <span>Micro Volume (less than 10K)</span>
                                 <span>68%</span>
                               </div>
                               <Progress value={68} className="h-2" />
