@@ -13,7 +13,7 @@ interface PlatformConnectionFormProps {
   platformName: string;
   color: string;
   icon: string;
-  initialConfig?: SocialApiConfig | null;
+  initialConfig?: Partial<SocialApiConfig> | null;
   onUpdateSuccess: () => void;
 }
 
@@ -29,10 +29,10 @@ const PlatformConnectionForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showSecrets, setShowSecrets] = useState(false);
   
-  const [apiKey, setApiKey] = useState(initialConfig?.apiKey || '');
-  const [apiSecret, setApiSecret] = useState(initialConfig?.apiSecret || '');
-  const [accessToken, setAccessToken] = useState(initialConfig?.accessToken || '');
-  const [accessTokenSecret, setAccessTokenSecret] = useState(initialConfig?.accessTokenSecret || '');
+  const [apiKey, setApiKey] = useState(initialConfig?.api_key || '');
+  const [apiSecret, setApiSecret] = useState(initialConfig?.api_secret || '');
+  const [accessToken, setAccessToken] = useState(initialConfig?.access_token || '');
+  const [accessTokenSecret, setAccessTokenSecret] = useState(initialConfig?.access_token_secret || '');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,12 +41,12 @@ const PlatformConnectionForm = ({
     try {
       const config: SocialApiConfig = {
         platform,
-        apiKey,
-        apiSecret,
-        accessToken,
-        accessTokenSecret,
+        api_key: apiKey,
+        api_secret: apiSecret,
+        access_token: accessToken,
+        access_token_secret: accessTokenSecret,
         connected: true,
-        lastUpdated: new Date().toISOString()
+        last_updated: new Date().toISOString()
       };
 
       const success = await updateApiConfiguration(config);

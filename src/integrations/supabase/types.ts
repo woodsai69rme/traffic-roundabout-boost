@@ -40,15 +40,7 @@ export type Database = {
           resource_type?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "activity_logs_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       ai_agents: {
         Row: {
@@ -135,6 +127,51 @@ export type Database = {
           model_id?: string
           name?: string
           provider?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_strategies: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          indicators: string[] | null
+          is_active: boolean | null
+          market_data_sources: string[] | null
+          model: string
+          name: string
+          parameters: Json
+          prompt: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          indicators?: string[] | null
+          is_active?: boolean | null
+          market_data_sources?: string[] | null
+          model?: string
+          name: string
+          parameters?: Json
+          prompt: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          indicators?: string[] | null
+          is_active?: boolean | null
+          market_data_sources?: string[] | null
+          model?: string
+          name?: string
+          parameters?: Json
+          prompt?: string
           updated_at?: string | null
           user_id?: string
         }
@@ -305,15 +342,7 @@ export type Database = {
           results?: Json
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "analysis_results_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       api_keys: {
         Row: {
@@ -436,15 +465,126 @@ export type Database = {
           webhook_url?: string | null
           workflow_id?: string | null
         }
+        Relationships: []
+      }
+      backtest_results: {
+        Row: {
+          created_at: string | null
+          end_date: string
+          equity_curve: Json | null
+          final_capital: number | null
+          id: string
+          initial_capital: number | null
+          losing_trades: number | null
+          max_drawdown: number | null
+          parameters: Json | null
+          profit_factor: number | null
+          sharpe_ratio: number | null
+          start_date: string
+          strategy_id: string | null
+          symbol: string
+          timeframe: string
+          total_return: number | null
+          total_trades: number | null
+          trades: Json | null
+          user_id: string
+          win_rate: number | null
+          winning_trades: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          end_date: string
+          equity_curve?: Json | null
+          final_capital?: number | null
+          id?: string
+          initial_capital?: number | null
+          losing_trades?: number | null
+          max_drawdown?: number | null
+          parameters?: Json | null
+          profit_factor?: number | null
+          sharpe_ratio?: number | null
+          start_date: string
+          strategy_id?: string | null
+          symbol: string
+          timeframe?: string
+          total_return?: number | null
+          total_trades?: number | null
+          trades?: Json | null
+          user_id: string
+          win_rate?: number | null
+          winning_trades?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string
+          equity_curve?: Json | null
+          final_capital?: number | null
+          id?: string
+          initial_capital?: number | null
+          losing_trades?: number | null
+          max_drawdown?: number | null
+          parameters?: Json | null
+          profit_factor?: number | null
+          sharpe_ratio?: number | null
+          start_date?: string
+          strategy_id?: string | null
+          symbol?: string
+          timeframe?: string
+          total_return?: number | null
+          total_trades?: number | null
+          trades?: Json | null
+          user_id?: string
+          win_rate?: number | null
+          winning_trades?: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: "automations_project_id_fkey"
-            columns: ["project_id"]
+            foreignKeyName: "backtest_results_strategy_id_fkey"
+            columns: ["strategy_id"]
             isOneToOne: false
-            referencedRelation: "projects"
+            referencedRelation: "ai_strategies"
             referencedColumns: ["id"]
           },
         ]
+      }
+      bank_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_primary: boolean | null
+          last_four_digits: string
+          plaid_account_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_type: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          last_four_digits: string
+          plaid_account_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_primary?: boolean | null
+          last_four_digits?: string
+          plaid_account_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       blockchain_transactions: {
         Row: {
@@ -647,15 +787,7 @@ export type Database = {
           project_id?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "collaboration_sessions_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       contents: {
         Row: {
@@ -704,6 +836,92 @@ export type Database = {
           title?: string
           type?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      context_sessions: {
+        Row: {
+          agent_id: string
+          context_data: Json | null
+          created_at: string | null
+          id: string
+          messages: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          context_data?: Json | null
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          context_data?: Json | null
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "context_sessions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "context7_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      context7_agents: {
+        Row: {
+          context_window: number | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          knowledge_base: string[] | null
+          memory_type: string | null
+          model: string
+          name: string
+          performance_metrics: Json | null
+          tools: string[] | null
+          type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          context_window?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          knowledge_base?: string[] | null
+          memory_type?: string | null
+          model: string
+          name: string
+          performance_metrics?: Json | null
+          tools?: string[] | null
+          type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          context_window?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          knowledge_base?: string[] | null
+          memory_type?: string | null
+          model?: string
+          name?: string
+          performance_metrics?: Json | null
+          tools?: string[] | null
+          type?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -849,6 +1067,45 @@ export type Database = {
         }
         Relationships: []
       }
+      exchange_configs: {
+        Row: {
+          api_key: string | null
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          name: string
+          password: string | null
+          sandbox: boolean | null
+          secret: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key?: string | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          name: string
+          password?: string | null
+          sandbox?: boolean | null
+          secret?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key?: string | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          name?: string
+          password?: string | null
+          sandbox?: boolean | null
+          secret?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       exchange_connections: {
         Row: {
           api_key_encrypted: string | null
@@ -936,6 +1193,99 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_goals: {
+        Row: {
+          created_at: string | null
+          current_amount: number | null
+          goal_name: string
+          goal_type: string
+          id: string
+          is_active: boolean | null
+          target_amount: number
+          target_date: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_amount?: number | null
+          goal_name: string
+          goal_type: string
+          id?: string
+          is_active?: boolean | null
+          target_amount: number
+          target_date?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_amount?: number | null
+          goal_name?: string
+          goal_type?: string
+          id?: string
+          is_active?: boolean | null
+          target_amount?: number
+          target_date?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      investments: {
+        Row: {
+          amount: number
+          asset_allocations: Json
+          created_at: string | null
+          executed_at: string | null
+          id: string
+          investment_type: string
+          portfolio_id: string
+          status: string
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          asset_allocations?: Json
+          created_at?: string | null
+          executed_at?: string | null
+          id?: string
+          investment_type: string
+          portfolio_id: string
+          status?: string
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          asset_allocations?: Json
+          created_at?: string | null
+          executed_at?: string | null
+          id?: string
+          investment_type?: string
+          portfolio_id?: string
+          status?: string
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "investments_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_entries: {
         Row: {
           content: string
@@ -1022,6 +1372,7 @@ export type Database = {
           low_24h: number | null
           market_cap_aud: number | null
           market_cap_usd: number | null
+          name: string | null
           price_aud: number
           price_usd: number
           symbol: string
@@ -1038,6 +1389,7 @@ export type Database = {
           low_24h?: number | null
           market_cap_aud?: number | null
           market_cap_usd?: number | null
+          name?: string | null
           price_aud: number
           price_usd: number
           symbol: string
@@ -1054,6 +1406,7 @@ export type Database = {
           low_24h?: number | null
           market_cap_aud?: number | null
           market_cap_usd?: number | null
+          name?: string | null
           price_aud?: number
           price_usd?: number
           symbol?: string
@@ -1346,6 +1699,85 @@ export type Database = {
         }
         Relationships: []
       }
+      portfolio_holdings: {
+        Row: {
+          allocation_percentage: number
+          asset_symbol: string
+          asset_type: string
+          average_cost: number
+          current_value: number
+          id: string
+          last_updated: string | null
+          portfolio_id: string
+          shares: number
+        }
+        Insert: {
+          allocation_percentage?: number
+          asset_symbol: string
+          asset_type: string
+          average_cost?: number
+          current_value?: number
+          id?: string
+          last_updated?: string | null
+          portfolio_id: string
+          shares?: number
+        }
+        Update: {
+          allocation_percentage?: number
+          asset_symbol?: string
+          asset_type?: string
+          average_cost?: number
+          current_value?: number
+          id?: string
+          last_updated?: string | null
+          portfolio_id?: string
+          shares?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_holdings_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolio_snapshots: {
+        Row: {
+          created_at: string
+          id: string
+          portfolio_id: string
+          snapshot_date: string
+          total_value: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          portfolio_id: string
+          snapshot_date: string
+          total_value: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          portfolio_id?: string
+          snapshot_date?: string
+          total_value?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_snapshots_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       portfolios: {
         Row: {
           created_at: string | null
@@ -1397,42 +1829,30 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string | null
           display_name: string | null
+          email: string
           id: string
-          live_balance: number | null
-          paper_balance: number | null
-          subscription_expires_at: string | null
-          subscription_tier: string | null
-          trading_mode: Database["public"]["Enums"]["trading_mode"] | null
           updated_at: string | null
-          username: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string | null
           display_name?: string | null
+          email: string
           id: string
-          live_balance?: number | null
-          paper_balance?: number | null
-          subscription_expires_at?: string | null
-          subscription_tier?: string | null
-          trading_mode?: Database["public"]["Enums"]["trading_mode"] | null
           updated_at?: string | null
-          username?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string | null
           display_name?: string | null
+          email?: string
           id?: string
-          live_balance?: number | null
-          paper_balance?: number | null
-          subscription_expires_at?: string | null
-          subscription_tier?: string | null
-          trading_mode?: Database["public"]["Enums"]["trading_mode"] | null
           updated_at?: string | null
-          username?: string | null
         }
         Relationships: []
       }
@@ -1470,99 +1890,108 @@ export type Database = {
           shared_by?: string
           shared_with?: string | null
         }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          deadline: string | null
+          description: string | null
+          id: string
+          name: string
+          priority: string | null
+          progress: number | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          priority?: string | null
+          progress?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          priority?: string | null
+          progress?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "project_shares_project_id_fkey"
+            foreignKeyName: "projects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prompts: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string | null
+          description: string | null
+          id: string
+          project_id: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          project_id?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          project_id?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompts_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "prompts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
-      }
-      projects: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          metadata: Json | null
-          status: string
-          tags: string[] | null
-          title: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          status?: string
-          tags?: string[] | null
-          title: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          status?: string
-          tags?: string[] | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      prompts: {
-        Row: {
-          content: string
-          created_at: string
-          description: string | null
-          id: string
-          metadata: Json | null
-          model: string | null
-          project_id: string | null
-          starred: boolean | null
-          tags: string[] | null
-          title: string
-          updated_at: string
-          user_id: string
-          version: number | null
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          model?: string | null
-          project_id?: string | null
-          starred?: boolean | null
-          tags?: string[] | null
-          title: string
-          updated_at?: string
-          user_id: string
-          version?: number | null
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          model?: string | null
-          project_id?: string | null
-          starred?: boolean | null
-          tags?: string[] | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-          version?: number | null
-        }
-        Relationships: []
       }
       resume_analytics: {
         Row: {
@@ -1758,15 +2187,7 @@ export type Database = {
           urls?: string[]
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "scraping_jobs_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       strategy_follows: {
         Row: {
@@ -1908,6 +2329,56 @@ export type Database = {
         }
         Relationships: []
       }
+      trade_history: {
+        Row: {
+          amount: number
+          created_at: string | null
+          exchange_id: string
+          id: string
+          order_id: string | null
+          price: number | null
+          side: string
+          status: string | null
+          symbol: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          exchange_id: string
+          id?: string
+          order_id?: string | null
+          price?: number | null
+          side: string
+          status?: string | null
+          symbol: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          exchange_id?: string
+          id?: string
+          order_id?: string | null
+          price?: number | null
+          side?: string
+          status?: string | null
+          symbol?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trade_history_exchange_id_fkey"
+            columns: ["exchange_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_configs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trading_bots: {
         Row: {
           ai_model: string | null
@@ -2044,6 +2515,59 @@ export type Database = {
           },
         ]
       }
+      transactions: {
+        Row: {
+          amount: number
+          bank_account_id: string | null
+          category: string | null
+          created_at: string | null
+          id: string
+          is_processed: boolean | null
+          merchant_name: string
+          plaid_transaction_id: string | null
+          rounded_amount: number
+          spare_change: number
+          transaction_date: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          bank_account_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_processed?: boolean | null
+          merchant_name: string
+          plaid_transaction_id?: string | null
+          rounded_amount: number
+          spare_change: number
+          transaction_date: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          bank_account_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_processed?: boolean | null
+          merchant_name?: string
+          plaid_transaction_id?: string | null
+          rounded_amount?: number
+          spare_change?: number
+          transaction_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_news_preferences: {
         Row: {
           created_at: string | null
@@ -2072,6 +2596,39 @@ export type Database = {
           notification_enabled?: boolean | null
           preferred_sources?: string[] | null
           sentiment_filter?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          auto_invest_enabled: boolean | null
+          created_at: string | null
+          id: string
+          investment_goals: Json
+          monthly_investment_target: number | null
+          risk_tolerance: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_invest_enabled?: boolean | null
+          created_at?: string | null
+          id?: string
+          investment_goals?: Json
+          monthly_investment_target?: number | null
+          risk_tolerance?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_invest_enabled?: boolean | null
+          created_at?: string | null
+          id?: string
+          investment_goals?: Json
+          monthly_investment_target?: number | null
+          risk_tolerance?: string
           updated_at?: string | null
           user_id?: string
         }
@@ -2196,7 +2753,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      populate_dummy_snapshots: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       alert_type:

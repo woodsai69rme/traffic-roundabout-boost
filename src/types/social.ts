@@ -51,6 +51,15 @@ export interface AudienceInsight {
     locations: Record<string, number>;
   };
   best_posting_times: string[];
-  top_hashtags: string[];
   engagement_patterns: Record<string, number>;
+  content_performance: {
+    content_types: Record<string, number>;
+    content_topics: Record<string, number>;
+    content_lengths: Record<string, number>;
+  };
+  hashtag_performance: {
+    top_hashtags: string[];
+    reach_by_category: Record<string, number>;
+    volume_analysis: Record<string, number>;
+  };
 }

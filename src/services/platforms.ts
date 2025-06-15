@@ -1,58 +1,57 @@
 
-export interface Platform {
-  id: string;
-  name: string;
-  icon: string;
-  color: string;
-}
-
-export const platforms: Platform[] = [
-  { 
-    id: 'twitter',
-    name: 'Twitter',
-    icon: '/platforms/twitter.svg',
-    color: 'bg-blue-500'
-  },
-  { 
-    id: 'facebook',
-    name: 'Facebook',
-    icon: '/platforms/facebook.svg',
-    color: 'bg-blue-600'
-  },
-  { 
+export const platforms = [
+  {
     id: 'instagram',
     name: 'Instagram',
-    icon: '/platforms/instagram.svg',
-    color: 'bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-500'
+    icon: '/icons/instagram.svg',
+    color: 'bg-gradient-to-r from-purple-500 via-pink-500 to-red-500',
   },
-  { 
-    id: 'linkedin',
-    name: 'LinkedIn',
-    icon: '/platforms/linkedin.svg',
-    color: 'bg-blue-700'
+  {
+    id: 'twitter',
+    name: 'Twitter',
+    icon: '/icons/twitter.svg',
+    color: 'bg-sky-500',
   },
-  { 
-    id: 'youtube',
-    name: 'YouTube',
-    icon: '/platforms/youtube.svg',
-    color: 'bg-red-600'
-  },
-  { 
+  {
     id: 'tiktok',
     name: 'TikTok',
-    icon: '/platforms/tiktok.svg',
-    color: 'bg-black'
+    icon: '/icons/tiktok.svg',
+    color: 'bg-black',
   },
-  { 
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    icon: '/icons/linkedin.svg',
+    color: 'bg-blue-700',
+  },
+  {
+    id: 'youtube',
+    name: 'YouTube',
+    icon: '/icons/youtube.svg',
+    color: 'bg-red-600',
+  },
+  {
+    id: 'facebook',
+    name: 'Facebook',
+    icon: '/icons/facebook.svg',
+    color: 'bg-blue-800',
+  },
+  {
+    id: 'twitch',
+    name: 'Twitch',
+    icon: '/icons/twitch.svg',
+    color: 'bg-purple-700',
+  },
+  {
     id: 'pinterest',
     name: 'Pinterest',
-    icon: '/platforms/pinterest.svg',
-    color: 'bg-red-700'
+    icon: '/icons/pinterest.svg',
+    color: 'bg-red-700',
   },
-  { 
-    id: 'reddit',
-    name: 'Reddit',
-    icon: '/platforms/reddit.svg',
-    color: 'bg-orange-600'
-  }
+  {
+    id: 'snapchat',
+    name: 'Snapchat',
+    icon: '/icons/snapchat.svg',
+    color: 'bg-yellow-400',
+  },
 ];

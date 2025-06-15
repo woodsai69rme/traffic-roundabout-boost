@@ -1,17 +1,34 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { SocialPlatform, ContentPost, EngagementMetrics, AIContentSuggestion, AudienceInsight } from '@/types/social';
+import { platforms } from './platforms';
 
 export const socialMediaService = {
   // Platform connections
   async getConnectedPlatforms(userId: string): Promise<SocialPlatform[]> {
-    const { data, error } = await supabase
+    const { data: connections, error } = await supabase
       .from('platform_connections')
-      .select('*')
+      .select('platform, connected')
       .eq('user_id', userId);
 
     if (error) throw error;
-    return data || [];
+    
+    const engagementMetrics = await this.getEngagementMetrics(userId);
+
+    return platforms.map(platform => {
+      const connection = connections?.find(c => c.platform === platform.id);
+      const metrics = engagementMetrics.find(m => m.platform === platform.id);
+
+      return {
+        id: platform.id,
+        name: platform.name,
+        icon: platform.icon,
+        connected: connection?.connected || false,
+        followers: metrics?.followers || 0,
+        engagement_rate: metrics?.engagement_rate || 0,
+        last_post: '3 hours ago', // Mock data
+      };
+    });
   },
 
   async connectPlatform(userId: string, platform: string, credentials: any) {
@@ -97,9 +114,18 @@ export const socialMediaService = {
         gender: { 'male': 45, 'female': 52, 'other': 3 },
         locations: { 'US': 60, 'UK': 15, 'Canada': 12, 'Australia': 8, 'Other': 5 }
       },
-      best_posting_times: ['9:00 AM', '1:00 PM', '7:00 PM'],
-      top_hashtags: ['#lifestyle', '#motivation', '#success', '#entrepreneur'],
-      engagement_patterns: { 'Monday': 85, 'Tuesday': 92, 'Wednesday': 88, 'Thursday': 95, 'Friday': 78, 'Saturday': 65, 'Sunday': 70 }
+      best_posting_times: ['9:00 AM', '1:00 PM', '7:00 PM', '9:00 PM'],
+      engagement_patterns: { 'Monday': 85, 'Tuesday': 92, 'Wednesday': 88, 'Thursday': 95, 'Friday': 78, 'Saturday': 65, 'Sunday': 70 },
+      content_performance: {
+        content_types: { 'Videos': 87, 'Images': 65, 'Carousels': 78, 'Text Only': 42 },
+        content_topics: { 'Educational': 92, 'Behind the Scenes': 78, 'User Generated': 83, 'Promotional': 51 },
+        content_lengths: { 'Short (0-15s)': 89, 'Medium (15-60s)': 76, 'Long (60s+)': 45 }
+      },
+      hashtag_performance: {
+        top_hashtags: ['#DigitalMarketing', '#ContentStrategy', '#SocialMediaTips', '#StartupLife', '#GrowthHacking'],
+        reach_by_category: { 'Industry-Specific': 87, 'Location-Based': 62, 'Trending': 91, 'Brand-Specific': 76 },
+        volume_analysis: { 'High Volume (1M+)': 42, 'Medium Volume (100K-1M)': 85, 'Low Volume (10K-100K)': 93, 'Micro Volume (<10K)': 68 }
+      }
     };
   }
 };
