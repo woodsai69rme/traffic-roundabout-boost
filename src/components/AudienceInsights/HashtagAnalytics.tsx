@@ -1,103 +1,126 @@
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
-import { getHashtagAnalytics } from '@/services/socialApiIntegrations';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Hash, TrendingUp, Users, Eye } from 'lucide-react';
+import { getHashtagAnalytics, HashtagAnalytics as HashtagData } from '@/services/socialApiIntegrations';
 
 interface HashtagAnalyticsProps {
   platform: string;
 }
 
-interface Hashtag {
-  hashtag: string;
-  posts: number;
-  engagement: number;
-  reach: number;
-  growth: number;
-  trending: boolean;
-}
+const HashtagAnalytics = ({ platform }: HashtagAnalyticsProps) => {
+  const [hashtags, setHashtags] = useState<HashtagData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const HashtagAnalytics: React.FC<HashtagAnalyticsProps> = ({ platform }) => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [hashtags, setHashtags] = useState<Hashtag[]>([
-    { hashtag: '#marketing', posts: 8500, engagement: 4.2, reach: 25000, growth: 15, trending: true },
-    { hashtag: '#socialmedia', posts: 12500, engagement: 3.8, reach: 45000, growth: 8, trending: true },
-    { hashtag: '#contentcreator', posts: 7200, engagement: 5.1, reach: 18000, growth: 22, trending: true },
-    { hashtag: '#digitalmarketing', posts: 9600, engagement: 3.5, reach: 28000, growth: 5, trending: false },
-    { hashtag: '#branding', posts: 6300, engagement: 4.0, reach: 15000, growth: 12, trending: false }
-  ]);
+  useEffect(() => {
+    const loadHashtags = async () => {
+      setLoading(true);
+      try {
+        const data = await getHashtagAnalytics(platform);
+        setHashtags(data);
+      } catch (error) {
+        console.error('Error loading hashtag analytics:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    
-    setLoading(true);
-    try {
-      const data = await getHashtagAnalytics(platform, searchQuery);
-      setHashtags(data);
-    } catch (error) {
-      console.error("Error searching hashtags:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    loadHashtags();
+  }, [platform]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Hash className="h-5 w-5" />
+            Hashtag Performance
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+            <p className="text-muted-foreground">Loading hashtag analytics...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
-        <CardTitle>Hashtag Analytics</CardTitle>
-        <CardDescription>Research and analyze hashtags for {platform}</CardDescription>
+        <CardTitle className="flex items-center gap-2">
+          <Hash className="h-5 w-5" />
+          Hashtag Performance
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2 mb-6">
-          <Input 
-            placeholder="Search hashtags" 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <Button onClick={handleSearch} disabled={loading}>
-            {loading ? "Searching..." : <Search className="h-4 w-4" />}
-          </Button>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left py-2 px-4">Hashtag</th>
-                <th className="text-right py-2 px-4">Posts</th>
-                <th className="text-right py-2 px-4">Engagement</th>
-                <th className="text-right py-2 px-4">Reach</th>
-                <th className="text-right py-2 px-4">Growth</th>
-                <th className="text-center py-2 px-4">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hashtags.map((hashtag, index) => (
-                <tr key={index} className="border-b hover:bg-muted/50">
-                  <td className="py-2 px-4">{hashtag.hashtag}</td>
-                  <td className="text-right py-2 px-4">{hashtag.posts.toLocaleString()}</td>
-                  <td className="text-right py-2 px-4">{hashtag.engagement.toFixed(1)}%</td>
-                  <td className="text-right py-2 px-4">{hashtag.reach.toLocaleString()}</td>
-                  <td className="text-right py-2 px-4 text-green-500">+{hashtag.growth}%</td>
-                  <td className="text-center py-2 px-4">
-                    {hashtag.trending ? (
-                      <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                        Trending
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">
-                        Normal
-                      </span>
-                    )}
-                  </td>
-                </tr>
+        <div className="space-y-6">
+          {/* Top Hashtags */}
+          <div>
+            <h4 className="font-medium mb-3">Top Performing Hashtags</h4>
+            <div className="flex flex-wrap gap-2">
+              {hashtags.slice(0, 10).map((hashtag, index) => (
+                <Badge 
+                  key={index} 
+                  variant="secondary" 
+                  className="text-sm py-1 px-3"
+                >
+                  {hashtag.hashtag}
+                </Badge>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
+
+          {/* Detailed Analytics */}
+          <div className="space-y-4">
+            <h4 className="font-medium">Detailed Analytics</h4>
+            {hashtags.map((hashtag, index) => (
+              <div key={index} className="border rounded-lg p-4">
+                <div className="flex justify-between items-center mb-3">
+                  <h5 className="font-medium">{hashtag.hashtag}</h5>
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                    <span className="text-sm text-green-600">{hashtag.trending_score}%</span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Hash className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <div className="font-medium">{hashtag.usage_count}</div>
+                      <div className="text-muted-foreground">Uses</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <div className="font-medium">{hashtag.reach.toLocaleString()}</div>
+                      <div className="text-muted-foreground">Reach</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <div className="font-medium">{hashtag.engagement_rate}%</div>
+                      <div className="text-muted-foreground">Engagement</div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-muted-foreground mb-1">Trend Score</div>
+                    <Progress value={hashtag.trending_score} className="h-2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>

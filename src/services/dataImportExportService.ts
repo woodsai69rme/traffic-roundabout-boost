@@ -1,6 +1,5 @@
-
 import { supabase } from "@/integrations/supabase/client";
-import { SocialApiConfig } from "./socialApiIntegrations";
+import { SocialApiConfig } from './socialApiIntegrations';
 import { 
   convertToCSV,
   readFileContents,
@@ -11,6 +10,29 @@ import {
   generateMockPosts,
   generateMockEngagements
 } from "@/utils/mockDataGenerators";
+
+const mockApiConfigs: SocialApiConfig[] = [
+  {
+    id: '1',
+    platform: 'instagram',
+    api_key: 'mock-api-key-1',
+    api_secret: 'mock-api-secret-1', 
+    access_token: 'mock-access-token-1',
+    access_token_secret: 'mock-access-token-secret-1',
+    connected: true,
+    last_updated: '2024-01-15T10:00:00Z'
+  },
+  {
+    id: '2', 
+    platform: 'twitter',
+    api_key: 'mock-api-key-2',
+    api_secret: 'mock-api-secret-2',
+    access_token: 'mock-access-token-2', 
+    access_token_secret: 'mock-access-token-secret-2',
+    connected: true,
+    last_updated: '2024-01-14T15:30:00Z'
+  }
+];
 
 export interface ExportOptions {
   format: 'json' | 'csv' | 'excel';
