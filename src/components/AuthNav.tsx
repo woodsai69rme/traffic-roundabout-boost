@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -11,87 +11,81 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/hooks/use-auth';
-import { useToast } from '@/hooks/use-toast';
-import NotificationCenter from '@/components/NotificationCenter';
-import { User, LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AuthNav = () => {
   const { user, signOut } = useAuth();
-  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    try {
-      await signOut();
-      toast({
-        title: "Signed out",
-        description: "You have been successfully signed out.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error signing out",
-        description: "There was a problem signing you out.",
-        variant: "destructive",
-      });
-    }
+    await signOut();
+    navigate('/');
   };
 
   if (!user) {
     return (
-      <div className="flex items-center gap-4">
-        <Link to="/login">
-          <Button variant="outline">Sign In</Button>
-        </Link>
-        <Link to="/register">
-          <Button className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white">
-            Sign Up
-          </Button>
-        </Link>
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" asChild>
+          <Link to="/auth">Sign In</Link>
+        </Button>
+        <Button asChild>
+          <Link to="/auth">Get Started</Link>
+        </Button>
       </div>
     );
   }
 
+  const userEmail = user.email || 'User';
+  const userInitials = userEmail
+    .split('@')[0]
+    .split('.')
+    .map(part => part.charAt(0).toUpperCase())
+    .join('')
+    .slice(0, 2);
+
   return (
-    <div className="flex items-center gap-2">
-      <NotificationCenter />
-      
+    <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-            <Avatar className="h-10 w-10 border border-gray-200">
-              <AvatarImage src={user.avatarUrl || ''} alt={user.username || user.email} />
-              <AvatarFallback className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white">
-                {user.username ? user.username.slice(0, 2).toUpperCase() : user.email.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
+              <AvatarImage 
+                src={user.user_metadata?.avatar_url} 
+                alt={userEmail}
+              />
+              <AvatarFallback>{userInitials}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel>
+          <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium">
-                {user.fullName || user.username || 'User'}
+              <p className="text-sm font-medium leading-none">
+                {user.user_metadata?.full_name || userEmail}
               </p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link to="/dashboard">
-            <DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/profile" className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link to="/profile">
-            <DropdownMenuItem>
+              <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/dashboard" className="cursor-pointer">
               <Settings className="mr-2 h-4 w-4" />
-              <span>Profile Settings</span>
-            </DropdownMenuItem>
-          </Link>
+              <span>Settings</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleSignOut}>
+          <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign Out</span>
+            <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,250 +1,179 @@
-import { supabase } from "@/integrations/supabase/client";
-import { SocialApiConfig } from './socialApiIntegrations';
-import { 
-  convertToCSV,
-  readFileContents,
-  generateTemplateData
-} from "@/utils/dataConversionUtils";
-import {
-  generateMockAnalytics,
-  generateMockPosts,
-  generateMockEngagements
-} from "@/utils/mockDataGenerators";
 
-const mockApiConfigs: SocialApiConfig[] = [
-  {
-    id: '1',
-    platform: 'instagram',
-    api_key: 'mock-api-key-1',
-    api_secret: 'mock-api-secret-1', 
-    access_token: 'mock-access-token-1',
-    access_token_secret: 'mock-access-token-secret-1',
-    connected: true,
-    last_updated: '2024-01-15T10:00:00Z'
-  },
-  {
-    id: '2', 
-    platform: 'twitter',
-    api_key: 'mock-api-key-2',
-    api_secret: 'mock-api-secret-2',
-    access_token: 'mock-access-token-2', 
-    access_token_secret: 'mock-access-token-secret-2',
-    connected: true,
-    last_updated: '2024-01-14T15:30:00Z'
-  }
-];
+import { supabase } from '@/integrations/supabase/client';
+import type { SocialApiConfig } from './socialApiIntegrations';
 
-export interface ExportOptions {
-  format: 'json' | 'csv' | 'excel';
-  dataType: 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements';
-  includeTimestamp: boolean;
+export interface ExportData {
+  platforms: SocialApiConfig[];
+  posts: any[];
+  analytics: any[];
+  settings: any;
+  timestamp: string;
 }
 
-export interface ImportResult {
-  success: boolean;
-  recordsImported: number;
-  errors?: string[];
+export interface ImportOptions {
+  overwriteExisting: boolean;
+  selectiveImport: {
+    platforms: boolean;
+    posts: boolean;
+    analytics: boolean;
+    settings: boolean;
+  };
 }
 
-/**
- * Export data from the application
- */
-export const exportData = async (options: ExportOptions): Promise<Blob> => {
-  const { data: user } = await supabase.auth.getUser();
-  
-  if (!user.user) {
-    throw new Error("User not authenticated");
-  }
-  
-  // In a real implementation, this would fetch data from various tables
-  // based on the options.dataType value
-  
-  try {
-    // Simulate data fetching and processing delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Fetch or generate the data based on options
-    const data = await fetchDataForExport(options.dataType, user.user.id);
-    
-    // Prepare the export data with metadata
-    const exportData = {
-      metadata: {
-        exportedAt: new Date().toISOString(),
-        userId: user.user.id,
-        dataType: options.dataType,
-        format: options.format
-      },
-      data
-    };
-    
-    // Convert to the requested format and return as Blob
-    return convertDataToFormat(exportData, options.format);
-  } catch (error) {
-    console.error("Error exporting data:", error);
-    throw error;
-  }
-};
+class DataImportExportService {
+  async exportUserData(userId: string): Promise<ExportData> {
+    try {
+      console.log('Exporting data for user:', userId);
+      
+      // Export platform connections
+      const { data: platforms, error: platformsError } = await supabase
+        .from('platform_connections')
+        .select('*')
+        .eq('user_id', userId);
+      
+      if (platformsError) throw platformsError;
 
-/**
- * Import data into the application
- */
-export const importData = async (file: File): Promise<ImportResult> => {
-  const { data: user } = await supabase.auth.getUser();
-  
-  if (!user.user) {
-    throw new Error("User not authenticated");
-  }
-  
-  try {
-    // Determine the file type
-    const fileType = file.name.split('.').pop()?.toLowerCase();
-    
-    // Read the file contents
-    const fileContent = await readFileContents(file, fileType as string);
-    
-    // Validate the data structure
-    // In a real app, this would perform thorough validation
-    
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // In a real app, we would process the data and insert it into the database
-    
-    // Return a mock result
-    return {
-      success: true,
-      recordsImported: Math.floor(Math.random() * 100) + 1
-    };
-  } catch (error) {
-    console.error("Error importing data:", error);
-    
-    return {
-      success: false,
-      recordsImported: 0,
-      errors: [error instanceof Error ? error.message : 'Unknown error occurred']
-    };
-  }
-};
+      // Export posts (mock data for now)
+      const posts = [
+        {
+          id: '1',
+          platform: 'instagram',
+          content: 'Sample post content',
+          status: 'published',
+          created_at: new Date().toISOString()
+        }
+      ];
 
-/**
- * Get a template file for data import
- */
-export const getImportTemplate = (dataType: string, format: string): Blob => {
-  // In a real app, this would generate proper templates
-  const templateData = generateTemplateData();
-  
-  let content: string;
-  let mimeType: string;
-  
-  switch (format) {
-    case 'json':
-      content = JSON.stringify(templateData.json[dataType as keyof typeof templateData.json], null, 2);
-      mimeType = 'application/json';
-      break;
-      
-    case 'csv':
-      content = templateData.csv[dataType as keyof typeof templateData.csv];
-      mimeType = 'text/csv';
-      break;
-      
-    case 'excel':
-      content = templateData.excel;
-      mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      break;
-      
-    default:
-      throw new Error(`Unsupported format: ${format}`);
-  }
-  
-  return new Blob([content], { type: mimeType });
-};
+      // Export analytics (mock data)
+      const analytics = [
+        {
+          platform: 'instagram',
+          followers: 1250,
+          engagement_rate: 4.2,
+          date: new Date().toISOString()
+        }
+      ];
 
-/**
- * Helper function to fetch data for export
- */
-async function fetchDataForExport(dataType: string, userId: string): Promise<any> {
-  switch (dataType) {
-    case 'all':
-      const platformConfigs = await fetchPlatformConnections(userId);
-      // In a real app, we would fetch analytics, posts, etc. here
-      
-      return {
-        platforms: platformConfigs,
-        analytics: generateMockAnalytics(),
-        posts: generateMockPosts(),
-        engagements: generateMockEngagements()
+      // Export settings (mock data)
+      const settings = {
+        notifications: true,
+        auto_post: false,
+        theme: 'light'
       };
-      
-    case 'analytics':
-      return generateMockAnalytics();
-      
-    case 'posts':
-      return generateMockPosts();
-      
-    case 'accounts':
-      return await fetchPlatformConnections(userId);
-      
-    case 'engagements':
-      return generateMockEngagements();
-      
-    default:
-      throw new Error(`Unsupported data type: ${dataType}`);
-  }
-}
 
-/**
- * Helper function to convert data to the requested format
- */
-function convertDataToFormat(data: any, format: string): Blob {
-  switch (format) {
-    case 'json':
-      return new Blob(
-        [JSON.stringify(data, null, 2)], 
-        { type: 'application/json' }
-      );
-      
-    case 'csv':
-      // For CSV, we need to flatten the data structure if it's nested
-      const flattenedData = Array.isArray(data.data) 
-        ? data.data 
-        : [data.data];
-      
-      return new Blob(
-        [convertToCSV(flattenedData)], 
-        { type: 'text/csv' }
-      );
-      
-    case 'excel':
-      // In a real app, this would use a library like xlsx to create Excel files
-      return new Blob(
-        ['This would be an Excel file in a production environment.'],
-        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
-      );
-      
-    default:
-      throw new Error(`Unsupported export format: ${format}`);
+      return {
+        platforms: platforms?.map(p => ({
+          platform: p.platform,
+          api_key: p.api_key || '',
+          api_secret: p.api_secret || '',
+          access_token: p.access_token || '',
+          access_token_secret: p.access_token_secret || '',
+          connected: p.connected || false,
+          last_updated: p.last_updated || new Date().toISOString()
+        })) || [],
+        posts,
+        analytics,
+        settings,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('Export failed:', error);
+      throw new Error('Failed to export user data');
+    }
   }
-}
 
-/**
- * Helper function to fetch platform connections
- */
-async function fetchPlatformConnections(userId: string): Promise<SocialApiConfig[]> {
-  const { data, error } = await supabase
-    .from('platform_connections')
-    .select('*')
-    .eq('user_id', userId);
+  async importUserData(userId: string, data: ExportData, options: ImportOptions): Promise<boolean> {
+    try {
+      console.log('Importing data for user:', userId, options);
+
+      if (options.selectiveImport.platforms && data.platforms) {
+        for (const platform of data.platforms) {
+          const { error } = await supabase
+            .from('platform_connections')
+            .upsert({
+              user_id: userId,
+              platform: platform.platform,
+              api_key: platform.api_key,
+              api_secret: platform.api_secret,
+              access_token: platform.access_token,
+              access_token_secret: platform.access_token_secret,
+              connected: platform.connected,
+              last_updated: platform.last_updated
+            }, { onConflict: 'user_id,platform' });
+
+          if (error) throw error;
+        }
+      }
+
+      // Import other data types would go here
+      console.log('Import completed successfully');
+      return true;
+    } catch (error) {
+      console.error('Import failed:', error);
+      throw new Error('Failed to import user data');
+    }
+  }
+
+  async exportToJSON(data: ExportData): Promise<string> {
+    return JSON.stringify(data, null, 2);
+  }
+
+  async exportToCSV(data: ExportData): Promise<string> {
+    // Simple CSV export for platforms
+    const headers = ['Platform', 'Connected', 'Last Updated'];
+    const rows = data.platforms.map(p => [
+      p.platform,
+      p.connected.toString(),
+      p.last_updated
+    ]);
     
-  if (error) throw error;
-  
-  return data.map(item => ({
-    id: item.id,
-    platform: item.platform,
-    apiKey: item.api_key || '',
-    apiSecret: '******', // Mask sensitive data in exports
-    accessToken: '******', // Mask sensitive data in exports
-    accessTokenSecret: '******', // Mask sensitive data in exports
-    connected: item.connected || false,
-    lastUpdated: item.last_updated || new Date().toISOString()
-  }));
+    return [headers, ...rows].map(row => row.join(',')).join('\n');
+  }
+
+  parseImportFile(fileContent: string, fileType: 'json' | 'csv'): ExportData {
+    try {
+      if (fileType === 'json') {
+        return JSON.parse(fileContent);
+      } else {
+        // Parse CSV (simplified)
+        const lines = fileContent.split('\n');
+        const headers = lines[0].split(',');
+        const platforms = lines.slice(1).map(line => {
+          const values = line.split(',');
+          return {
+            platform: values[0],
+            api_key: '',
+            api_secret: '',
+            access_token: '',
+            access_token_secret: '',
+            connected: values[1] === 'true',
+            last_updated: values[2] || new Date().toISOString()
+          };
+        });
+
+        return {
+          platforms,
+          posts: [],
+          analytics: [],
+          settings: {},
+          timestamp: new Date().toISOString()
+        };
+      }
+    } catch (error) {
+      throw new Error('Invalid file format');
+    }
+  }
+
+  validateImportData(data: any): data is ExportData {
+    return (
+      typeof data === 'object' &&
+      Array.isArray(data.platforms) &&
+      Array.isArray(data.posts) &&
+      Array.isArray(data.analytics) &&
+      typeof data.settings === 'object' &&
+      typeof data.timestamp === 'string'
+    );
+  }
 }
+
+export const dataImportExportService = new DataImportExportService();

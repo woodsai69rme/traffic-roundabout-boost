@@ -1,169 +1,65 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { TrendingUp, Users, BarChart3, Calendar, Sparkles, DollarSign, BookOpen } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
-import NotificationCenter from './NotificationCenter';
 import { useAuth } from '@/hooks/use-auth';
-import UserProfileMenu from './UserProfileMenu';
+import AuthNav from '@/components/AuthNav';
+import { Button } from '@/components/ui/button';
+import { BarChart3, Calendar, Users, Zap } from 'lucide-react';
 
 const NavbarWithAuth = () => {
-  const { user, isLoading } = useAuth();
-
-  const mainNavItems = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <BarChart3 className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Growth Tools',
-      href: '#',
-      icon: <TrendingUp className="h-4 w-4 mr-2" />,
-      subItems: [
-        {
-          title: 'Platform Connections',
-          href: '/platforms',
-          description: 'Connect and manage your social media accounts'
-        },
-        {
-          title: 'Content Planner',
-          href: '/content-planner',
-          description: 'Schedule and plan your content across platforms'
-        },
-        {
-          title: 'AI Content Creator',
-          href: '/ai-content-creator',
-          description: 'Generate engaging content with AI assistance'
-        }
-      ]
-    },
-    {
-      title: 'Analytics',
-      href: '#',
-      icon: <BarChart3 className="h-4 w-4 mr-2" />,
-      subItems: [
-        {
-          title: 'Performance Analytics',
-          href: '/analytics',
-          description: 'Track your growth and engagement metrics'
-        },
-        {
-          title: 'Audience Insights',
-          href: '/audience-insights',
-          description: 'Understand your audience demographics and behavior'
-        }
-      ]
-    },
-    {
-      title: 'Community',
-      href: '/communities',
-      icon: <Users className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Monetization',
-      href: '/monetization',
-      icon: <DollarSign className="h-4 w-4 mr-2" />
-    },
-    {
-      title: 'Docs',
-      href: '/docs',
-      icon: <BookOpen className="h-4 w-4 mr-2" />
-    }
-  ];
+  const { user } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            <div className="rounded-full w-6 h-6 bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
-              <span className="font-bold text-white text-sm">R</span>
-            </div>
-            <span className="hidden font-bold sm:inline-block">
-              Roundabout WebTraffic
-            </span>
-          </Link>
-          
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              {mainNavItems.map((item) => 
-                item.subItems ? (
-                  <NavigationMenuItem key={item.title}>
-                    <NavigationMenuTrigger className="h-auto">
-                      <span className="flex items-center">
-                        {item.icon}
-                        {item.title}
-                      </span>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                        {item.subItems.map((subItem) => (
-                          <li key={subItem.title} className="row-span-3">
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={subItem.href}
-                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                              >
-                                <div className="mb-2 mt-4 text-lg font-medium">
-                                  {subItem.title}
-                                </div>
-                                <p className="text-sm leading-tight text-muted-foreground">
-                                  {subItem.description}
-                                </p>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                ) : (
-                  <NavigationMenuItem key={item.title}>
-                    <Link to={item.href}>
-                      <NavigationMenuLink 
-                        className={cn(
-                          "flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary"
-                        )}
-                      >
-                        {item.icon}
-                        {item.title}
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                )
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="md:hidden" asChild>
-            <Link to="/notifications">
-              <NotificationCenter />
+    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">R</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Roundabout
+              </span>
             </Link>
-          </Button>
-          <div className="hidden md:flex">
-            <NotificationCenter />
+            
+            {user && (
+              <div className="hidden md:flex items-center gap-4">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/dashboard" className="flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/content-planner" className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    Content
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/audience-insights" className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Insights
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/ai-content" className="flex items-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    AI Content
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/platforms">Platforms</Link>
+                </Button>
+              </div>
+            )}
           </div>
           
-          <ThemeToggle />
-          
-          {!isLoading && user ? (
-            <UserProfileMenu />
-          ) : (
-            !isLoading && (
-              <Button asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-            )
-          )}
+          <AuthNav />
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
 
