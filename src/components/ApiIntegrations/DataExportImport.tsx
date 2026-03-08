@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { exportData, importData, getImportTemplate, ExportOptions } from '@/services/dataImportExportService';
+import { exportData, importData, getImportTemplate, type ExportOptions } from '@/services/dataImportExportService';
 
 const DataExportImport = () => {
   const { toast } = useToast();
@@ -35,7 +35,7 @@ const DataExportImport = () => {
   const formats = [
     { value: "json", label: "JSON" },
     { value: "csv", label: "CSV" },
-    { value: "excel", label: "Excel" }
+    { value: "xlsx", label: "Excel" }
   ];
 
   const handleExport = async () => {
@@ -53,7 +53,7 @@ const DataExportImport = () => {
       ]);
       
       const options: ExportOptions = {
-        format: exportFormat as 'json' | 'csv' | 'excel',
+        format: exportFormat as 'json' | 'csv' | 'xlsx',
         dataType: exportType as 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements',
         includeTimestamp
       };

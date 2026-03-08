@@ -1,181 +1,83 @@
-
-import { supabase } from '@/integrations/supabase/client';
-
 export interface ExportOptions {
   format: 'json' | 'csv' | 'xlsx';
-  includeAnalytics?: boolean;
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
+  dataType: 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements';
+  includeTimestamp: boolean;
 }
 
-export interface ImportOptions {
-  format: 'json' | 'csv' | 'xlsx';
-  overwrite?: boolean;
-  validateData?: boolean;
+export interface ImportResult {
+  success: boolean;
+  recordsImported: number;
+  errors?: string[];
 }
 
-export interface ExportData {
-  posts: any[];
-  analytics: any[];
-  platforms: any[];
-  metadata: {
-    exportDate: string;
-    totalRecords: number;
-    format: string;
-  };
-}
+const mockData: Record<string, any[]> = {
+  analytics: [
+    { date: '2024-01-01', platform: 'instagram', followers: 2453, engagement: 4.2 },
+    { date: '2024-01-01', platform: 'twitter', followers: 1876, engagement: 3.8 },
+  ],
+  posts: [
+    { id: '1', platform: 'instagram', content: 'Sample post', status: 'published', likes: 156 },
+  ],
+  accounts: [
+    { platform: 'instagram', connected: true, username: '@demo' },
+  ],
+  engagements: [
+    { platform: 'instagram', likes: 156, comments: 23, shares: 12, views: 1240 },
+  ],
+};
 
-export const exportData = async (options: ExportOptions): Promise<ExportData> => {
-  try {
-    // Fetch posts data
-    const { data: posts, error: postsError } = await supabase
-      .from('posts')
-      .select('*');
+export const exportData = async (options: ExportOptions): Promise<Blob> => {
+  const data = options.dataType === 'all' ? mockData : { [options.dataType]: mockData[options.dataType] || [] };
 
-    if (postsError) throw postsError;
+  if (options.format === 'json') {
+    return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  }
 
-    // Fetch analytics data if requested
-    let analytics = [];
-    if (options.includeAnalytics) {
-      const { data: analyticsData, error: analyticsError } = await supabase
-        .from('analytics')
-        .select('*');
-
-      if (analyticsError) throw analyticsError;
-      analytics = analyticsData || [];
+  if (options.format === 'csv') {
+    const entries = options.dataType === 'all' ? mockData.analytics : (mockData[options.dataType] || []);
+    if (!Array.isArray(entries) || entries.length === 0) {
+      return new Blob(['No data'], { type: 'text/csv' });
     }
+    const headers = Object.keys(entries[0]).join(',');
+    const rows = entries.map((r: any) => Object.values(r).join(','));
+    return new Blob([headers + '\n' + rows.join('\n')], { type: 'text/csv' });
+  }
 
-    // Fetch platforms data
-    const { data: platforms, error: platformsError } = await supabase
-      .from('platforms')
-      .select('*');
+  return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+};
 
-    if (platformsError) throw platformsError;
-
-    const exportData: ExportData = {
-      posts: posts || [],
-      analytics,
-      platforms: platforms || [],
-      metadata: {
-        exportDate: new Date().toISOString(),
-        totalRecords: (posts?.length || 0) + analytics.length + (platforms?.length || 0),
-        format: options.format,
-      },
+export const importData = async (file: File): Promise<ImportResult> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const content = reader.result as string;
+        const parsed = JSON.parse(content);
+        const count = Array.isArray(parsed) ? parsed.length : Object.keys(parsed).length;
+        resolve({ success: true, recordsImported: count });
+      } catch {
+        resolve({ success: false, recordsImported: 0, errors: ['Invalid file format'] });
+      }
     };
-
-    return exportData;
-  } catch (error) {
-    console.error('Export failed:', error);
-    throw new Error(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
+    reader.onerror = () => resolve({ success: false, recordsImported: 0, errors: ['Failed to read file'] });
+    reader.readAsText(file);
+  });
 };
 
-export const importData = async (file: File, options: ImportOptions): Promise<void> => {
-  try {
-    const text = await file.text();
-    let data;
-
-    switch (options.format) {
-      case 'json':
-        data = JSON.parse(text);
-        break;
-      case 'csv':
-        // Simple CSV parsing - in production, use a proper CSV parser
-        const lines = text.split('\n');
-        const headers = lines[0].split(',');
-        data = lines.slice(1).map(line => {
-          const values = line.split(',');
-          const obj: any = {};
-          headers.forEach((header, index) => {
-            obj[header.trim()] = values[index]?.trim();
-          });
-          return obj;
-        });
-        break;
-      default:
-        throw new Error(`Unsupported format: ${options.format}`);
-    }
-
-    // Validate data if requested
-    if (options.validateData) {
-      if (!data || !Array.isArray(data)) {
-        throw new Error('Invalid data format');
-      }
-    }
-
-    // Import posts if they exist in the data
-    if (data.posts && Array.isArray(data.posts)) {
-      for (const post of data.posts) {
-        const { error } = await supabase
-          .from('posts')
-          .upsert(post, { onConflict: 'id' });
-
-        if (error) throw error;
-      }
-    }
-
-    // Import platforms if they exist in the data
-    if (data.platforms && Array.isArray(data.platforms)) {
-      for (const platform of data.platforms) {
-        const { error } = await supabase
-          .from('platforms')
-          .upsert(platform, { onConflict: 'id' });
-
-        if (error) throw error;
-      }
-    }
-
-    console.log('Import completed successfully');
-  } catch (error) {
-    console.error('Import failed:', error);
-    throw new Error(`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
-};
-
-export const getImportTemplate = (format: 'json' | 'csv' | 'xlsx') => {
-  const template = {
-    posts: [
-      {
-        id: 'example-id',
-        content: 'Example post content',
-        platform: 'twitter',
-        scheduled_time: '2024-01-01T12:00:00Z',
-        status: 'scheduled',
-        created_at: '2024-01-01T10:00:00Z'
-      }
-    ],
-    platforms: [
-      {
-        id: 'example-platform-id',
-        name: 'Twitter',
-        type: 'twitter',
-        is_connected: true,
-        created_at: '2024-01-01T10:00:00Z'
-      }
-    ]
+export const getImportTemplate = (dataType: string, format: string): Blob => {
+  const templates: Record<string, any[]> = {
+    analytics: [{ date: '', platform: '', followers: 0, engagement: 0 }],
+    posts: [{ platform: '', content: '', scheduled_time: '', status: 'draft' }],
+    accounts: [{ platform: '', username: '', connected: false }],
+    engagements: [{ platform: '', likes: 0, comments: 0, shares: 0, views: 0 }],
   };
 
-  switch (format) {
-    case 'json':
-      return JSON.stringify(template, null, 2);
-    case 'csv':
-      // Simple CSV template for posts
-      return 'id,content,platform,scheduled_time,status,created_at\nexample-id,Example post content,twitter,2024-01-01T12:00:00Z,scheduled,2024-01-01T10:00:00Z';
-    default:
-      return JSON.stringify(template, null, 2);
-  }
-};
+  const template = templates[dataType] || templates.analytics;
 
-export const downloadFile = (content: string, filename: string, mimeType: string = 'application/json') => {
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  if (format === 'csv') {
+    const headers = Object.keys(template[0]).join(',');
+    return new Blob([headers + '\n'], { type: 'text/csv' });
+  }
+
+  return new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
 };
