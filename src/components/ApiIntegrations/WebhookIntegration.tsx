@@ -278,7 +278,7 @@ const WebhookIntegration = () => {
                 <div className="flex justify-between items-center">
                   <CardTitle>{webhook.name}</CardTitle>
                   <Switch 
-                    checked={webhook.active}
+                    checked={webhook.is_active}
                     onCheckedChange={checked => handleToggleWebhook(webhook.id, checked)}
                   />
                 </div>
