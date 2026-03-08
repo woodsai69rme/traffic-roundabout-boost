@@ -104,9 +104,9 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 | `/documentation` | Documentation | No | Markdown docs browser |
 | `/dashboard` | Dashboard | Yes | Metrics, platform performance, AI suggestions, quick actions |
 | `/platforms` | Platforms | Yes | Connect/manage 10 social platforms |
-| `/content-planner` | ContentPlanner | Yes | Calendar, content queue with full CRUD (delete/publish/toggle status), templates |
+| `/content-planner` | ContentPlanner | Yes | Calendar, content queue with full CRUD, templates (localStorage) |
 | `/analytics` | Analytics | Yes | DB-connected line/bar/pie charts, content performance table, demographics |
-| `/audience-insights` | AudienceInsights | Yes | Demographics, engagement patterns, hashtag analytics |
+| `/audience-insights` | AudienceInsights | Yes | Demographics, engagement patterns, hashtag analytics (DB-connected) |
 | `/ai-content` | AIContentCreator | Yes | Real AI content generation via edge function with platform/tone/length selectors |
 | `/profile` | Profile | Yes | Read/write to profiles DB table |
 | `/communities` | Communities | Yes | Discussions, groups, events tabs |
@@ -118,7 +118,7 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 
 **socialMediaService.ts** — Queries `platform_connections`, `scheduled_posts`, `analytics_snapshots` tables. Methods: `getConnectedPlatforms()`, `connectPlatform()`, `getContentPosts()`, `schedulePost()`, `getEngagementMetrics()`, `getAIContentSuggestions()`, `getAudienceInsights()`. All include mock fallback for empty data.
 
-**socialApiIntegrations.ts** — Queries `platform_connections` and `scheduled_posts`. Methods: `fetchApiConfigurations()`, `updateApiConfiguration()`, `disconnectPlatform()`, `fetchScheduledPosts()`, `getHashtagAnalytics()`.
+**socialApiIntegrations.ts** — Queries `platform_connections` and `scheduled_posts`. Methods: `fetchApiConfigurations()`, `updateApiConfiguration()`, `disconnectPlatform()`, `fetchScheduledPosts()`, `getHashtagAnalytics()` (queries analytics_snapshots with mock fallback).
 
 **webhookService.ts** — Full CRUD against `webhooks` table. Methods: `getWebhooks()`, `createWebhook()`, `updateWebhook()`, `deleteWebhook()`, `toggleWebhook()`.
 
@@ -137,6 +137,14 @@ Create `supabase/functions/generate-content/index.ts`:
 
 In `AIContentCreator.tsx`, call via `supabase.functions.invoke('generate-content', { body: { prompt, platform, tone, length } })`.
 
+### UI PATTERNS
+
+**Skeleton loaders**: Create a `PageSkeleton.tsx` component exporting `DashboardSkeleton`, `AnalyticsSkeleton`, `ContentPlannerSkeleton`. Each renders Card + Skeleton elements matching the page layout. Use these in loading states instead of spinners.
+
+**EmptyState component**: Reusable component accepting `icon` (LucideIcon), `title`, `description`, `actionLabel`, `actionLink`. Renders centered icon in muted circle, text, and CTA button.
+
+**Content Templates**: In ContentPlanner, the templates tab stores templates in localStorage (`roundabout_content_templates`). Each template has `id`, `name`, `content`, `platform`. Users can create and delete templates inline.
+
 ### KEY FEATURES
 
 - **Two navbars:** Navbar (public), NavbarWithAuth (protected pages with user menu, theme toggle)
@@ -147,15 +155,18 @@ In `AIContentCreator.tsx`, call via `supabase.functions.invoke('generate-content
 - **10 platform support** — Instagram, YouTube, TikTok, Twitter, Facebook, LinkedIn, Pinterest, Reddit, Snapchat, Twitch
 - **AI content generator** — Real AI via Lovable AI edge function, not mock
 - **Content scheduler** — Calendar view, post creation, scheduling to DB, full CRUD (delete/publish/toggle)
-- **Analytics** — DB-connected Line/bar/pie charts with Recharts, loading state, mock fallback
+- **Content templates** — localStorage-backed create/delete/list in templates tab
+- **Analytics** — DB-connected Line/bar/pie charts with Recharts, skeleton loading, mock fallback
+- **Hashtag analytics** — DB-connected with mock fallback
 - **Data export/import** — Exports from DB tables, imports into scheduled_posts, JSON/CSV support
 - **Communities** — Discussions, groups, events tabs
 - **Monetization** — Revenue tools, marketplace, pricing
 - **Dark/light theme** via next-themes
 - **Auth guard** — ProtectedRoute redirects unauthenticated users to `/login`
+- **Skeleton loading** — Dashboard, Analytics, ContentPlanner use skeleton UI during load
 
 ### DEPLOYMENT
 
-Works with: Vercel, Netlify, Railway, Docker, Lovable.dev publish, AWS Amplify, Google Cloud Run, Fly.io, Render, self-hosted VPS. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Edge functions auto-deploy with Lovable Cloud.
+Works with: Vercel (`vercel.json`), Netlify (`netlify.toml`), Docker (`Dockerfile`), Railway, Lovable.dev publish, AWS Amplify, Google Cloud Run, Fly.io, Render, self-hosted VPS. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Edge functions auto-deploy with Lovable Cloud.
 
 Build all of this as a complete, working application.
