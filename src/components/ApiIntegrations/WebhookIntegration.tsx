@@ -104,8 +104,8 @@ const WebhookIntegration = () => {
       ));
       
       toast({
-        title: active ? "Webhook Activated" : "Webhook Deactivated",
-        description: `Webhook has been ${active ? 'activated' : 'deactivated'}.`
+        title: is_active ? "Webhook Activated" : "Webhook Deactivated",
+        description: `Webhook has been ${is_active ? 'activated' : 'deactivated'}.`
       });
     } catch (error) {
       toast({
