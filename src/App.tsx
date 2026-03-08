@@ -1,6 +1,7 @@
 
 import { Toaster } from "@/components/ui/toaster";
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Platforms from "./pages/Platforms";
@@ -28,21 +29,20 @@ const App = () => (
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/platforms" element={<Platforms />} />
-      <Route path="/content-planner" element={<ContentPlanner />} />
-      <Route path="/analytics" element={<Analytics />} />
-      <Route path="/audience-insights" element={<AudienceInsights />} />
-      <Route path="/ai-content" element={<AIContentCreator />} />
       <Route path="/documentation" element={<Documentation />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/communities" element={<Communities />} />
-      <Route path="/monetization" element={<Monetization />} />
-      <Route path="/api-integrations" element={<SocialApiIntegrationPage />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/platforms" element={<ProtectedRoute><Platforms /></ProtectedRoute>} />
+      <Route path="/content-planner" element={<ProtectedRoute><ContentPlanner /></ProtectedRoute>} />
+      <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+      <Route path="/audience-insights" element={<ProtectedRoute><AudienceInsights /></ProtectedRoute>} />
+      <Route path="/ai-content" element={<ProtectedRoute><AIContentCreator /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
+      <Route path="/monetization" element={<ProtectedRoute><Monetization /></ProtectedRoute>} />
+      <Route path="/api-integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </>
 );
 
 export default App;
-
