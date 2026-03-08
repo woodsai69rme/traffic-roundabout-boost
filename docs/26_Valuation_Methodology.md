@@ -12,16 +12,19 @@ Estimates the cost to rebuild the current codebase from scratch with professiona
 
 | Component | Hours | Rate (AUD/hr) | Cost (AUD) |
 |-----------|-------|---------------|-----------|
-| Frontend (16 pages, 40+ components) | 120–180 | $120 | $14,400–$21,600 |
+| Frontend (17 pages, 40+ components) | 140–200 | $120 | $16,800–$24,000 |
 | Database schema + RLS + triggers | 16–24 | $150 | $2,400–$3,600 |
 | Auth system (login/register/reset) | 8–12 | $150 | $1,200–$1,800 |
-| Service layer (5 services) | 20–30 | $130 | $2,600–$3,900 |
-| Documentation (30 files) | 20–30 | $100 | $2,000–$3,000 |
+| Service layer (5 DB-connected services) | 30–40 | $130 | $3,900–$5,200 |
+| AI edge function (real LLM integration) | 8–12 | $150 | $1,200–$1,800 |
+| Skeleton loaders + empty states + UX | 12–16 | $120 | $1,440–$1,920 |
+| Content templates + CRUD | 8–10 | $120 | $960–$1,200 |
+| Documentation (30 files) | 24–36 | $100 | $2,400–$3,600 |
 | Design system + theming | 8–12 | $120 | $960–$1,440 |
-| DevOps + deployment config | 4–8 | $140 | $560–$1,120 |
-| **Total** | **196–296** | | **$24,120–$36,460** |
+| DevOps (Docker/Vercel/Netlify configs) | 6–10 | $140 | $840–$1,400 |
+| **Total** | **260–372** | | **$32,100–$45,960** |
 
-**MVP Valuation: AUD $18,000–$35,000** (discounted for lack of users/revenue)
+**MVP Valuation: AUD $30,000–$50,000** (discounted for lack of users/revenue)
 
 ### 2. Revenue Multiple Method (Projected)
 
@@ -29,7 +32,7 @@ Standard SaaS valuations use ARR multiples based on growth rate.
 
 | Stage | ARR (AUD) | Multiple | Valuation (AUD) |
 |-------|----------|---------|----------------|
-| Pre-revenue (current) | $0 | N/A | $18K–$35K (cost basis) |
+| Pre-revenue (current) | $0 | N/A | $30K–$50K (cost basis) |
 | Early traction (100 users) | $35K | 3–5x | $105K–$175K |
 | Growth ($500K ARR) | $500K | 8–16x | $4M–$8M |
 | Scale ($5M ARR) | $5M | 8–16x | $40M–$80M |
@@ -62,20 +65,21 @@ Standard SaaS valuations use ARR multiples based on growth rate.
 
 | Method | Low (AUD) | High (AUD) |
 |--------|----------|-----------|
-| Cost-to-recreate | $18,000 | $35,000 |
-| Revenue multiple (pre-rev) | $18,000 | $35,000 |
+| Cost-to-recreate | $30,000 | $50,000 |
+| Revenue multiple (pre-rev) | $30,000 | $50,000 |
 | Comparable seed rounds | $50,000 | $150,000 |
 | DCF (5-year NPV) | — | $25,600,000 |
 
-**Current fair value estimate: AUD $18,000–$35,000** (pre-revenue, pre-users)
+**Current fair value estimate: AUD $30,000–$50,000** (pre-revenue, pre-users)
 
 **Post-seed target valuation: AUD $2,000,000–$3,000,000** (with $500K raise at 15–25% dilution)
 
 ## Key Value Drivers
 
-1. **Technical completeness** — Production-ready frontend with 16 pages, auth, DB
-2. **AI integration** — Content generation using latest LLMs
+1. **Technical completeness** — Production-ready frontend with 17 pages, auth, DB, all services live
+2. **AI integration** — Real content generation using google/gemini-3-flash-preview (no API key required)
 3. **Unique community growth model** — Reciprocal engagement (no competitor has this)
 4. **10-platform support** — Broad coverage from day one
 5. **Comprehensive documentation** — 30-file doc suite reduces onboarding cost
 6. **Open architecture** — Webhook support, API integrations, data export/import
+7. **Deploy-anywhere** — Docker, Vercel, Netlify, Lovable Cloud configs included
