@@ -115,7 +115,7 @@ const Communities = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <NavbarWithAuth />
       <main className="flex-grow bg-muted/20 py-8">
         <div className="container mx-auto px-4">
           <div className="mb-8">
