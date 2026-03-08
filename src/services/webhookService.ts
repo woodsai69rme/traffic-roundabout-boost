@@ -1,56 +1,77 @@
 
+import { supabase } from '@/integrations/supabase/client';
+
 export interface Webhook {
   id: string;
   name: string;
   url: string;
   events: string[];
-  active: boolean;
+  is_active: boolean;
   user_id: string;
   created_at: string;
   updated_at: string;
 }
 
-interface WebhookError extends Error {
-  code?: string;
-  details?: string;
-}
-
-// In-memory mock store
-let mockWebhooks: Webhook[] = [];
-
 export const fetchWebhooks = async (): Promise<Webhook[]> => {
-  return [...mockWebhooks];
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data, error } = await supabase
+    .from('webhooks')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data || []) as Webhook[];
 };
 
-export const createWebhook = async (webhook: Omit<Webhook, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<Webhook> => {
-  const now = new Date().toISOString();
-  const newWebhook: Webhook = {
-    ...webhook,
-    id: crypto.randomUUID(),
-    user_id: 'mock-user',
-    created_at: now,
-    updated_at: now,
-  };
-  mockWebhooks.push(newWebhook);
-  return newWebhook;
+export const createWebhook = async (webhook: { name: string; url: string; events: string[]; is_active: boolean }): Promise<Webhook> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const { data, error } = await supabase
+    .from('webhooks')
+    .insert({
+      name: webhook.name,
+      url: webhook.url,
+      events: webhook.events,
+      is_active: webhook.is_active,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as Webhook;
 };
 
-export const updateWebhook = async (id: string, updates: Partial<Omit<Webhook, 'id' | 'user_id' | 'created_at' | 'updated_at'>>): Promise<Webhook> => {
-  const idx = mockWebhooks.findIndex(w => w.id === id);
-  if (idx === -1) throw new Error('Webhook not found');
-  mockWebhooks[idx] = { ...mockWebhooks[idx], ...updates, updated_at: new Date().toISOString() };
-  return mockWebhooks[idx];
+export const updateWebhook = async (id: string, updates: Partial<{ name: string; url: string; events: string[]; is_active: boolean }>): Promise<Webhook> => {
+  const { data, error } = await supabase
+    .from('webhooks')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as Webhook;
 };
 
 export const deleteWebhook = async (id: string): Promise<boolean> => {
-  mockWebhooks = mockWebhooks.filter(w => w.id !== id);
+  const { error } = await supabase
+    .from('webhooks')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
   return true;
 };
 
 export const triggerTestEvent = async (id: string, eventType: string): Promise<boolean> => {
-  const webhook = mockWebhooks.find(w => w.id === id);
-  if (!webhook) throw new Error('Webhook not found');
-  console.log(`[Webhook Test] Sending ${eventType} event to ${webhook.url}`);
+  const webhook = await supabase.from('webhooks').select('*').eq('id', id).single();
+  if (webhook.error) throw new Error('Webhook not found');
+  console.log(`[Webhook Test] Sending ${eventType} event to ${webhook.data.url}`);
   await new Promise(resolve => setTimeout(resolve, 1000));
   return true;
 };
