@@ -26,7 +26,7 @@ const WebhookIntegration = () => {
     name: '',
     url: '',
     events: ['post.created', 'engagement.received'],
-    active: true
+    is_active: true
   });
   const [showAddForm, setShowAddForm] = useState(false);
   const [testingWebhookId, setTestingWebhookId] = useState<string | null>(null);
