@@ -29,10 +29,10 @@ const Navbar = () => {
           <Link to="/profile" className="text-foreground/80 hover:text-primary transition-colors">
             Profile
           </Link>
-          <Link to="/integrations" className="text-foreground/80 hover:text-primary transition-colors">
+          <Link to="/api-integrations" className="text-foreground/80 hover:text-primary transition-colors">
             Integrations
           </Link>
-          <Link to="/docs" className="text-foreground/80 hover:text-primary transition-colors flex items-center gap-1">
+          <Link to="/documentation" className="text-foreground/80 hover:text-primary transition-colors flex items-center gap-1">
             <BookOpen className="h-4 w-4" />
             Docs
           </Link>
@@ -40,11 +40,11 @@ const Navbar = () => {
         
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Button variant="outline" size="sm" className="hidden sm:flex">
-            Log In
+          <Button variant="outline" size="sm" className="hidden sm:flex" asChild>
+            <Link to="/login">Log In</Link>
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white">
-            Sign Up
+          <Button size="sm" className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white" asChild>
+            <Link to="/register">Sign Up</Link>
           </Button>
         </div>
       </div>

@@ -26,7 +26,7 @@ const WebhookIntegration = () => {
     name: '',
     url: '',
     events: ['post.created', 'engagement.received'],
-    active: true
+    is_active: true
   });
   const [showAddForm, setShowAddForm] = useState(false);
   const [testingWebhookId, setTestingWebhookId] = useState<string | null>(null);
@@ -70,7 +70,7 @@ const WebhookIntegration = () => {
         name: newWebhook.name,
         url: newWebhook.url,
         events: newWebhook.events || [],
-        active: newWebhook.active ?? true
+        is_active: newWebhook.is_active ?? true
       });
       
       toast({
@@ -83,7 +83,7 @@ const WebhookIntegration = () => {
         name: '',
         url: '',
         events: ['post.created', 'engagement.received'],
-        active: true
+        is_active: true
       });
       setShowAddForm(false);
     } catch (error) {
@@ -95,17 +95,17 @@ const WebhookIntegration = () => {
     }
   };
   
-  const handleToggleWebhook = async (id: string, active: boolean) => {
+  const handleToggleWebhook = async (id: string, is_active: boolean) => {
     try {
-      await updateWebhook(id, { active });
+      await updateWebhook(id, { is_active });
       
       setWebhooks(webhooks.map(webhook => 
-        webhook.id === id ? { ...webhook, active } : webhook
+        webhook.id === id ? { ...webhook, is_active } : webhook
       ));
       
       toast({
-        title: active ? "Webhook Activated" : "Webhook Deactivated",
-        description: `Webhook has been ${active ? 'activated' : 'deactivated'}.`
+        title: is_active ? "Webhook Activated" : "Webhook Deactivated",
+        description: `Webhook has been ${is_active ? 'activated' : 'deactivated'}.`
       });
     } catch (error) {
       toast({
@@ -253,8 +253,8 @@ const WebhookIntegration = () => {
             <div className="flex items-center space-x-2">
               <Switch 
                 id="webhook-active"
-                checked={newWebhook.active}
-                onCheckedChange={checked => setNewWebhook({...newWebhook, active: checked})}
+                checked={newWebhook.is_active}
+                onCheckedChange={checked => setNewWebhook({...newWebhook, is_active: checked})}
               />
               <Label htmlFor="webhook-active">Active</Label>
             </div>
@@ -278,7 +278,7 @@ const WebhookIntegration = () => {
                 <div className="flex justify-between items-center">
                   <CardTitle>{webhook.name}</CardTitle>
                   <Switch 
-                    checked={webhook.active}
+                    checked={webhook.is_active}
                     onCheckedChange={checked => handleToggleWebhook(webhook.id, checked)}
                   />
                 </div>

@@ -1,82 +1,64 @@
-# TODO & Credit Estimates
+# Roundabout WebTraffic — TODO & Credits Tracker
 
-## Status Legend
-- ✅ Done
-- 🔄 In Progress
-- ⬚ Not Started
+*Last updated: 2026-03-08*
 
-## Phase 1: Critical Fixes
-| Task | Status | Credits |
-|------|--------|---------|
-| Fix App.tsx duplicate providers | ✅ | 0.5 |
-| Fix Providers.tsx "use client" | ✅ | 0.1 |
-| Add missing routes (7 routes) | ✅ | 0.5 |
-| **Phase 1 Total** | **✅** | **~1** |
+## Completed Work
 
-## Phase 2: Database Setup
-| Task | Status | Credits |
-|------|--------|---------|
-| Create profiles table + RLS + trigger | ✅ | 0.5 |
-| Create platform_connections table + RLS | ✅ | 0.3 |
-| Create scheduled_posts table + RLS | ✅ | 0.3 |
-| Create webhooks table + RLS | ✅ | 0.3 |
-| Create analytics_snapshots table + RLS | ✅ | 0.3 |
-| Update services to use real DB | ⬚ | 2 |
-| **Phase 2 Total** | **🔄** | **~3** |
+| # | Task | Credits Used | Date |
+|---|------|-------------|------|
+| 1 | Initial project scaffold (16 pages, components, routing) | ~5 | Pre-audit |
+| 2 | Database schema (5 tables + RLS + trigger) | ~2 | 2026-03-08 |
+| 3 | Fix App.tsx routing + Providers.tsx | ~1 | 2026-03-08 |
+| 4 | Fix Navbar consistency (NavbarWithAuth on all protected pages) | ~1 | 2026-03-08 |
+| 5 | Fix dead links (Navbar, Footer, Index) | ~1 | 2026-03-08 |
+| 6 | Password reset page + route | ~1 | 2026-03-08 |
+| 7 | Profile page connected to database | ~1 | 2026-03-08 |
+| 8 | Webhook service connected to database | ~1 | 2026-03-08 |
+| 9 | Documentation suite (30 files) | ~4 | 2026-03-08 |
+| 10 | Recreation prompt (full one-shot) | ~1 | 2026-03-08 |
+| **Total** | | **~18** | |
 
-## Phase 3: Documentation
-| Task | Status | Credits |
-|------|--------|---------|
-| 05_User_Journeys_And_Flows.md | ✅ | 0.3 |
-| 07_API_Documentation.md | ✅ | 0.3 |
-| 08_Database_Schema.md | ✅ | 0.3 |
-| 09_Auth_And_Security.md | ✅ | 0.3 |
-| 11_Codebase_Conventions.md | ✅ | 0.3 |
-| 12_Testing_Strategy.md | ✅ | 0.3 |
-| 13_Deployment.md | ✅ | 0.3 |
-| 14_Getting_Started_For_Users.md | ✅ | 0.3 |
-| 15_How_To_Guides.md | ✅ | 0.3 |
-| 25_TODO_AND_CREDITS.md (this file) | ✅ | 0.2 |
-| 03_COMPLETE_RECREATION_PROMPT.md | ✅ | 1 |
-| 24_Current_Valuation.md (AUD rewrite) | ✅ | 0.3 |
-| Update existing docs (01-04, 06, 10, 16-23) | ⬚ | 3 |
-| Create 25-29 business docs | ⬚ | 2 |
-| **Phase 3 Total** | **🔄** | **~8** |
+## Remaining Enhancements (24 items, ~72–115 credits)
 
-## Phase 4: Enhancement Roadmap
-| # | Enhancement | Status | Credits |
-|---|------------|--------|---------|
-| 1 | Link-in-Bio Builder | ⬚ | 5-8 |
-| 2 | Social Listening | ⬚ | 5-8 |
-| 3 | Content Recycling / Evergreen Queue | ⬚ | 3-5 |
-| 4 | A/B Testing for Posts | ⬚ | 5-8 |
-| 5 | Competitor Benchmarking | ⬚ | 5-8 |
-| 6 | RSS Feed to Social | ⬚ | 3-5 |
-| 7 | UTM Link Builder & Tracker | ⬚ | 2-3 |
-| 8 | Bulk CSV Upload Scheduling | ⬚ | 2-3 |
-| 9 | AI Brand Voice Training | ⬚ | 5-8 |
-| 10 | Unified Inbox | ⬚ | 5-8 |
-| 11 | Custom PDF Report Builder | ⬚ | 3-5 |
-| 12 | Content Templates Library | ⬚ | 2-3 |
-| 13 | Canva-Style Image Editor | ⬚ | 5-8 |
-| 14 | Auto-Reply Chatbot | ⬚ | 3-5 |
-| 15 | Multi-Language i18n | ⬚ | 3-5 |
-| 16 | Onboarding Tour | ⬚ | 2-3 |
-| 17 | Loading Skeletons | ⬚ | 1-2 |
-| 18 | Empty States | ⬚ | 1-2 |
-| 19 | Global Search (Cmd+K) | ⬚ | 2-3 |
-| 20 | Keyboard Shortcuts | ⬚ | 1-2 |
-| 21 | Notification Preferences | ⬚ | 2-3 |
-| 22 | API Key Management | ⬚ | 3-5 |
-| 23 | White-Label Mode | ⬚ | 3-5 |
-| 24 | Stripe Billing Integration | ⬚ | 3-5 |
-| **Phase 4 Total** | | **70-110** |
+### High Priority (7 items, 19–31 credits)
 
-## Grand Total
-| Category | Credits |
-|----------|---------|
-| Fixes (Phase 1) | ~1 ✅ |
-| Database (Phase 2) | ~3 (1 remaining) |
-| Documentation (Phase 3) | ~8 (5 remaining) |
-| Enhancements (Phase 4) | 70-110 |
-| **Total Remaining** | **~76-116** |
+| # | Enhancement | Est. Credits | Description |
+|---|------------|-------------|-------------|
+| 1 | Loading Skeletons | 1–2 | Replace spinners with skeleton UI on all pages |
+| 2 | Empty States | 1–2 | Proper illustrations and CTAs when data is empty |
+| 3 | Onboarding Tour | 2–3 | First-time user walkthrough with tooltips |
+| 4 | Link-in-Bio Builder | 5–8 | Drag-drop landing page builder for social bios |
+| 5 | Unified Inbox | 5–8 | Single view for comments/DMs across platforms |
+| 6 | Content Recycling Queue | 3–5 | Auto-repost top-performing content |
+| 7 | Connect remaining services to DB | 2–3 | Platform connections + scheduled posts + analytics |
+
+### Medium Priority (10 items, 32–49 credits)
+
+| # | Enhancement | Est. Credits |
+|---|------------|-------------|
+| 8 | Competitor Benchmarking | 5–8 |
+| 9 | A/B Testing for Posts | 5–8 |
+| 10 | RSS Feed to Social | 3–5 |
+| 11 | UTM Link Builder & Tracker | 2–3 |
+| 12 | Bulk CSV Upload Scheduling | 2–3 |
+| 13 | Content Templates Library | 2–3 |
+| 14 | Global Search (Cmd+K) | 2–3 |
+| 15 | Notification Preferences | 2–3 |
+| 16 | Stripe Billing Integration | 3–5 |
+| 17 | AI Brand Voice Training | 5–8 |
+
+### Low Priority (7 items, 21–35 credits)
+
+| # | Enhancement | Est. Credits |
+|---|------------|-------------|
+| 18 | PDF Report Builder | 3–5 |
+| 19 | Canva-Style Image Editor | 5–8 |
+| 20 | Auto-Reply Chatbot | 3–5 |
+| 21 | Multi-Language i18n | 3–5 |
+| 22 | Keyboard Shortcuts | 1–2 |
+| 23 | API Key Management | 3–5 |
+| 24 | White-Label Mode | 3–5 |
+
+## Documentation Status — All 30 ✅ Complete
+
+01–30 all present in `/docs` directory. See `docs/30_README_HANDOFF.md` for full listing.

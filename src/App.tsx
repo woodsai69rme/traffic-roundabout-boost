@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 import Communities from "./pages/Communities";
 import Monetization from "./pages/Monetization";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ const App = () => (
       <Route path="/auth" element={<Auth />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/platforms" element={<Platforms />} />
       <Route path="/content-planner" element={<ContentPlanner />} />
@@ -43,3 +45,4 @@ const App = () => (
 );
 
 export default App;
+

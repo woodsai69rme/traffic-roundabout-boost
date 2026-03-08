@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
+import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +16,7 @@ const Monetization = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <NavbarWithAuth />
       <main className="flex-grow bg-muted/20 py-8">
         <div className="container mx-auto px-4">
           <div className="mb-8">
