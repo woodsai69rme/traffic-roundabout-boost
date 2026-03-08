@@ -35,7 +35,7 @@ const DataExportImport = () => {
   const formats = [
     { value: "json", label: "JSON" },
     { value: "csv", label: "CSV" },
-    { value: "excel", label: "Excel" }
+    { value: "xlsx", label: "Excel" }
   ];
 
   const handleExport = async () => {
