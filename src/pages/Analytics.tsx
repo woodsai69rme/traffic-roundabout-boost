@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useAuth } from '@/hooks/use-auth';
 import { socialMediaService } from '@/services/socialMediaService';
 import type { EngagementMetrics, ContentPost } from '@/types/social';
+import { AnalyticsSkeleton } from '@/components/PageSkeleton';
 
 // Fallback mock data
 const defaultGrowthData = [

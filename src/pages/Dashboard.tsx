@@ -10,6 +10,9 @@ import { TrendingUp, Users, Eye, Heart, MessageCircle, Share, Plus } from 'lucid
 import { socialMediaService } from '@/services/socialMediaService';
 import type { EngagementMetrics, AIContentSuggestion } from '@/types/social';
 import { Link } from 'react-router-dom';
+import { DashboardSkeleton } from '@/components/PageSkeleton';
+import EmptyState from '@/components/EmptyState';
+import { BarChart3 } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -43,10 +46,9 @@ const Dashboard = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <NavbarWithAuth />
-        <main className="flex-grow flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your dashboard...</p>
+        <main className="flex-grow p-4 md:p-8">
+          <div className="container mx-auto">
+            <DashboardSkeleton />
           </div>
         </main>
         <Footer />

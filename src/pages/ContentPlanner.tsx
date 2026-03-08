@@ -154,12 +154,31 @@ const ContentPlanner = () => {
             </TabsContent>
             <TabsContent value="templates">
               <Card>
-                <CardHeader><CardTitle>Content Templates</CardTitle><CardDescription>Reusable templates to streamline your content creation</CardDescription></CardHeader>
-                <CardContent>
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Create content templates to save time and maintain consistency.</p>
-                    <Button className="mt-4">Create Template</Button>
+                <CardHeader><CardTitle>Content Templates</CardTitle><CardDescription>Save reusable templates for consistent posting</CardDescription></CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input className="border rounded-md px-3 py-2 text-sm bg-background" placeholder="Template name" value={newTemplateName} onChange={e => setNewTemplateName(e.target.value)} />
+                    <select className="border rounded-md px-3 py-2 text-sm bg-background" value={newTemplatePlatform} onChange={e => setNewTemplatePlatform(e.target.value)}>
+                      <option value="instagram">Instagram</option><option value="twitter">Twitter</option><option value="linkedin">LinkedIn</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
+                    </select>
+                    <Button onClick={saveTemplate}>Save Template</Button>
                   </div>
+                  <textarea className="w-full border rounded-md px-3 py-2 text-sm min-h-[80px] bg-background" placeholder="Template content..." value={newTemplateContent} onChange={e => setNewTemplateContent(e.target.value)} />
+                  {templates.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-4">No templates yet. Create one above.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {templates.map(t => (
+                        <div key={t.id} className="flex items-start justify-between p-4 border rounded-lg">
+                          <div>
+                            <p className="font-medium">{t.name} <span className="text-xs text-muted-foreground capitalize ml-2">{t.platform}</span></p>
+                            <p className="text-sm text-muted-foreground mt-1">{t.content}</p>
+                          </div>
+                          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteTemplate(t.id)}>Delete</Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

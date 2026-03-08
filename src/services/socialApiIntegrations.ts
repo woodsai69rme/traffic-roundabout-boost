@@ -136,6 +136,27 @@ export const fetchScheduledPosts = async (): Promise<Post[]> => {
 };
 
 export const getHashtagAnalytics = async (_platform: string): Promise<HashtagAnalytics[]> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { data } = await supabase
+      .from('analytics_snapshots')
+      .select('platform, reach, engagement_rate, impressions')
+      .eq('user_id', user.id)
+      .order('snapshot_date', { ascending: false })
+      .limit(10);
+
+    if (data && data.length > 0) {
+      return data.map((row, i) => ({
+        hashtag: `#${row.platform}`,
+        usage_count: row.impressions || 0,
+        reach: row.reach || 0,
+        engagement_rate: Number(row.engagement_rate) || 0,
+        trending_score: Math.max(10, 90 - i * 10),
+      }));
+    }
+  }
+
+  // Fallback mock
   return [
     { hashtag: '#socialmedia', usage_count: 245, reach: 12500, engagement_rate: 4.2, trending_score: 85 },
     { hashtag: '#marketing', usage_count: 189, reach: 9800, engagement_rate: 3.8, trending_score: 72 },
