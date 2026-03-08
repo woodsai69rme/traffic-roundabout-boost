@@ -1,10 +1,6 @@
 
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/use-auth";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Platforms from "./pages/Platforms";
@@ -14,29 +10,36 @@ import AudienceInsights from "./pages/AudienceInsights";
 import AIContentCreator from "./pages/AIContentCreator";
 import Documentation from "./pages/Documentation";
 import Auth from "./pages/Auth";
-
-const queryClient = new QueryClient();
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Communities from "./pages/Communities";
+import Monetization from "./pages/Monetization";
+import NotFound from "./pages/NotFound";
+import SocialApiIntegrationPage from "./components/ApiIntegrations/SocialApiIntegrationPage";
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/platforms" element={<Platforms />} />
-          <Route path="/content-planner" element={<ContentPlanner />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/audience-insights" element={<AudienceInsights />} />
-          <Route path="/ai-content" element={<AIContentCreator />} />
-          <Route path="/documentation" element={<Documentation />} />
-        </Routes>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <>
+    <Toaster />
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/platforms" element={<Platforms />} />
+      <Route path="/content-planner" element={<ContentPlanner />} />
+      <Route path="/analytics" element={<Analytics />} />
+      <Route path="/audience-insights" element={<AudienceInsights />} />
+      <Route path="/ai-content" element={<AIContentCreator />} />
+      <Route path="/documentation" element={<Documentation />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/communities" element={<Communities />} />
+      <Route path="/monetization" element={<Monetization />} />
+      <Route path="/api-integrations" element={<SocialApiIntegrationPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </>
 );
 
 export default App;
