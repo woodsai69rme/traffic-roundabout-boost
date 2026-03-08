@@ -83,7 +83,7 @@ const WebhookIntegration = () => {
         name: '',
         url: '',
         events: ['post.created', 'engagement.received'],
-        active: true
+        is_active: true
       });
       setShowAddForm(false);
     } catch (error) {
