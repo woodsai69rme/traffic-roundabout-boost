@@ -70,7 +70,7 @@ const WebhookIntegration = () => {
         name: newWebhook.name,
         url: newWebhook.url,
         events: newWebhook.events || [],
-        active: newWebhook.active ?? true
+        is_active: newWebhook.is_active ?? true
       });
       
       toast({
