@@ -95,12 +95,12 @@ const WebhookIntegration = () => {
     }
   };
   
-  const handleToggleWebhook = async (id: string, active: boolean) => {
+  const handleToggleWebhook = async (id: string, is_active: boolean) => {
     try {
-      await updateWebhook(id, { active });
+      await updateWebhook(id, { is_active });
       
       setWebhooks(webhooks.map(webhook => 
-        webhook.id === id ? { ...webhook, active } : webhook
+        webhook.id === id ? { ...webhook, is_active } : webhook
       ));
       
       toast({
