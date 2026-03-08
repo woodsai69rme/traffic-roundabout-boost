@@ -1,6 +1,7 @@
 # Roundabout WebTraffic — Complete One-Shot Recreation Prompt
 
 > **Purpose:** This single prompt can recreate the entire Roundabout WebTraffic project from scratch in Lovable.dev (or any React + Vite + Tailwind + Supabase environment) with NO existing codebase.
+> **Last updated:** 2026-03-08 (v0.8.0)
 
 ---
 
@@ -164,9 +165,43 @@ In `AIContentCreator.tsx`, call via `supabase.functions.invoke('generate-content
 - **Dark/light theme** via next-themes
 - **Auth guard** — ProtectedRoute redirects unauthenticated users to `/login`
 - **Skeleton loading** — Dashboard, Analytics, ContentPlanner use skeleton UI during load
+- **EmptyState** — Illustrated empty states with CTA when no data
 
 ### DEPLOYMENT
 
 Works with: Vercel (`vercel.json`), Netlify (`netlify.toml`), Docker (`Dockerfile`), Railway, Lovable.dev publish, AWS Amplify, Google Cloud Run, Fly.io, Render, self-hosted VPS. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Edge functions auto-deploy with Lovable Cloud.
+
+### DEPLOYMENT CONFIGS
+
+**Dockerfile** (multi-stage):
+```dockerfile
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf (SPA fallback)
+EXPOSE 80
+```
+
+**vercel.json**:
+```json
+{ "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
+```
+
+**netlify.toml**:
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
 
 Build all of this as a complete, working application.
