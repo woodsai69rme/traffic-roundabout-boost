@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import NavbarWithAuth from '@/components/NavbarWithAuth';
 import Footer from '@/components/Footer';
@@ -9,15 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { fetchScheduledPosts, Post } from '@/services/socialApiIntegrations';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContentPlanner = () => {
   const [scheduledPosts, setScheduledPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadScheduledPosts();
-  }, []);
+  useEffect(() => { loadScheduledPosts(); }, []);
 
   const loadScheduledPosts = async () => {
     try {
@@ -26,29 +24,59 @@ const ContentPlanner = () => {
       setScheduledPosts(posts);
     } catch (error) {
       console.error("Error loading scheduled posts:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load scheduled posts. Please try again later.",
-        variant: "destructive"
-      });
+      toast({ title: "Error", description: "Failed to load scheduled posts.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleEditPost = (post: Post) => {
-    // To be implemented with a modal form
-    console.log("Edit post:", post);
+  const handleEditPost = async (post: Post) => {
+    // Update status to 'scheduled' if draft
+    if (post.id.startsWith('demo-')) {
+      toast({ title: "Demo post", description: "This is a demo post and cannot be edited." });
+      return;
+    }
+    const { error } = await supabase
+      .from('scheduled_posts')
+      .update({ status: post.status === 'draft' ? 'scheduled' : 'draft', updated_at: new Date().toISOString() })
+      .eq('id', post.id);
+    if (error) {
+      toast({ title: "Error", description: "Failed to update post.", variant: "destructive" });
+    } else {
+      toast({ title: "Updated", description: `Post status changed to ${post.status === 'draft' ? 'scheduled' : 'draft'}.` });
+      loadScheduledPosts();
+    }
   };
 
-  const handleDeletePost = (post: Post) => {
-    // To be implemented with confirmation
-    console.log("Delete post:", post);
+  const handleDeletePost = async (post: Post) => {
+    if (post.id.startsWith('demo-')) {
+      toast({ title: "Demo post", description: "This is a demo post and cannot be deleted." });
+      return;
+    }
+    const { error } = await supabase.from('scheduled_posts').delete().eq('id', post.id);
+    if (error) {
+      toast({ title: "Error", description: "Failed to delete post.", variant: "destructive" });
+    } else {
+      toast({ title: "Deleted", description: "Post has been removed." });
+      loadScheduledPosts();
+    }
   };
 
-  const handlePublishNow = (post: Post) => {
-    // To be implemented
-    console.log("Publish now:", post);
+  const handlePublishNow = async (post: Post) => {
+    if (post.id.startsWith('demo-')) {
+      toast({ title: "Demo post", description: "This is a demo post and cannot be published." });
+      return;
+    }
+    const { error } = await supabase
+      .from('scheduled_posts')
+      .update({ status: 'published', updated_at: new Date().toISOString() })
+      .eq('id', post.id);
+    if (error) {
+      toast({ title: "Error", description: "Failed to publish post.", variant: "destructive" });
+    } else {
+      toast({ title: "Published", description: "Post has been published!" });
+      loadScheduledPosts();
+    }
   };
 
   return (
@@ -60,7 +88,6 @@ const ContentPlanner = () => {
             <h1 className="text-3xl md:text-4xl font-bold mb-2">Content Planner</h1>
             <p className="text-muted-foreground">Schedule and manage content across all your platforms</p>
           </header>
-          
           <Tabs defaultValue="calendar" className="space-y-6">
             <div className="flex justify-between items-center">
               <TabsList>
@@ -68,50 +95,27 @@ const ContentPlanner = () => {
                 <TabsTrigger value="queue">Content Queue</TabsTrigger>
                 <TabsTrigger value="templates">Content Templates</TabsTrigger>
               </TabsList>
-              
               <div className="flex gap-2">
                 <Button variant="outline">Import</Button>
                 <Button>New Post</Button>
               </div>
             </div>
-            
-            <TabsContent value="calendar">
-              <ContentCalendar />
-            </TabsContent>
-            
+            <TabsContent value="calendar"><ContentCalendar /></TabsContent>
             <TabsContent value="queue">
               <Card>
-                <CardHeader>
-                  <CardTitle>Content Queue</CardTitle>
-                  <CardDescription>
-                    Manage your upcoming scheduled content
-                  </CardDescription>
-                </CardHeader>
+                <CardHeader><CardTitle>Content Queue</CardTitle><CardDescription>Manage your upcoming scheduled content</CardDescription></CardHeader>
                 <CardContent>
                   {isLoading ? (
-                    <div className="text-center py-8">
-                      <p>Loading posts...</p>
-                    </div>
+                    <div className="text-center py-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2" /><p>Loading posts...</p></div>
                   ) : (
-                    <ScheduledPostsList 
-                      posts={scheduledPosts}
-                      onEdit={handleEditPost}
-                      onDelete={handleDeletePost}
-                      onPublishNow={handlePublishNow}
-                    />
+                    <ScheduledPostsList posts={scheduledPosts} onEdit={handleEditPost} onDelete={handleDeletePost} onPublishNow={handlePublishNow} />
                   )}
                 </CardContent>
               </Card>
             </TabsContent>
-            
             <TabsContent value="templates">
               <Card>
-                <CardHeader>
-                  <CardTitle>Content Templates</CardTitle>
-                  <CardDescription>
-                    Reusable templates to streamline your content creation
-                  </CardDescription>
-                </CardHeader>
+                <CardHeader><CardTitle>Content Templates</CardTitle><CardDescription>Reusable templates to streamline your content creation</CardDescription></CardHeader>
                 <CardContent>
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">Create content templates to save time and maintain consistency.</p>

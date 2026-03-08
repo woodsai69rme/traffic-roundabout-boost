@@ -1,3 +1,5 @@
+import { supabase } from '@/integrations/supabase/client';
+
 export interface ExportOptions {
   format: 'json' | 'csv' | 'xlsx';
   dataType: 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements';
@@ -26,21 +28,74 @@ const mockData: Record<string, any[]> = {
   ],
 };
 
+const queryTable = async (dataType: string): Promise<any[] | null> => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  if (dataType === 'analytics' || dataType === 'engagements') {
+    const { data } = await supabase
+      .from('analytics_snapshots')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('snapshot_date', { ascending: false })
+      .limit(100);
+    return data && data.length > 0 ? data : null;
+  }
+
+  if (dataType === 'posts') {
+    const { data } = await supabase
+      .from('scheduled_posts')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(100);
+    return data && data.length > 0 ? data : null;
+  }
+
+  if (dataType === 'accounts') {
+    const { data } = await supabase
+      .from('platform_connections')
+      .select('*')
+      .eq('user_id', user.id);
+    return data && data.length > 0 ? data : null;
+  }
+
+  return null;
+};
+
+const toCsv = (entries: any[]): string => {
+  if (!entries.length) return 'No data';
+  const headers = Object.keys(entries[0]).join(',');
+  const rows = entries.map((r: any) => Object.values(r).map(v => JSON.stringify(v ?? '')).join(','));
+  return headers + '\n' + rows.join('\n');
+};
+
 export const exportData = async (options: ExportOptions): Promise<Blob> => {
-  const data = options.dataType === 'all' ? mockData : { [options.dataType]: mockData[options.dataType] || [] };
+  let data: Record<string, any[]>;
+
+  if (options.dataType === 'all') {
+    const [analytics, posts, accounts] = await Promise.all([
+      queryTable('analytics'),
+      queryTable('posts'),
+      queryTable('accounts'),
+    ]);
+    data = {
+      analytics: analytics || mockData.analytics,
+      posts: posts || mockData.posts,
+      accounts: accounts || mockData.accounts,
+    };
+  } else {
+    const dbData = await queryTable(options.dataType);
+    data = { [options.dataType]: dbData || mockData[options.dataType] || [] };
+  }
 
   if (options.format === 'json') {
     return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   }
 
   if (options.format === 'csv') {
-    const entries = options.dataType === 'all' ? mockData.analytics : (mockData[options.dataType] || []);
-    if (!Array.isArray(entries) || entries.length === 0) {
-      return new Blob(['No data'], { type: 'text/csv' });
-    }
-    const headers = Object.keys(entries[0]).join(',');
-    const rows = entries.map((r: any) => Object.values(r).join(','));
-    return new Blob([headers + '\n' + rows.join('\n')], { type: 'text/csv' });
+    const entries = options.dataType === 'all' ? (data.analytics || []) : (data[options.dataType] || []);
+    return new Blob([toCsv(entries)], { type: 'text/csv' });
   }
 
   return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -49,11 +104,30 @@ export const exportData = async (options: ExportOptions): Promise<Blob> => {
 export const importData = async (file: File): Promise<ImportResult> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       try {
         const content = reader.result as string;
         const parsed = JSON.parse(content);
-        const count = Array.isArray(parsed) ? parsed.length : Object.keys(parsed).length;
+        const records = Array.isArray(parsed) ? parsed : Object.values(parsed).flat();
+        const count = records.length;
+
+        // Try to insert into scheduled_posts if records look like posts
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && count > 0 && records[0]?.content) {
+          const rows = records.map((r: any) => ({
+            user_id: user.id,
+            content: r.content || '',
+            platforms: r.platforms || r.platform ? [r.platform] : [],
+            scheduled_for: r.scheduled_for || r.scheduled_time || new Date().toISOString(),
+            status: r.status || 'draft',
+          }));
+          const { error } = await supabase.from('scheduled_posts').insert(rows);
+          if (error) {
+            resolve({ success: false, recordsImported: 0, errors: [error.message] });
+            return;
+          }
+        }
+
         resolve({ success: true, recordsImported: count });
       } catch {
         resolve({ success: false, recordsImported: 0, errors: ['Invalid file format'] });

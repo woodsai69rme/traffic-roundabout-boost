@@ -2,6 +2,20 @@
 
 All notable changes to Roundabout WebTraffic are documented here.
 
+## [0.6.0] — 2026-03-08
+
+### Added
+- **Real AI Content Generation** — Edge function `generate-content` using Lovable AI (google/gemini-3-flash-preview) replaces setTimeout mock
+- **DB-connected data export/import** — `dataImportExportService.ts` now queries `analytics_snapshots`, `scheduled_posts`, `platform_connections` tables with mock fallback
+- **DB-connected Analytics page** — `Analytics.tsx` loads real metrics and posts from services, populates charts dynamically
+- **ContentPlanner full CRUD** — Delete, publish, and toggle-status operations now execute against `scheduled_posts` table via Supabase
+
+### Changed
+- `AIContentCreator.tsx` calls edge function instead of mock setTimeout
+- `Analytics.tsx` uses `useAuth` + `socialMediaService` for real data with fallback
+- `ContentPlanner.tsx` handlers perform real DB mutations with toast feedback
+- Bumped valuation to AUD $30,000–$50,000
+
 ## [0.5.0] — 2026-03-08
 
 ### Added

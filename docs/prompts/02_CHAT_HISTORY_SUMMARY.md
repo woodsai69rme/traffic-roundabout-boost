@@ -25,9 +25,25 @@
 - Updated recreation prompt with DB-connected architecture
 - Bumped valuation to AUD $25,000-$45,000
 
+### Session 4 (2026-03-08 — Evening)
+- Audit & planning session — identified remaining mock services and stubs
+
+### Session 5 (2026-03-08 — Late Evening)
+- **dataImportExportService.ts**: DB-connected export/import querying analytics_snapshots, scheduled_posts, platform_connections
+- **Analytics.tsx**: Now loads real data from socialMediaService with loading spinner and mock fallback
+- **ContentPlanner.tsx**: Full CRUD — delete, publish, toggle status all execute real Supabase mutations
+- **AI Edge Function**: Created `supabase/functions/generate-content/index.ts` using Lovable AI (google/gemini-3-flash-preview)
+- **AIContentCreator.tsx**: Replaced setTimeout mock with real edge function call
+- Updated config.toml with `[functions.generate-content] verify_jwt = false`
+- Updated 7 docs: Changelog, TODO, Chat History, Recreation Prompt, Valuation, Roadmap, Validation Checklist
+- Bumped valuation to AUD $30,000-$50,000
+
 ### Current State
-- All 17 routes functional
-- 5/5 DB tables integrated with services
-- Auth guard on all protected routes
-- 30+ docs complete
-- Ready for beta testing
+- All 17 routes functional with ProtectedRoute guards
+- 5/5 DB tables integrated — zero mock-only services remain
+- Real AI content generation via Lovable AI edge function
+- Full CRUD on ContentPlanner (delete/publish/edit)
+- Analytics page loads from DB with fallback
+- Export/import queries real data
+- 30+ docs complete and current
+- Ready for production deployment
