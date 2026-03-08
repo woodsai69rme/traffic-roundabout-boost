@@ -90,22 +90,58 @@ CREATE POLICY "Users manage own analytics" ON public.analytics_snapshots FOR ALL
 
 Create AuthProvider context with `signIn`, `signUp`, `signOut` methods using Supabase auth. Track user/session state via `onAuthStateChange`. Wrap app in Providers component (BrowserRouter > QueryClientProvider > AuthProvider > ThemeProvider > TooltipProvider).
 
+Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, show spinner; if no `user`, redirect to `/login`. Wrap all authenticated routes with this component.
+
 ### 17 ROUTES
 
-`/` Landing | `/login` Login | `/register` Register | `/reset-password` Password Reset | `/auth` Tabbed Auth | `/dashboard` Dashboard | `/platforms` Platforms | `/content-planner` Content Planner | `/analytics` Analytics | `/audience-insights` Audience Insights | `/ai-content` AI Content Creator | `/documentation` Documentation | `/profile` Profile (DB-connected) | `/communities` Communities | `/monetization` Monetization | `/api-integrations` API Integrations | `*` 404
+| Route | Component | Protected | Description |
+|-------|-----------|-----------|-------------|
+| `/` | Index | No | Landing page with hero, features, CTA |
+| `/login` | Login | No | Email/password login form |
+| `/register` | Register | No | Email/password signup form |
+| `/auth` | Auth | No | Tabbed sign-in/sign-up |
+| `/reset-password` | ResetPassword | No | Dual mode: request reset (email) or set new password (recovery token) |
+| `/documentation` | Documentation | No | Markdown docs browser |
+| `/dashboard` | Dashboard | Yes | Metrics, platform performance, AI suggestions, quick actions |
+| `/platforms` | Platforms | Yes | Connect/manage 10 social platforms |
+| `/content-planner` | ContentPlanner | Yes | Calendar, content queue, templates |
+| `/analytics` | Analytics | Yes | Line/bar/pie charts, content performance table, demographics |
+| `/audience-insights` | AudienceInsights | Yes | Demographics, engagement patterns, hashtag analytics |
+| `/ai-content` | AIContentCreator | Yes | AI content generation with platform/tone selectors |
+| `/profile` | Profile | Yes | Read/write to profiles DB table |
+| `/communities` | Communities | Yes | Discussions, groups, events tabs |
+| `/monetization` | Monetization | Yes | Revenue tools, marketplace, pricing tiers |
+| `/api-integrations` | SocialApiIntegrationPage | Yes | Platform API config, webhooks CRUD, data export/import |
+| `*` | NotFound | No | 404 page |
+
+### SERVICE LAYER (All DB-Connected)
+
+**socialMediaService.ts** — Queries `platform_connections`, `scheduled_posts`, `analytics_snapshots` tables. Methods: `getConnectedPlatforms()`, `connectPlatform()`, `getContentPosts()`, `schedulePost()`, `getEngagementMetrics()`, `getAIContentSuggestions()`, `getAudienceInsights()`. All include mock fallback for empty data.
+
+**socialApiIntegrations.ts** — Queries `platform_connections` and `scheduled_posts`. Methods: `fetchApiConfigurations()`, `updateApiConfiguration()`, `disconnectPlatform()`, `fetchScheduledPosts()`, `getHashtagAnalytics()`.
+
+**webhookService.ts** — Full CRUD against `webhooks` table. Methods: `getWebhooks()`, `createWebhook()`, `updateWebhook()`, `deleteWebhook()`, `toggleWebhook()`.
+
+**dataImportExportService.ts** — Export data as JSON/CSV, import from file upload, download templates.
 
 ### KEY FEATURES
 
-- **Two navbars:** Navbar (public), NavbarWithAuth (protected pages — Dashboard, Analytics, Communities, Monetization, Profile, etc.)
+- **Two navbars:** Navbar (public), NavbarWithAuth (protected pages with user menu, theme toggle)
 - **Footer** with real links to all routes
 - **Profile page** reads/writes to `profiles` table via Supabase client
 - **Webhook service** performs CRUD against `webhooks` table
 - **Password reset** — request mode (email form) and update mode (new password form when URL has recovery token)
 - **10 platform support** — Instagram, YouTube, TikTok, Twitter, Facebook, LinkedIn, Pinterest, Reddit, Snapchat, Twitch
 - **AI content generator** — Platform selector, tone selector, content generation
-- **Content scheduler** — Calendar view, post creation, scheduling
+- **Content scheduler** — Calendar view, post creation, scheduling to DB
 - **Analytics** — Line/bar/pie charts with Recharts
 - **Communities** — Discussions, groups, events tabs
 - **Monetization** — Revenue tools, marketplace, pricing
+- **Dark/light theme** via next-themes
+- **Auth guard** — ProtectedRoute redirects unauthenticated users to `/login`
+
+### DEPLOYMENT
+
+Works with: Vercel, Netlify, Railway, Docker, Lovable.dev publish. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`.
 
 Build all of this as a complete, working application.

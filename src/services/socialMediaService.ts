@@ -1,33 +1,60 @@
-
 import type { SocialPlatform, ContentPost, EngagementMetrics, AIContentSuggestion, AudienceInsight } from '@/types/social';
 import { platforms } from './platforms';
+import { supabase } from '@/integrations/supabase/client';
+
+const mockMetrics: EngagementMetrics[] = [
+  { platform: 'instagram', followers: 2453, engagement_rate: 4.2, reach: 15600, impressions: 23400, growth_rate: 12.5 },
+  { platform: 'twitter', followers: 1876, engagement_rate: 3.8, reach: 8900, impressions: 12300, growth_rate: 8.7 },
+];
 
 export const socialMediaService = {
   async getConnectedPlatforms(userId: string): Promise<SocialPlatform[]> {
-    const engagementMetrics = await this.getEngagementMetrics(userId);
+    const { data: connections } = await supabase
+      .from('platform_connections')
+      .select('*')
+      .eq('user_id', userId);
+
+    const metrics = await this.getEngagementMetrics(userId);
 
     return platforms.map(platform => {
-      const metrics = engagementMetrics.find(m => m.platform === platform.id);
+      const conn = connections?.find(c => c.platform === platform.id);
+      const metric = metrics.find(m => m.platform === platform.id);
       return {
         id: platform.id,
         name: platform.name,
         icon: platform.icon,
-        connected: false,
-        followers: metrics?.followers || 0,
-        engagement_rate: metrics?.engagement_rate || 0,
+        connected: conn?.status === 'connected',
+        followers: metric?.followers || 0,
+        engagement_rate: metric?.engagement_rate || 0,
         last_post: '3 hours ago',
       };
     });
   },
 
   async connectPlatform(userId: string, platform: string, credentials: any) {
-    console.log('Connecting platform:', platform, 'for user:', userId);
-    return null;
+    const { error } = await supabase
+      .from('platform_connections')
+      .upsert({
+        user_id: userId,
+        platform,
+        access_token: credentials?.access_token || '',
+        status: 'connected',
+        connected_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    return error ? null : { success: true };
   },
 
   async getContentPosts(userId: string): Promise<ContentPost[]> {
-    return [
-      {
+    const { data } = await supabase
+      .from('scheduled_posts')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (!data || data.length === 0) {
+      return [{
         id: '1',
         platform: 'instagram',
         content: 'Check out this amazing view! 🌅 #sunrise #nature #photography',
@@ -35,36 +62,74 @@ export const socialMediaService = {
         scheduled_time: new Date(),
         status: 'published',
         engagement: { likes: 156, comments: 23, shares: 12, views: 1240 },
-      },
-    ];
+      }];
+    }
+
+    return data.map(row => ({
+      id: row.id,
+      platform: row.platforms[0] || 'unknown',
+      content: row.content,
+      media_urls: row.media_urls || [],
+      scheduled_time: new Date(row.scheduled_for),
+      status: row.status as ContentPost['status'],
+      engagement: { likes: 0, comments: 0, shares: 0, views: 0 },
+    }));
   },
 
   async schedulePost(userId: string, post: Partial<ContentPost>) {
-    console.log('Scheduling post:', post);
+    const { error } = await supabase
+      .from('scheduled_posts')
+      .insert({
+        user_id: userId,
+        content: post.content || '',
+        platforms: post.platform ? [post.platform] : [],
+        scheduled_for: post.scheduled_time?.toISOString() || new Date().toISOString(),
+        status: 'scheduled',
+        media_urls: post.media_urls || [],
+      });
+    if (error) console.error('Error scheduling post:', error);
   },
 
   async getEngagementMetrics(userId: string): Promise<EngagementMetrics[]> {
-    return [
-      { platform: 'instagram', followers: 2453, engagement_rate: 4.2, reach: 15600, impressions: 23400, growth_rate: 12.5 },
-      { platform: 'twitter', followers: 1876, engagement_rate: 3.8, reach: 8900, impressions: 12300, growth_rate: 8.7 },
-    ];
+    const { data } = await supabase
+      .from('analytics_snapshots')
+      .select('*')
+      .eq('user_id', userId)
+      .order('snapshot_date', { ascending: false })
+      .limit(10);
+
+    if (!data || data.length === 0) return mockMetrics;
+
+    const byPlatform = new Map<string, EngagementMetrics>();
+    for (const row of data) {
+      if (!byPlatform.has(row.platform)) {
+        byPlatform.set(row.platform, {
+          platform: row.platform,
+          followers: row.followers || 0,
+          engagement_rate: Number(row.engagement_rate) || 0,
+          reach: row.reach || 0,
+          impressions: row.impressions || 0,
+          growth_rate: 0,
+        });
+      }
+    }
+
+    return byPlatform.size > 0 ? Array.from(byPlatform.values()) : mockMetrics;
   },
 
-  async getAIContentSuggestions(userId: string, platform: string): Promise<AIContentSuggestion[]> {
-    return [
-      {
-        id: '1',
-        platform,
-        content: 'Share behind-the-scenes content to increase engagement',
-        hashtags: ['#BTS', '#authentic', '#community'],
-        optimal_time: new Date(Date.now() + 3600000),
-        predicted_engagement: 8.5,
-        confidence_score: 0.87,
-      },
-    ];
+  async getAIContentSuggestions(_userId: string, platform: string): Promise<AIContentSuggestion[]> {
+    return [{
+      id: '1',
+      platform,
+      content: 'Share behind-the-scenes content to increase engagement',
+      hashtags: ['#BTS', '#authentic', '#community'],
+      optimal_time: new Date(Date.now() + 3600000),
+      predicted_engagement: 8.5,
+      confidence_score: 0.87,
+    }];
   },
 
-  async getAudienceInsights(userId: string, platform: string): Promise<AudienceInsight> {
+  async getAudienceInsights(_userId: string, platform: string): Promise<AudienceInsight> {
     return {
       platform,
       demographics: {
