@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useAuth } from '@/hooks/use-auth';
 import { socialMediaService } from '@/services/socialMediaService';
 import type { EngagementMetrics, ContentPost } from '@/types/social';
+import { AnalyticsSkeleton } from '@/components/PageSkeleton';
 
 // Fallback mock data
 const defaultGrowthData = [
@@ -103,8 +104,10 @@ const Analytics = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <NavbarWithAuth />
-        <main className="flex-grow flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <main className="flex-grow bg-muted/20 py-8">
+          <div className="container mx-auto px-4">
+            <AnalyticsSkeleton />
+          </div>
         </main>
         <Footer />
       </div>

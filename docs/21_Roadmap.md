@@ -2,7 +2,7 @@
 
 *Last updated: 2026-03-08*
 
-## Completed (v0.4.0 – v0.6.0)
+## Completed (v0.4.0 – v0.7.0)
 
 - ✅ **Core Platform** — 17 routes, 40+ components, responsive design, dark/light theme
 - ✅ **Supabase Backend** — 5 tables with RLS, auto-profile trigger
@@ -11,11 +11,17 @@
 - ✅ **DB-Connected Services** — All services query real tables with mock fallback
 - ✅ **Real AI Content Generation** — Edge function with Lovable AI (google/gemini-3-flash-preview)
 - ✅ **Content Planner CRUD** — Delete, publish, toggle status on scheduled posts
-- ✅ **Analytics Dashboard** — DB-connected charts with loading states
+- ✅ **Content Templates** — localStorage-backed create/delete/list
+- ✅ **Analytics Dashboard** — DB-connected charts with skeleton loading
+- ✅ **Hashtag Analytics** — DB-connected with mock fallback
 - ✅ **Data Export/Import** — Real DB queries, JSON/CSV support
 - ✅ **Webhook Management** — Full CRUD against webhooks table
 - ✅ **Profile Management** — Read/write to profiles table
+- ✅ **Skeleton Loading States** — Dashboard, Analytics, ContentPlanner
+- ✅ **EmptyState Component** — Reusable empty state with CTA
+- ✅ **Deployment Configs** — Dockerfile, netlify.toml, vercel.json
 - ✅ **30+ Documentation Files** — Product, technical, investor, developer docs
+- ✅ **Recreation Prompt** — One-shot full recreation prompt
 
 ## Q2 2026: Enhancement & Polish
 
@@ -26,7 +32,6 @@
 | Content Recycling Queue | 3-5 | High |
 | Unified Inbox (DMs/Comments) | 5-8 | High |
 | Onboarding Tour | 2-3 | High |
-| Loading Skeletons & Empty States | 1-2 | High |
 
 ## Q3 2026: Growth Features
 
@@ -38,7 +43,7 @@
 | UTM Link Builder | 2-3 | Medium |
 | Bulk CSV Scheduling | 2-3 | Medium |
 | AI Brand Voice Training | 5-8 | Medium |
-| Content Templates Library (DB) | 2-3 | Medium |
+| Content Templates DB Upgrade | 2-3 | Medium |
 | Full Post Edit Modal | 2-3 | Medium |
 | Global Search (Cmd+K) | 2-3 | Medium |
 

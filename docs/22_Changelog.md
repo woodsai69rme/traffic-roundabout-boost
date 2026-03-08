@@ -2,6 +2,21 @@
 
 All notable changes to Roundabout WebTraffic are documented here.
 
+## [0.7.0] — 2026-03-08
+
+### Added
+- **Skeleton loaders** — Dashboard, Analytics, ContentPlanner now show skeleton UI during loading instead of generic spinners
+- **EmptyState component** — Reusable illustrated empty state with CTA for pages with no data
+- **Content Templates (localStorage)** — ContentPlanner templates tab now has create/delete/list functionality backed by localStorage
+- **Deployment configs** — Added `Dockerfile`, `netlify.toml`, `vercel.json` for one-click deploy to any platform
+- **DB-connected hashtag analytics** — `getHashtagAnalytics()` now queries `analytics_snapshots` with mock fallback
+
+### Changed
+- ContentPlanner loading state uses `ContentPlannerSkeleton` instead of spinner
+- Analytics loading state uses `AnalyticsSkeleton` instead of spinner
+- Dashboard loading state uses `DashboardSkeleton` instead of spinner
+- `isLoading` in ContentPlanner now defaults to `true` for proper initial skeleton display
+
 ## [0.6.0] — 2026-03-08
 
 ### Added

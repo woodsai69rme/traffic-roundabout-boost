@@ -9,10 +9,49 @@ import { Button } from '@/components/ui/button';
 import { fetchScheduledPosts, Post } from '@/services/socialApiIntegrations';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ContentPlannerSkeleton } from '@/components/PageSkeleton';
+
+interface ContentTemplate {
+  id: string;
+  name: string;
+  content: string;
+  platform: string;
+}
+
+const TEMPLATES_KEY = 'roundabout_content_templates';
 
 const ContentPlanner = () => {
   const [scheduledPosts, setScheduledPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [templates, setTemplates] = useState<ContentTemplate[]>([]);
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [newTemplateContent, setNewTemplateContent] = useState('');
+  const [newTemplatePlatform, setNewTemplatePlatform] = useState('instagram');
+
+  useEffect(() => {
+    const saved = localStorage.getItem(TEMPLATES_KEY);
+    if (saved) setTemplates(JSON.parse(saved));
+  }, []);
+
+  const saveTemplate = () => {
+    if (!newTemplateName.trim() || !newTemplateContent.trim()) {
+      toast({ title: "Missing fields", description: "Name and content are required.", variant: "destructive" });
+      return;
+    }
+    const t: ContentTemplate = { id: crypto.randomUUID(), name: newTemplateName, content: newTemplateContent, platform: newTemplatePlatform };
+    const updated = [...templates, t];
+    setTemplates(updated);
+    localStorage.setItem(TEMPLATES_KEY, JSON.stringify(updated));
+    setNewTemplateName(''); setNewTemplateContent(''); setNewTemplatePlatform('instagram');
+    toast({ title: "Saved", description: "Template created." });
+  };
+
+  const deleteTemplate = (id: string) => {
+    const updated = templates.filter(t => t.id !== id);
+    setTemplates(updated);
+    localStorage.setItem(TEMPLATES_KEY, JSON.stringify(updated));
+    toast({ title: "Deleted", description: "Template removed." });
+  };
   const { toast } = useToast();
 
   useEffect(() => { loadScheduledPosts(); }, []);
@@ -106,7 +145,7 @@ const ContentPlanner = () => {
                 <CardHeader><CardTitle>Content Queue</CardTitle><CardDescription>Manage your upcoming scheduled content</CardDescription></CardHeader>
                 <CardContent>
                   {isLoading ? (
-                    <div className="text-center py-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2" /><p>Loading posts...</p></div>
+                    <ContentPlannerSkeleton />
                   ) : (
                     <ScheduledPostsList posts={scheduledPosts} onEdit={handleEditPost} onDelete={handleDeletePost} onPublishNow={handlePublishNow} />
                   )}
@@ -115,12 +154,31 @@ const ContentPlanner = () => {
             </TabsContent>
             <TabsContent value="templates">
               <Card>
-                <CardHeader><CardTitle>Content Templates</CardTitle><CardDescription>Reusable templates to streamline your content creation</CardDescription></CardHeader>
-                <CardContent>
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Create content templates to save time and maintain consistency.</p>
-                    <Button className="mt-4">Create Template</Button>
+                <CardHeader><CardTitle>Content Templates</CardTitle><CardDescription>Save reusable templates for consistent posting</CardDescription></CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input className="border rounded-md px-3 py-2 text-sm bg-background" placeholder="Template name" value={newTemplateName} onChange={e => setNewTemplateName(e.target.value)} />
+                    <select className="border rounded-md px-3 py-2 text-sm bg-background" value={newTemplatePlatform} onChange={e => setNewTemplatePlatform(e.target.value)}>
+                      <option value="instagram">Instagram</option><option value="twitter">Twitter</option><option value="linkedin">LinkedIn</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
+                    </select>
+                    <Button onClick={saveTemplate}>Save Template</Button>
                   </div>
+                  <textarea className="w-full border rounded-md px-3 py-2 text-sm min-h-[80px] bg-background" placeholder="Template content..." value={newTemplateContent} onChange={e => setNewTemplateContent(e.target.value)} />
+                  {templates.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-4">No templates yet. Create one above.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {templates.map(t => (
+                        <div key={t.id} className="flex items-start justify-between p-4 border rounded-lg">
+                          <div>
+                            <p className="font-medium">{t.name} <span className="text-xs text-muted-foreground capitalize ml-2">{t.platform}</span></p>
+                            <p className="text-sm text-muted-foreground mt-1">{t.content}</p>
+                          </div>
+                          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteTemplate(t.id)}>Delete</Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
