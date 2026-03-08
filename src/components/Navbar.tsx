@@ -40,11 +40,11 @@ const Navbar = () => {
         
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Button variant="outline" size="sm" className="hidden sm:flex">
-            Log In
+          <Button variant="outline" size="sm" className="hidden sm:flex" asChild>
+            <Link to="/login">Log In</Link>
           </Button>
-          <Button size="sm" className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white">
-            Sign Up
+          <Button size="sm" className="bg-gradient-to-r from-roundabout-purple to-roundabout-blue text-white" asChild>
+            <Link to="/register">Sign Up</Link>
           </Button>
         </div>
       </div>
