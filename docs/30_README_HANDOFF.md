@@ -35,7 +35,8 @@ npm run build
 | Backend | Supabase (PostgreSQL + Auth + Edge Functions) |
 | State | React Query + React Context |
 | Routing | React Router v6 |
-| Hosting | Lovable Cloud |
+| AI | google/gemini-3-flash-preview via Edge Function |
+| Hosting | Lovable Cloud / Docker / Vercel / Netlify |
 
 ## Project Structure
 
@@ -49,23 +50,26 @@ src/
 │   ├── NavbarWithAuth.tsx           # Authenticated navbar
 │   ├── Footer.tsx                   # Global footer
 │   ├── Providers.tsx                # App providers (Router, Query, Auth, Theme)
-│   ├── ApiIntegrations/             # Webhook, platform connection components
+│   ├── ProtectedRoute.tsx           # Auth guard for protected pages
+│   ├── PageSkeleton.tsx             # Loading skeleton for pages
+│   ├── EmptyState.tsx               # Empty state with illustrations
+│   ├── ApiIntegrations/             # Webhook, platform connection, data export/import
 │   ├── AIEnhancement/               # AI content tools
 │   ├── AudienceInsights/            # Analytics components
-│   └── ContentScheduler/            # Scheduling components
+│   └── ContentScheduler/            # Scheduling, calendar, templates, AI generator
 ├── pages/
 │   ├── Index.tsx                    # Landing page
 │   ├── Login.tsx / Register.tsx     # Auth pages
 │   ├── ResetPassword.tsx            # Password reset flow
-│   ├── Dashboard.tsx                # Main dashboard
+│   ├── Dashboard.tsx                # Main dashboard (DB-connected)
 │   ├── Profile.tsx                  # User profile (DB-connected)
-│   ├── Analytics.tsx                # Cross-platform analytics
-│   ├── ContentPlanner.tsx           # Content scheduling
-│   ├── Platforms.tsx                # Platform management
+│   ├── Analytics.tsx                # Cross-platform analytics (DB-connected)
+│   ├── ContentPlanner.tsx           # Content scheduling (DB-connected, full CRUD)
+│   ├── Platforms.tsx                # Platform management (DB-connected)
 │   ├── Communities.tsx              # Community features
 │   ├── Monetization.tsx             # Monetization tools
-│   ├── AIContentCreator.tsx         # AI content generation
-│   ├── AudienceInsights.tsx         # Audience demographics
+│   ├── AIContentCreator.tsx         # AI content generation (live edge function)
+│   ├── AudienceInsights.tsx         # Audience demographics (DB-connected)
 │   ├── Documentation.tsx            # Doc viewer
 │   └── NotFound.tsx                 # 404 page
 ├── hooks/
@@ -73,9 +77,10 @@ src/
 │   └── use-mobile.tsx               # Responsive hook
 ├── services/
 │   ├── webhookService.ts            # Webhook CRUD (DB-connected)
-│   ├── socialMediaService.ts        # Social media data
+│   ├── socialMediaService.ts        # Social media data (DB-connected)
 │   ├── socialApiIntegrations.ts     # Platform API integrations
-│   └── dataImportExportService.ts   # Data export/import
+│   ├── platforms.ts                 # Platform connections CRUD (DB-connected)
+│   └── dataImportExportService.ts   # Data export/import (DB-connected)
 ├── integrations/supabase/
 │   ├── client.ts                    # Supabase client (auto-generated)
 │   └── types.ts                     # Database types (auto-generated)
@@ -114,34 +119,46 @@ src/
 | `/api-integrations` | API Integrations | Yes |
 | `*` | 404 Not Found | No |
 
-## What's Working
+## What's Working (100% Complete)
 
-- ✅ All 17 routes render correctly
-- ✅ Authentication (login, register, password reset)
+- ✅ All 17 routes render correctly with ProtectedRoute guards
+- ✅ Authentication (login, register, password reset, session management)
 - ✅ Profile reads/writes to database
 - ✅ Webhook CRUD against database
+- ✅ Platform connections CRUD against database
+- ✅ Content scheduling with full CRUD (create, edit, delete, publish)
+- ✅ Analytics with Recharts visualizations from analytics_snapshots table
+- ✅ AI content generation via live edge function (google/gemini-3-flash-preview)
+- ✅ Data export from real tables (JSON, CSV)
+- ✅ Data import into scheduled_posts (JSON)
+- ✅ Hashtag analytics from analytics_snapshots
+- ✅ Content templates with localStorage CRUD
+- ✅ Skeleton loading states on Dashboard, Analytics, ContentPlanner
+- ✅ EmptyState component with illustrations and CTAs
 - ✅ Consistent NavbarWithAuth on all protected pages
 - ✅ Footer with real links
 - ✅ Theme toggle (light/dark)
 - ✅ Responsive design
+- ✅ Deployment configs (Dockerfile, vercel.json, netlify.toml)
 
-## What Needs Work
+## Enhancement Backlog
 
-See `docs/25_TODO_AND_CREDITS.md` for the full enhancement roadmap (24 items, ~72–115 credits estimated).
+See `docs/25_TODO_AND_CREDITS.md` for 35 research-backed enhancement items (~80–130 credits estimated). Key items include:
 
-Key items:
-- Dashboard, Analytics, Content Planner still use mock data
-- Platform connections service not yet DB-connected
-- AI content generation uses setTimeout mock
-- No loading skeletons or empty states
-- No Stripe billing integration
+- Drag-and-drop visual calendar
+- Unified social inbox
+- Approval workflows + team roles
+- Stripe billing integration
+- Social listening + sentiment analysis
+- Link-in-bio page builder
+- Real OAuth flows for social platforms
 
 ## Documentation
 
 All 30 docs are in the `/docs` directory. Key files:
 - `docs/prompts/03_COMPLETE_RECREATION_PROMPT.md` — One-shot recreation prompt
-- `docs/24_Current_Valuation.md` — AUD valuation
-- `docs/25_TODO_AND_CREDITS.md` — Remaining work tracker
+- `docs/24_Current_Valuation.md` — AUD $30,000–$50,000 valuation
+- `docs/25_TODO_AND_CREDITS.md` — Enhancement backlog (35 items)
 
 ## Environment Variables
 
@@ -152,9 +169,30 @@ Set automatically by Lovable Cloud:
 
 ## Deployment
 
-The app deploys automatically via Lovable. For manual deployment:
+### Lovable Cloud (Default)
+The app deploys automatically via Lovable.
+
+### Docker
+```bash
+docker build -t roundabout-webtraffic .
+docker run -p 80:80 roundabout-webtraffic
+```
+
+### Vercel
+```bash
+npm run build
+vercel deploy --prod
+```
+
+### Netlify
+```bash
+npm run build
+netlify deploy --prod --dir=dist
+```
+
+### Manual
 - `npm run build` produces a static `dist/` folder
-- Deploy to any static host (Vercel, Netlify, Cloudflare Pages)
+- Deploy to any static host
 - Ensure environment variables are set
 
 ## Contact
