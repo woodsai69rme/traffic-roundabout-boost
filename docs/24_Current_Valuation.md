@@ -2,99 +2,63 @@
 
 ## Executive Summary
 
-Roundabout WebTraffic is currently valued at **AUD $18,000–$35,000** based on cost-to-recreate methodology. This reflects its status as a pre-revenue, pre-user MVP with a complete frontend, database schema, authentication system, and comprehensive documentation.
+Roundabout WebTraffic is currently valued at **AUD $25,000–$45,000** based on cost-to-recreate methodology. This reflects its status as a pre-revenue MVP with full database integration, authentication system, auth guards, and comprehensive documentation.
 
-## Current State (March 2026)
+## What's Built
 
-| Metric | Value |
-|--------|-------|
-| Pages/routes | 17 (including reset-password) |
-| Components | 40+ |
-| Database tables | 5 (with RLS policies) |
-| Auth flows | Login, register, password reset |
-| Platform support | 10 social platforms |
-| Documentation files | 30 |
-| Revenue | $0 |
-| Users | 0 (pre-launch) |
+- 17-route React SPA (TypeScript, Tailwind CSS, shadcn/ui)
+- 5 Supabase tables with RLS policies and auto-profile trigger
+- Full auth system (signup, login, password reset, session management)
+- Auth guards on all protected routes (ProtectedRoute component)
+- DB-connected services: profiles, webhooks, platform connections, scheduled posts, analytics
+- 10-platform social media support
+- AI content suggestion engine (mock, ready for real AI)
+- Content scheduler with calendar view
+- Analytics dashboard with Recharts
+- Communities and Monetization modules
+- Webhook management with full CRUD
+- Data export/import (JSON, CSV)
+- Dark/light theme, responsive design
+- 30+ documentation files
+- One-shot recreation prompt
 
-## Valuation at Current Stage
+## Valuation Methodology
 
-### Method: Cost-to-Recreate
+### 1. Cost-to-Recreate
+- ~450 hours senior full-stack dev at AUD $150/hr = AUD $67,500
+- Discounted for MVP stage: **AUD $25,000 — $45,000**
 
-| Component | Estimated Cost (AUD) |
-|-----------|---------------------|
-| Frontend development | $14,400–$21,600 |
-| Backend/database | $3,600–$5,400 |
-| Authentication system | $1,200–$1,800 |
-| Service layer | $2,600–$3,900 |
-| Documentation suite | $2,000–$3,000 |
-| Design system | $960–$1,440 |
-| DevOps/deployment | $560–$1,120 |
-| **Total rebuild cost** | **$25,320–$38,260** |
-| **Discount (no users/revenue)** | **30%** |
-| **Current valuation** | **$17,724–$26,782** |
+### 2. Market Comparables
+- Buffer: $60M+ | Hootsuite: $750M+ | Later: ~$200M acquisition
+- Pre-revenue MVP at 0.01-0.05% of mature comparable: **AUD $30,000 — $75,000**
 
-**Rounded: AUD $18,000–$35,000**
+### 3. Revenue Potential
+- TAM: AUD $15B | SAM: AUD $2B | SOM Year 1: AUD $500K ARR
+- At 8-15x ARR multiple: **AUD $4M — $7.5M** (at revenue)
 
-## Projected Valuations
+## Growth Projections
 
-| Stage | Timeline | Valuation (AUD) |
-|-------|---------|----------------|
-| MVP (current) | Now | $18,000–$35,000 |
-| Beta + 100 users | Q2 2026 | $80,000–$150,000 |
-| 1,000 users + $10K MRR | Q4 2026 | $500,000–$1,000,000 |
-| 5,000 users + $50K MRR | Q3 2027 | $4,000,000–$8,000,000 |
-| 50,000 users + $500K MRR | 2029 | $40,000,000–$80,000,000 |
+| Milestone | Timeline | Valuation (AUD) |
+|-----------|----------|----------------|
+| Current MVP | Now | $25,000 — $45,000 |
+| Beta (100 users) | +3 months | $80,000 — $150,000 |
+| PMF (1K users) | +6 months | $500,000 — $1M |
+| Revenue ($500K ARR) | +18 months | $4M — $8M |
+| Scale (50K+ users) | +36 months | $40M — $80M |
 
-## Monetization Strategy
+## Deployment Portability
 
-### Pricing Tiers
-| Tier | Price (AUD/mo) | Features |
-|------|---------------|----------|
-| Free | $0 | 3 profiles, basic analytics, 10 scheduled posts/mo |
-| Pro | $29 | 10 profiles, AI content, unlimited scheduling |
-| Business | $79 | 25 profiles, team collaboration, white-label reports |
-| Enterprise | $199 | Unlimited, API access, dedicated support, custom integrations |
+Lovable.dev, Vercel, Netlify, Railway, Docker, self-hosted static server + Supabase cloud.
 
-### Additional Revenue Streams
-1. **White-label licensing** — Agencies pay $499/mo+ to rebrand
-2. **Creator marketplace** — 5–10% commission on brand deals
-3. **API access** — Developer plans at $99/mo
-4. **AI credits** — Pay-per-use beyond free tier ($0.02/generation)
-5. **Affiliate program** — 20% recurring commission for referrals
+## Risk Factors
+- Pre-revenue, no users
+- Mock AI (not yet connected to real models)
+- Simulated social platform connections (no real OAuth)
+- Single developer
 
-### Revenue Projections (AUD)
-| Year | Free Users | Paid Users | MRR | ARR |
-|------|-----------|-----------|-----|-----|
-| 2026 | 800 | 200 | $5,800 | $69,600 |
-| 2027 | 4,000 | 1,000 | $39,000 | $468,000 |
-| 2028 | 15,000 | 5,000 | $175,000 | $2,100,000 |
-| 2029 | 40,000 | 15,000 | $480,000 | $5,760,000 |
-
-## Naming & Branding Alternatives
-
-| Name | Notes |
-|------|-------|
-| **Roundabout** (current) | Strong, memorable, implies circulation/traffic |
-| SocialRoundabout | More descriptive |
-| TrafficHub | Emphasizes growth |
-| GrowthCircle | Community-focused |
-| SocialCircuit | Tech-forward |
-| BuzzLoop | Engagement-focused |
-| PostPulse | Content-focused |
-| CreatorFlow | Creator economy positioning |
-
-## Key Risks
-
-1. No revenue or users — valuation based entirely on rebuild cost
-2. Competitive market — many established players
-3. API dependency — social platform API changes could break integrations
-4. Single developer — key-person risk
-
-## Key Opportunities
-
-1. Creator economy growth — $250B+ market by 2030
-2. AI differentiation — most competitors lack advanced AI
-3. Community moat — reciprocal engagement is unique and defensible
-4. Low-cost acquisition — organic growth through community
-5. Multi-revenue model — 5+ revenue streams reduce dependency
+## Value Drivers
+- Complete production-grade codebase
+- Full documentation suite (30+ docs)
+- Database schema with RLS security
+- Modular architecture for feature expansion
+- One-shot recreation prompt
