@@ -104,14 +104,14 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 | `/documentation` | Documentation | No | Markdown docs browser |
 | `/dashboard` | Dashboard | Yes | Metrics, platform performance, AI suggestions, quick actions |
 | `/platforms` | Platforms | Yes | Connect/manage 10 social platforms |
-| `/content-planner` | ContentPlanner | Yes | Calendar, content queue, templates |
-| `/analytics` | Analytics | Yes | Line/bar/pie charts, content performance table, demographics |
+| `/content-planner` | ContentPlanner | Yes | Calendar, content queue with full CRUD (delete/publish/toggle status), templates |
+| `/analytics` | Analytics | Yes | DB-connected line/bar/pie charts, content performance table, demographics |
 | `/audience-insights` | AudienceInsights | Yes | Demographics, engagement patterns, hashtag analytics |
-| `/ai-content` | AIContentCreator | Yes | AI content generation with platform/tone selectors |
+| `/ai-content` | AIContentCreator | Yes | Real AI content generation via edge function with platform/tone/length selectors |
 | `/profile` | Profile | Yes | Read/write to profiles DB table |
 | `/communities` | Communities | Yes | Discussions, groups, events tabs |
 | `/monetization` | Monetization | Yes | Revenue tools, marketplace, pricing tiers |
-| `/api-integrations` | SocialApiIntegrationPage | Yes | Platform API config, webhooks CRUD, data export/import |
+| `/api-integrations` | SocialApiIntegrationPage | Yes | Platform API config, webhooks CRUD, data export/import (DB-connected) |
 | `*` | NotFound | No | 404 page |
 
 ### SERVICE LAYER (All DB-Connected)
@@ -122,7 +122,20 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 
 **webhookService.ts** — Full CRUD against `webhooks` table. Methods: `getWebhooks()`, `createWebhook()`, `updateWebhook()`, `deleteWebhook()`, `toggleWebhook()`.
 
-**dataImportExportService.ts** — Export data as JSON/CSV, import from file upload, download templates.
+**dataImportExportService.ts** — DB-connected export querying `analytics_snapshots`, `scheduled_posts`, `platform_connections` based on data type. Import parses JSON and inserts into `scheduled_posts`. Supports JSON/CSV formats. Falls back to mock data when no authenticated user or empty results.
+
+### EDGE FUNCTION: generate-content
+
+Create `supabase/functions/generate-content/index.ts`:
+- Accepts `{ prompt, platform, tone, length }` in request body
+- Calls Lovable AI Gateway (`https://ai.gateway.lovable.dev/v1/chat/completions`) with model `google/gemini-3-flash-preview`
+- System prompt instructs AI to generate platform-optimized social media content
+- Returns `{ content: string }`
+- CORS headers for browser access
+- Handles 429 (rate limit) and 402 (payment required) errors
+- Set `verify_jwt = false` in config.toml
+
+In `AIContentCreator.tsx`, call via `supabase.functions.invoke('generate-content', { body: { prompt, platform, tone, length } })`.
 
 ### KEY FEATURES
 
@@ -132,9 +145,10 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 - **Webhook service** performs CRUD against `webhooks` table
 - **Password reset** — request mode (email form) and update mode (new password form when URL has recovery token)
 - **10 platform support** — Instagram, YouTube, TikTok, Twitter, Facebook, LinkedIn, Pinterest, Reddit, Snapchat, Twitch
-- **AI content generator** — Platform selector, tone selector, content generation
-- **Content scheduler** — Calendar view, post creation, scheduling to DB
-- **Analytics** — Line/bar/pie charts with Recharts
+- **AI content generator** — Real AI via Lovable AI edge function, not mock
+- **Content scheduler** — Calendar view, post creation, scheduling to DB, full CRUD (delete/publish/toggle)
+- **Analytics** — DB-connected Line/bar/pie charts with Recharts, loading state, mock fallback
+- **Data export/import** — Exports from DB tables, imports into scheduled_posts, JSON/CSV support
 - **Communities** — Discussions, groups, events tabs
 - **Monetization** — Revenue tools, marketplace, pricing
 - **Dark/light theme** via next-themes
@@ -142,6 +156,6 @@ Create a `ProtectedRoute` component that checks `useAuth()` — if `loading`, sh
 
 ### DEPLOYMENT
 
-Works with: Vercel, Netlify, Railway, Docker, Lovable.dev publish. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`.
+Works with: Vercel, Netlify, Railway, Docker, Lovable.dev publish, AWS Amplify, Google Cloud Run, Fly.io, Render, self-hosted VPS. Environment variables needed: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. Edge functions auto-deploy with Lovable Cloud.
 
 Build all of this as a complete, working application.
