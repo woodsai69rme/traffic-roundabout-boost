@@ -9,10 +9,49 @@ import { Button } from '@/components/ui/button';
 import { fetchScheduledPosts, Post } from '@/services/socialApiIntegrations';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ContentPlannerSkeleton } from '@/components/PageSkeleton';
+
+interface ContentTemplate {
+  id: string;
+  name: string;
+  content: string;
+  platform: string;
+}
+
+const TEMPLATES_KEY = 'roundabout_content_templates';
 
 const ContentPlanner = () => {
   const [scheduledPosts, setScheduledPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [templates, setTemplates] = useState<ContentTemplate[]>([]);
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [newTemplateContent, setNewTemplateContent] = useState('');
+  const [newTemplatePlatform, setNewTemplatePlatform] = useState('instagram');
+
+  useEffect(() => {
+    const saved = localStorage.getItem(TEMPLATES_KEY);
+    if (saved) setTemplates(JSON.parse(saved));
+  }, []);
+
+  const saveTemplate = () => {
+    if (!newTemplateName.trim() || !newTemplateContent.trim()) {
+      toast({ title: "Missing fields", description: "Name and content are required.", variant: "destructive" });
+      return;
+    }
+    const t: ContentTemplate = { id: crypto.randomUUID(), name: newTemplateName, content: newTemplateContent, platform: newTemplatePlatform };
+    const updated = [...templates, t];
+    setTemplates(updated);
+    localStorage.setItem(TEMPLATES_KEY, JSON.stringify(updated));
+    setNewTemplateName(''); setNewTemplateContent(''); setNewTemplatePlatform('instagram');
+    toast({ title: "Saved", description: "Template created." });
+  };
+
+  const deleteTemplate = (id: string) => {
+    const updated = templates.filter(t => t.id !== id);
+    setTemplates(updated);
+    localStorage.setItem(TEMPLATES_KEY, JSON.stringify(updated));
+    toast({ title: "Deleted", description: "Template removed." });
+  };
   const { toast } = useToast();
 
   useEffect(() => { loadScheduledPosts(); }, []);
