@@ -53,7 +53,7 @@ const DataExportImport = () => {
       ]);
       
       const options: ExportOptions = {
-        format: exportFormat as 'json' | 'csv' | 'excel',
+        format: exportFormat as 'json' | 'csv' | 'xlsx',
         dataType: exportType as 'all' | 'analytics' | 'posts' | 'accounts' | 'engagements',
         includeTimestamp
       };
