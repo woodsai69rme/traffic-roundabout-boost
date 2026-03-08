@@ -253,8 +253,8 @@ const WebhookIntegration = () => {
             <div className="flex items-center space-x-2">
               <Switch 
                 id="webhook-active"
-                checked={newWebhook.active}
-                onCheckedChange={checked => setNewWebhook({...newWebhook, active: checked})}
+                checked={newWebhook.is_active}
+                onCheckedChange={checked => setNewWebhook({...newWebhook, is_active: checked})}
               />
               <Label htmlFor="webhook-active">Active</Label>
             </div>
