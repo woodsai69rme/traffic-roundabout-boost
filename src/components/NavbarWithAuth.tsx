@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import AuthNav from '@/components/AuthNav';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Calendar, Users, Zap } from 'lucide-react';
+import { BarChart3, Calendar, Users, Zap, Search } from 'lucide-react';
+import GlobalSearch from './GlobalSearch';
 
 const NavbarWithAuth = () => {
   const { user } = useAuth();
