@@ -19,10 +19,13 @@ import Communities from "./pages/Communities";
 import Monetization from "./pages/Monetization";
 import NotFound from "./pages/NotFound";
 import SocialApiIntegrationPage from "./components/ApiIntegrations/SocialApiIntegrationPage";
+import UTMBuilder from "./pages/UTMBuilder";
+import GlobalSearch from "./components/GlobalSearch";
 
 const App = () => (
   <>
     <Toaster />
+    <GlobalSearch />
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
@@ -40,6 +43,7 @@ const App = () => (
       <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
       <Route path="/monetization" element={<ProtectedRoute><Monetization /></ProtectedRoute>} />
       <Route path="/api-integrations" element={<ProtectedRoute><SocialApiIntegrationPage /></ProtectedRoute>} />
+      <Route path="/utm-builder" element={<ProtectedRoute><UTMBuilder /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </>

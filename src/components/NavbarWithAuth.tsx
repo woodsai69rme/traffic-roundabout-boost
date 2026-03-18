@@ -57,7 +57,10 @@ const NavbarWithAuth = () => {
             )}
           </div>
           
-          <AuthNav />
+          <div className="flex items-center gap-3">
+            <GlobalSearch />
+            <AuthNav />
+          </div>
         </div>
       </div>
     </nav>
